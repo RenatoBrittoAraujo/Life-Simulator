@@ -7,8 +7,8 @@
 class Collision
 {
 public:
-	static const void boxToSegment(Box *box, Segment *segment);
-	static const void boxToBox(Box *boxA, Box *boxB);
+	static const bool boxToSegment(Box *box, Segment *segment);
+	static const bool boxToBox(Box *boxA, Box *boxB);
 };
 
 #endif

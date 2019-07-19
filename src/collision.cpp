@@ -6,13 +6,13 @@
 #include "rectangle.hpp"
 #include "point.hpp"
 
-const void Collision::boxToBox(Box *boxA, Box *boxB)
+const bool Collision::boxToBox(Box *boxA, Box *boxB)
 {
 	const Rectangle boxARect = boxA->getBoundingBox();
 	const Rectangle boxBRect = boxB->getBoundingBox();
 
 	if(!boxARect.collidesWith(boxBRect) or boxARect == boxBRect)
-		return;
+		return false;
 
 	float recoil = boxARect.collisionLength(boxBRect) / 2.0f;
 	float momentum;
@@ -52,11 +52,13 @@ const void Collision::boxToBox(Box *boxA, Box *boxB)
 		break;
 
 	default:
+		return false;
 		break;
 	}
+	return true;
 }
 
-const void Collision::boxToSegment(Box *box, Segment *segment)
+const bool Collision::boxToSegment(Box *box, Segment *segment)
 {
 	const float fx = segment->getFirst().getX();
 	const float fy = segment->getFirst().getY();
@@ -107,6 +109,10 @@ const void Collision::boxToSegment(Box *box, Segment *segment)
 		}
 	}
 
-	box->setX(x - halfWidth);
+	if (Util::fequals(x - halfWidth, box->getX()) and Util::fequals(y - halfHeight, box->getY()))
+		return false;
+
+		box->setX(x - halfWidth);
 	box->setY(y - halfHeight);
+	return true;
 }

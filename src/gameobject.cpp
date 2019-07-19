@@ -9,7 +9,6 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	delete this->_sprite;
 }
 
 void GameObject::setSprite(Graphics &graphics, const std::string assetName, Rectangle sourceRect, float targetWidth, float targetHeight)
@@ -18,21 +17,18 @@ void GameObject::setSprite(Graphics &graphics, const std::string assetName, Rect
 }
 
 std::map<std::string, Rectangle> GameObject::images({
-	{"npcSquare.png", Rectangle(0, 0, 512, 512)},
-	{"playerSquare.png", Rectangle(0, 0, 310, 310)}
+	{"npcSquare.png", Rectangle(0.0f, 0.0f, 512.0f, 512.0f)},
+	{"playerSquare.png", Rectangle(0.0f, 0.0f, 310.0f, 310.0f)}
 });
 
-void update()
+void GameObject::update()
 {
-
 }
 
-void move(Util::Direction direction)
+void GameObject::move(Util::Direction direction)
 {
-
 }
 
-void collide(std::vector<GameObject *> objects)
+void GameObject::collide(std::vector<GameObject *> objects)
 {
-
 }

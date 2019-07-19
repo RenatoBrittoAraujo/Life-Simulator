@@ -2,7 +2,6 @@
 #define GAMEOBJECT_HPP
 
 #include "point.hpp"
-#include "segment.hpp"
 #include "graphics.hpp"
 #include "rectangle.hpp"
 #include "sprite.hpp"
@@ -75,7 +74,7 @@ protected:
 
 private:
 
-	Color _renderColor;
+	Color _renderColor = Color::black();
 
 	bool _moves;
 	bool _collides;

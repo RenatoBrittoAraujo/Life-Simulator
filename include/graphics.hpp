@@ -37,11 +37,16 @@ public:
 	SDL_Renderer *getRenderer() const;
 	void setRenderColor(Color color);
 
+	void setStandardColor(const Color color) { this->_standartColor = color; }
+	Color getStandardColor() const { return this->_standartColor; }
+
 private:
 	SDL_Window *_window;
 	SDL_Renderer *_renderer;
 
 	std::map<std::string, SDL_Surface *> _spriteSheets;
+
+	Color _standartColor = Color(255,255,255,255);
 };
 
 #endif

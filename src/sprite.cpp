@@ -17,7 +17,6 @@ Sprite::Sprite(Graphics &graphics, const std::string &path, Rectangle sourceRect
 {
 	this->_spriteSheet = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(path));
 }
-
 void Sprite::draw(Graphics &graphics, int x, int y)
 {
 	SDL_Rect destination = { x, y, (int) this->_destWidth, (int) this->_destHeight };

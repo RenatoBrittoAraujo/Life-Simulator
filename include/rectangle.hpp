@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 
 #include <algorithm>
+#include <iostream>
+#include <vector>
 
 class Rectangle
 {
@@ -90,7 +92,7 @@ public:
 	/*
 		Fits into a specficied width and height but without exceeding it. If fit is not perfect, fit as most as possible without exceeding
 	 */
-	void fit(const float width, const float height)
+	void fit(float width, float height)
 	{
 		float rel = this->_width / this->_height;
 		float newHeight = width / rel;
@@ -115,6 +117,11 @@ public:
 		newRect.w = this->_width;
 		newRect.h = this->_height;
 		return newRect;
+	}
+
+	void print()
+	{
+		std::cout << "RECT X = " << getLeft() << " WIDTH = " << getRight() - getLeft() << " Y = " << getTop() << " HEIGHT = " << getBottom() - getTop() << std::endl;
 	}
 
 private:

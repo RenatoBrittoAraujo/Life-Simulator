@@ -4,13 +4,13 @@
 #include "graphics.hpp"
 #include "input.hpp"
 #include "color.hpp"
+#include "box.hpp"
+#include "segment.hpp"
 
 #include <vector>
 
 struct SDL_Window;
 struct SDL_Renderer;
-class Life;
-class Segment;
 
 class Game
 {
@@ -77,13 +77,9 @@ private:
 
 	// Custom game classes
 
-	Life *_player;
+	Box _player;
 
-	std::vector<Life> _npcs;
 	std::vector<Segment> boundingBox;
-
-	Color _backgroundColor = Color::white();
-	Color _segmentColor = Color::darkGray();
 
 	unsigned int _ticksLastNpcMove;
 

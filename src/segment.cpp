@@ -6,6 +6,8 @@
 
 Segment::Segment()
 {
+
+	setColor(Color::darkGray());
 }
 
 Segment::~Segment()
@@ -20,19 +22,30 @@ Segment::Segment(Point first, Point second)
 	{
 		std::swap(this->_first, this->_second);
 	}
+	setColor(Color::darkGray());
 }
 
 void Segment::draw(Graphics &graphics, Point currentShift)
 {
+	Color oldColor = graphics.getStandardColor();
+	graphics.setRenderColor(getColor());
 	SDL_RenderDrawLine(graphics.getRenderer(),
 		_first.getX() - currentShift.getX(),
 		_first.getY() - currentShift.getY(),
 		_second.getX() - currentShift.getX(),
 		_second.getY() - currentShift.getY());
+	graphics.setRenderColor(oldColor);
 }
 
-void Segment::scale(float scaleValue)
+void Segment::update()
 {
-	this->_first.scale(scaleValue);
-	this->_second.scale(scaleValue);
+}
+
+void Segment::move(Util::Direction direction)
+{
+}
+
+void Segment::collide(std::vector<GameObject *> objects)
+{
+
 }

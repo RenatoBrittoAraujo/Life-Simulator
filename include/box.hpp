@@ -10,10 +10,10 @@ class Box : public GameObject
 {
 public:
 
-	Box();
-	~Box();
+	Box() {}
+	~Box() {}
 
-	Box(Graphics &graphics, const char *assetName, float width, float height);
+	Box(Graphics &graphics, const char *assetName, float width, float height = Util::floatMax());
 
 	/*
 		Base class virtuals

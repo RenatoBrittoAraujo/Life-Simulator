@@ -57,25 +57,8 @@ bool Game::init(bool fullscreen)
 
 	/* Custom class initialization */
 
-	// Set up player
-	this->_player = new Life();
-	this->_player->loadSprite(*this->_graphics, "assets/square.png", 310, 310, 0.1);
-	this->_player->setCentered(true);
-	this->_player->setPosition(
-		Point(Util::randInt(GameMap::SPAWN_BORDER_DISTANCE, GameMap::MAP_WIDTH - GameMap::SPAWN_BORDER_DISTANCE), 
-					Util::randInt(GameMap::SPAWN_BORDER_DISTANCE, GameMap::MAP_HEIGHT - GameMap::SPAWN_BORDER_DISTANCE)));
-
-	// Set up npcs
-	for(int i = 0; i < Util::randInt(GameMap::MIN_NPC, GameMap::MAX_NPC); i++)
-	{
-		this->_npcs.push_back(Life());
-		this->_npcs.back().loadSprite(*this->_graphics, "assets/squarenpc.png", 512, 512, (310.0 * 0.1) / 512.0);
-		this->_npcs.back().setPosition(
-			Point(Util::randInt(GameMap::SPAWN_BORDER_DISTANCE, GameMap::MAP_WIDTH - GameMap::SPAWN_BORDER_DISTANCE), 
-						Util::randInt(GameMap::SPAWN_BORDER_DISTANCE, GameMap::MAP_HEIGHT - GameMap::SPAWN_BORDER_DISTANCE)));
-	}
-
-	_ticksLastNpcMove = SDL_GetTicks();
+	_player = Box(*this->_graphics, "playerSquare.png", 50.0f, 50.0f);
+	_player.setPosition(Point(100,100));
 
 	// Set up map borders
 	this->boundingBox = {
@@ -120,27 +103,27 @@ void Game::handleUserInput()
 
 	if(this->_input.wasKeyPressed(SDL_SCANCODE_R))
 	{
-		this->_backgroundColor = Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255);
+		this->_graphics->setStandardColor(Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255));
 	}
 
 	if(this->_input.isKeyHeld(SDL_SCANCODE_W))
 	{
-		this->_player->moveUp();
+		this->_player.move(Util::Direction::TOP);
 	}
 	
 	if (this->_input.isKeyHeld(SDL_SCANCODE_A))
 	{
-		this->_player->moveLeft();
+		this->_player.move(Util::Direction::LEFT);
 	}
 
 	if (this->_input.isKeyHeld(SDL_SCANCODE_S))
 	{
-		this->_player->moveDown();
+		this->_player.move(Util::Direction::BOTTOM);
 	}
 
 	if (this->_input.isKeyHeld(SDL_SCANCODE_D))
 	{
-		this->_player->moveRight();
+		this->_player.move(Util::Direction::RIGHT);
 	}
 
 	// End of custom key handling
@@ -150,56 +133,40 @@ void Game::update()
 {
 	/* Updating of game classes */
 
+	this->_player.update();
+
+	/* Collisions */
+
 	if(SDL_GetTicks() - _ticksLastNpcMove > 150)
 	{
-		for(auto &npc : this->_npcs)
-		{
-			npc.setRandomMovement();
-		}
+
 		_ticksLastNpcMove = SDL_GetTicks();
 	}
 
-	std::vector<Life *> lives;
+	std::vector<GameObject*> gameObjects;
 
-	for (auto &npc : this->_npcs)
+	gameObjects.push_back(&this->_player);
+	for(auto &seg : this->boundingBox)
 	{
-		npc.update();
-		lives.push_back(&npc);
+		gameObjects.push_back(&seg);
 	}
 
-	lives.push_back(_player);
-
-	this->_player->update();
-	this->_player->collisionCheck(boundingBox, lives);
-
-	for(auto &npc : this->_npcs)
-	{
-		npc.collisionCheck(boundingBox, lives);
-	}
+	this->_player.collide(gameObjects);
 
 	/* End of updating */
 }
 
 void Game::render()
 {
-	_graphics->setRenderColor(this->_backgroundColor);
 	_graphics->fillBackground();
 
 	/* Rendering of different classes */
 
-	this->_player->draw(*this->_graphics);
+	this->_player.draw(*this->_graphics);
 
-	const Point shift = this->_player->getCenteredShift();
-
-	for(auto &npc : this->_npcs)
-	{
-		npc.draw(*this->_graphics, shift);
-	}
-
-	_graphics->setRenderColor(this->_segmentColor);
 	for(int i = 0; i < boundingBox.size(); i++)
 	{
-		boundingBox[i].draw(*this->_graphics, shift);
+		boundingBox[i].draw(*this->_graphics);
 	}
 
 	/* End of rendering */

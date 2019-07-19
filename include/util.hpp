@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <limits>
 
 namespace PhysicsConstants
 {
@@ -12,9 +13,9 @@ const float bounceSpeedFactor = 0.8;
 
 namespace MovementConstants
 {
-const float speedCap = 1000.0;
+const float speedCap = 100.0;
 const float movementAcceleration = 0.9;
-const float attritionFactor = 0.7;
+const float attritionFactor = 0.95;
 }
 
 class Util
@@ -60,20 +61,25 @@ public:
 
 	enum Direction
 	{
+		NONE = 0,
 		TOP,
 		BOTTOM,
 		LEFT,
-		RIGHT,
-		NONE
+		RIGHT
 	};
 
 	static const std::string getStringFromDirection(Direction direction)
 	{
-		direction == Direction::TOP ? "TOP" :
+		return direction == Direction::TOP ? "TOP" :
 		direction == Direction::BOTTOM ? "BOTTOM" :
 		direction == Direction::LEFT ? "LEFT" :
 		direction == Direction::RIGHT ? "RIGHT" :
 		"NONE";
+	}
+
+	static const float floatMax()
+	{
+		return std::numeric_limits<float>::max();
 	}
 };
 
