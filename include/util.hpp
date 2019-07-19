@@ -8,14 +8,14 @@
 namespace PhysicsConstants
 {
 const float gravity = 0.00;
-const float bounceSpeedFactor = 0.8;
+const float bounceSpeedFactor = 0.6;
 } // namespace PhysicsConstants
 
 namespace MovementConstants
 {
 const float speedCap = 100.0;
 const float movementAcceleration = 0.9;
-const float attritionFactor = 0.95;
+const float attritionFactor = 0.92;
 }
 
 class Util

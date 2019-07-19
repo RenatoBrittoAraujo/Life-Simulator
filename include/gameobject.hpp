@@ -54,7 +54,6 @@ public:
 	/*
 	 Basic getters and setters
 	 */
-
 	void setColor(const Color color) { this->_renderColor = color; }
 	Color getColor() const { return this->_renderColor; }
 

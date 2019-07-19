@@ -1,14 +1,26 @@
-// 		Returns relative shift every object has to do in relation to centered object's position
-// 	 */
-// 	const Point getCenteredShift() const;
+#ifndef LIFE_HPP
+#define LIFE_HPP
 
-// 	void setRandomMovement(Util::Direction direction = Util::Direction::NONE);
+#include "box.hpp"
 
-// 	/*
-// 		Checks if life is colliding with some segment of segments
-// 	 */
-// 	void collisionCheck(std::vector<Segment> segments, std::vector<Life *> lives);
+class Life
+{
+public:
 
-// 	void moveRandomly();
+	Life();
+	~Life();
 
-// 	Util::Direction _randomMovementDirection = Util::Direction::NONE;
+	Life(Graphics &graphics, const char *assetName, float width, float height);
+
+	virtual void draw(Graphics &graphics);
+	virtual void update();
+
+	Box &getBox() { return _box; }
+
+protected:
+
+	Box _box;
+
+};
+
+#endif

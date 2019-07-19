@@ -33,12 +33,16 @@ public:
 		Fills renderer background with set background color
 	 */
 	void fillBackground();
+	
+	/*
+		Getters and setters
+	 */
 
 	SDL_Renderer *getRenderer() const;
 	void setRenderColor(Color color);
 
-	void setStandardColor(const Color color) { this->_standartColor = color; }
-	Color getStandardColor() const { return this->_standartColor; }
+	void setStandardColor(const Color color) { this->_standardColor = color; }
+	Color getStandardColor() const { return this->_standardColor; }
 
 private:
 	SDL_Window *_window;
@@ -46,7 +50,7 @@ private:
 
 	std::map<std::string, SDL_Surface *> _spriteSheets;
 
-	Color _standartColor = Color(255,255,255,255);
+	Color _standardColor = Color(255,255,255,255);
 };
 
 #endif

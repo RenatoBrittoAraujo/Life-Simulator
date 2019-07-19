@@ -4,6 +4,8 @@
 #include "life.hpp"
 #include "segment.hpp"
 #include "time.hpp"
+#include "player.hpp"
+#include "npc.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -18,18 +20,16 @@ namespace GameMap
 {
 	const int MAP_WIDTH = 1200;
 	const int MAP_HEIGHT = 1200;
-	const int MIN_NPC = 10;
-	const int MAX_NPC = 100;
+	const int MIN_NPC = 20;
+	const int MAX_NPC = 80;
 	const int SPAWN_BORDER_DISTANCE = 40;
 }
 
 Game::Game()
-{
-}
+{}
 
 Game::~Game()
-{
-}
+{}
 
 bool Game::init(bool fullscreen)
 {
@@ -57,8 +57,17 @@ bool Game::init(bool fullscreen)
 
 	/* Custom class initialization */
 
-	_player = Box(*this->_graphics, "playerSquare.png", 50.0f, 50.0f);
-	_player.setPosition(Point(100,100));
+	// Setting up player
+	_player = Player(*this->_graphics, "playerSquare.png", 50.0f, 50.0f);
+	_player.getBox().setPosition(Point(200,100));
+
+	// Setting up NPCs
+	for(int i = 0; i < Util::randInt(GameMap::MIN_NPC, GameMap::MAX_NPC); i++)
+	{
+		NPC npc = NPC(*this->_graphics, "npcSquare.png", 40.0f, 40.0f);
+		npc.getBox().setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
+		this->_npcs.push_back(npc);
+	}
 
 	// Set up map borders
 	this->boundingBox = {
@@ -108,22 +117,22 @@ void Game::handleUserInput()
 
 	if(this->_input.isKeyHeld(SDL_SCANCODE_W))
 	{
-		this->_player.move(Util::Direction::TOP);
+		this->_player.getBox().move(Util::Direction::TOP);
 	}
 	
 	if (this->_input.isKeyHeld(SDL_SCANCODE_A))
 	{
-		this->_player.move(Util::Direction::LEFT);
+		this->_player.getBox().move(Util::Direction::LEFT);
 	}
 
 	if (this->_input.isKeyHeld(SDL_SCANCODE_S))
 	{
-		this->_player.move(Util::Direction::BOTTOM);
+		this->_player.getBox().move(Util::Direction::BOTTOM);
 	}
 
 	if (this->_input.isKeyHeld(SDL_SCANCODE_D))
 	{
-		this->_player.move(Util::Direction::RIGHT);
+		this->_player.getBox().move(Util::Direction::RIGHT);
 	}
 
 	// End of custom key handling
@@ -135,23 +144,42 @@ void Game::update()
 
 	this->_player.update();
 
+	for(auto& npc : this->_npcs)
+	{
+		npc.update();
+	}
+
 	/* Collisions */
 
 	if(SDL_GetTicks() - _ticksLastNpcMove > 150)
 	{
-
+		for (auto &npc : this->_npcs)
+		{
+			npc.changeMovement();
+		}
 		_ticksLastNpcMove = SDL_GetTicks();
 	}
 
 	std::vector<GameObject*> gameObjects;
 
-	gameObjects.push_back(&this->_player);
+	gameObjects.push_back(&this->_player.getBox());
+
 	for(auto &seg : this->boundingBox)
 	{
-		gameObjects.push_back(&seg);
+		gameObjects.push_back((Segment*)&seg);
 	}
 
-	this->_player.collide(gameObjects);
+	for (auto &npc : this->_npcs)
+	{
+		gameObjects.push_back((Box*)&npc.getBox());
+	}
+
+	this->_player.getBox().collide(gameObjects);
+
+	for (auto &npc : this->_npcs)
+	{
+		npc.getBox().collide(gameObjects);
+	}
 
 	/* End of updating */
 }
@@ -162,11 +190,18 @@ void Game::render()
 
 	/* Rendering of different classes */
 
-	this->_player.draw(*this->_graphics);
+	Point shift = this->_player.getCenteredShift();
 
 	for(int i = 0; i < boundingBox.size(); i++)
 	{
-		boundingBox[i].draw(*this->_graphics);
+		boundingBox[i].draw(*this->_graphics, shift);
+	}
+
+	this->_player.draw(*this->_graphics);
+
+	for (auto &npc : this->_npcs)
+	{
+		npc.getBox().draw(*this->_graphics, shift);
 	}
 
 	/* End of rendering */

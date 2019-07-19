@@ -13,23 +13,21 @@ public:
 	Box() {}
 	~Box() {}
 
-	Box(Graphics &graphics, const char *assetName, float width, float height = Util::floatMax());
+	Box(Graphics &graphics, const char *assetName, float width, float height);
 
 	/*
 		Base class virtuals
 	 */
-
 	void setSprite(Graphics &graphics, const char *assetName, int imageWidth, int imageHeight);
 	void draw(Graphics &graphics, Point shift = Point(0, 0));
 	void update();
-	void collide(std::vector<GameObject*> objects);
 	void move(Util::Direction direction);
+	void collide(std::vector<GameObject*> objects);
 	const std::string type() const { return "Box"; };
 
 	/*
 		Getters and Setters
 	 */
-
 	Rectangle getBoundingBox() const { return Rectangle(this->_x, this->_y, this->_width, this->_height); }
 	void setBoundingBox(const Rectangle rect)
 	{
@@ -61,6 +59,10 @@ public:
 	void setXSpeed(const float xSpeed) { this->_xSpeed = xSpeed; }
 	void setYSpeed(const float ySpeed) { this->_ySpeed = ySpeed; }
 
+	void setCentered(const bool centered) { this->_centered = centered; }
+
+	void print();
+
 private:
 
 	float _x, _y;
@@ -71,6 +73,7 @@ private:
 	float _xSpeed;
 	float _ySpeed;
 
+	bool _centered = false;
 };
 
 #endif

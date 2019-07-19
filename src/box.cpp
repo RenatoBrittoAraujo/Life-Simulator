@@ -29,10 +29,16 @@ void Box::setSprite(Graphics &graphics, const char *assetName, int width, int he
 	this->GameObject::setSprite(graphics, "assets/" + (std::string) assetName, sourceRect, imageRect.getWidth(), imageRect.getHeight());
 }
 
-
 void Box::draw(Graphics &graphics, Point shift)
 {
-	this->_sprite->draw(graphics, this->_x, this->_y);
+	if(_centered)
+	{
+		this->_sprite->draw(graphics, Util::getScreenWidth() / 2.0f - this->_width, Util::getScreenHeight() / 2.0f - this->_height);
+	}
+	else
+	{	
+		this->_sprite->draw(graphics, this->_x - shift.getX(), this->_y - shift.getY());
+	}
 }
 
 void Box::update()
@@ -43,8 +49,6 @@ void Box::update()
 	this->_xSpeed *= MovementConstants::attritionFactor;
 	this->_ySpeed *= MovementConstants::attritionFactor;
 }
-
-#include <iostream>
 
 void Box::move(Util::Direction direction)
 {
@@ -79,24 +83,30 @@ void Box::move(Util::Direction direction)
 
 void Box::collide(std::vector<GameObject *> objects)
 {
+	if(!this->collides())
+		return;
 	for(auto &object : objects)
 	{
-		if(!object->collides() or this == object)
+		if(this == object)
 		{
 			continue;
 		}
 		std::string objectType = object->type();
 		if(objectType == "Box")
 		{
-			if(Collision::boxToBox(this, (Box*) object))
-				std::cout<<"COLLISION BOX WITH BOX DETECTED"<<std::endl;
+			Collision::boxToBox(this, (Box*) object);
 		}
 		if(objectType == "Segment")
 		{
-			if (Collision::boxToSegment(this, (Segment *)object))
-				std::cout << "COLLISION SEGMENT WITH BOX DETECTED" << std::endl;
+			Collision::boxToSegment(this, (Segment *)object);
 		}
 	}
+}
+
+void Box::print()
+{
+	std::cout<<"BOX PARAMS:"<<std::endl;
+	std::cout<<"\tX = "<<this->_x<<" Y = "<<this->_y<<" HEIGHT = "<<this->_height<<" WIDTH = "<<this->_width<<std::endl;
 }
 
 // Private

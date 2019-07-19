@@ -5,7 +5,9 @@
 #include "input.hpp"
 #include "color.hpp"
 #include "box.hpp"
+#include "player.hpp"
 #include "segment.hpp"
+#include "npc.hpp"
 
 #include <vector>
 
@@ -77,7 +79,8 @@ private:
 
 	// Custom game classes
 
-	Box _player;
+	Player _player;
+	std::vector<NPC> _npcs;
 
 	std::vector<Segment> boundingBox;
 
