@@ -3,8 +3,9 @@
 
 #include "point.hpp"
 #include "graphics.hpp"
+#include "gameobject.hpp"
 
-class Segment
+class Segment : public GameObject
 {
 public:
 	Segment();

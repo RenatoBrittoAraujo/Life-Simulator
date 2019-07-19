@@ -4,6 +4,19 @@
 #include <string>
 #include <vector>
 
+namespace PhysicsConstants
+{
+const float gravity = 0.00;
+const float bounceSpeedFactor = 0.8;
+} // namespace PhysicsConstants
+
+namespace MovementConstants
+{
+const float speedCap = 1000.0;
+const float movementAcceleration = 0.9;
+const float attritionFactor = 0.7;
+}
+
 class Util
 {
 public:
@@ -54,14 +67,14 @@ public:
 		NONE
 	};
 
-	// static const char* getStringFromDirection(Direction direction)
-	// {
-	// 	direction == Direction::TOP ? "TOP" :
-	// 	direction == Direction::BOTTOM ? "BOTTOM" :
-	// 	direction == Direction::LEFT ? "LEFT" :
-	// 	direction == Direction::RIGHT ? "RIGHT" :
-	// 	"NONE";
-	// }
+	static const std::string getStringFromDirection(Direction direction)
+	{
+		direction == Direction::TOP ? "TOP" :
+		direction == Direction::BOTTOM ? "BOTTOM" :
+		direction == Direction::LEFT ? "LEFT" :
+		direction == Direction::RIGHT ? "RIGHT" :
+		"NONE";
+	}
 };
 
 #endif

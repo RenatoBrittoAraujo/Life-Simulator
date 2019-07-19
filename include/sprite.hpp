@@ -2,6 +2,7 @@
 #define SPRITE_HPP
 
 #include "graphics.hpp"
+#include "rectangle.hpp"
 
 #include <SDL2/SDL.h>
 #include <string>
@@ -14,10 +15,10 @@ public:
 	Sprite();
 	~Sprite();
 
-	Sprite(Graphics &graphics, const std::string &path, int sourceX, int sourceY, int sourceWidth, int sourceHeight, float scale);
+	Sprite(Graphics &graphics, const std::string &path, Rectangle sourceRect, float destWidth, float destHeight);
 
 	/*
-		Renders the sprite to screen 
+		Renders the sprite to screen
 	 */
 	void draw(Graphics &graphics, int x, int y);
 
@@ -28,7 +29,8 @@ protected:
 
 private:
 
-	float _scale;
+	float _destWidth;
+	float _destHeight;
 
 };
 

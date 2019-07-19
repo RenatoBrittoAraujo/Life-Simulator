@@ -12,6 +12,9 @@ public:
 	_alpha(alpha)
 	{}
 
+	Color() {}
+	~Color() {}
+
 	const int getRed() const { return this->_red; }
 	const int getGreen() const { return this->_green; }
 	const int getBlue() const { return this->_blue; }

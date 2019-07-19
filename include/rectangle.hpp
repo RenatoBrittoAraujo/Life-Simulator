@@ -2,6 +2,7 @@
 #define RECTANGLE_HPP
 
 #include "util.hpp"
+#include <SDL2/SDL.h>
 
 #include <algorithm>
 
@@ -79,6 +80,42 @@ public:
 	}
 
 	const inline Rectangle getRect() const { return *this; }
+
+	void scale(const float scaleFactor)
+	{
+		this->_width *= scaleFactor;
+		this->_height *= scaleFactor;
+	}
+
+	/*
+		Fits into a specficied width and height but without exceeding it. If fit is not perfect, fit as most as possible without exceeding
+	 */
+	void fit(const float width, const float height)
+	{
+		float rel = this->_width / this->_height;
+		float newHeight = width / rel;
+		float newWidth = rel * height;
+		if(newHeight > height)
+		{
+			this->_width = newWidth;
+			this->_height = height;
+		}
+		else
+		{
+			this->_height = newHeight;
+			this->_width = width;
+		}
+	}
+
+	SDL_Rect toSDLRect()
+	{
+		SDL_Rect newRect;
+		newRect.x = this->_x;
+		newRect.y = this->_y;
+		newRect.w = this->_width;
+		newRect.h = this->_height;
+		return newRect;
+	}
 
 private:
 	float _x, _y, _width, _height;
