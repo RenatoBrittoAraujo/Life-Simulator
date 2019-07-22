@@ -4,9 +4,9 @@
 #include "rectangle.hpp"
 #include "point.hpp"
 #include "graphics.hpp"
-#include "gameobject.hpp"
+#include "spriteobject.hpp"
 
-class Box : public GameObject
+class Box : public SpriteObject
 {
 public:
 
@@ -15,65 +15,10 @@ public:
 
 	Box(Graphics &graphics, const char *assetName, float width, float height);
 
-	/*
-		Base class virtuals
-	 */
-	void setSprite(Graphics &graphics, const char *assetName, int imageWidth, int imageHeight);
-	void draw(Graphics &graphics, Point shift = Point(0, 0));
-	void update();
-	void move(Util::Direction direction);
-	void collide(std::vector<GameObject*> objects);
-	const std::string type() const { return "Box"; };
-
-	/*
-		Getters and Setters
-	 */
-	Rectangle getBoundingBox() const { return Rectangle(this->_x, this->_y, this->_width, this->_height); }
-	void setBoundingBox(const Rectangle rect)
-	{
-		this->_x = rect.getLeft();
-		this->_y = rect.getTop();
-		this->_height = rect.getHeight();
-		this->_width = rect.getWidth();
-	}
-
-	Point getPosition() const { return Point(this->_x, this->_y); }
-	void setPosition(const Point position)
-	{
-		this->_x = position.getX();
-		this->_y = position.getY();
-	}
-
-	float getX() const { return this->_x; }
-	float getY() const { return this->_y; }
-	void setX(const float x) { this->_x = x; }
-	void setY(const float y) { this->_y = y; }
-
-	float getWidth() const { return this->_width; };
-	float getHeight() const { return this->_height; };
-	void setWidth(const float width) { this->_width = width; };
-	void setHeight(const float height) { this->_height = height; };
-
-	float getXSpeed() const { return this->_xSpeed; }
-	float getYSpeed() const { return this->_ySpeed; }
-	void setXSpeed(const float xSpeed) { this->_xSpeed = xSpeed; }
-	void setYSpeed(const float ySpeed) { this->_ySpeed = ySpeed; }
-
-	void setCentered(const bool centered) { this->_centered = centered; }
-
-	void print();
+	const GameObjectTypes type() const { return BOX; };
 
 private:
 
-	float _x, _y;
-	float _height, _width;
-
-	const char *_assetName;
-
-	float _xSpeed;
-	float _ySpeed;
-
-	bool _centered = false;
 };
 
 #endif

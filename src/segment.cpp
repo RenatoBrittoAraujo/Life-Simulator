@@ -44,8 +44,3 @@ void Segment::update()
 void Segment::move(Util::Direction direction)
 {
 }
-
-void Segment::collide(std::vector<GameObject *> objects)
-{
-
-}

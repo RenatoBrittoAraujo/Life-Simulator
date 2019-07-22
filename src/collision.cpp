@@ -1,10 +1,59 @@
 #include "collision.hpp"
-
 #include "box.hpp"
 #include "segment.hpp"
 #include "util.hpp"
 #include "rectangle.hpp"
 #include "point.hpp"
+#include "circle.hpp"
+#include "gameobject.hpp"
+
+#include <vector>
+#include <algorithm>
+
+// Public
+
+const bool Collision::handleCollision(GameObject *objectA, GameObject *objectB)
+{
+	// If any of the objects are an instance of the virtual class GameObject or 
+	// both objects are actually the same or
+	// none of the objects would move if a collision was to happen
+	// return no collision and don't calculate anything
+	if (objectA->type() == GAMEOBJECT or
+			objectB->type() == GAMEOBJECT or
+			objectA == objectB or
+			(objectA->collides() == false and objectB->collides() == false))
+	{
+		return false;
+	}
+	// Swapping them for easier comparing
+	if (objectA->type() > objectB->type())
+	{
+		std::swap(objectA, objectB);
+	}
+	// Hardcoded handlers
+	if (objectA->type() == BOX and objectB->type() == BOX)
+	{
+		return boxToBox((Box *)objectA, (Box *)objectB);
+	}
+	if (objectA->type() == BOX and objectB->type() == CIRCLE)
+	{
+		return boxToCircle((Box *)objectA, (Circle *)objectB);
+	}
+	if (objectA->type() == BOX and objectB->type() == SEGMENT)
+	{
+		return boxToSegment((Box *)objectA, (Segment *)objectB);
+	}
+	if (objectA->type() == CIRCLE and objectB->type() == CIRCLE)
+	{
+		return circleToCircle((Circle *)objectA, (Circle *)objectB);
+	}
+	if (objectA->type() == CIRCLE and objectB->type() == SEGMENT)
+	{
+		return circleToSegment((Circle *)objectA, (Segment *)objectB);
+	}
+	return false;
+}
+// Private
 
 const bool Collision::boxToBox(Box *boxA, Box *boxB)
 {
@@ -115,4 +164,19 @@ const bool Collision::boxToSegment(Box *box, Segment *segment)
 		box->setX(x - halfWidth);
 	box->setY(y - halfHeight);
 	return true;
+}
+
+const bool Collision::boxToCircle(Box *box, Circle *circle)
+{
+
+}
+
+const bool Collision::circleToSegment(Circle *circle, Segment *segment)
+{
+
+}
+
+const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
+{
+
 }

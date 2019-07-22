@@ -20,8 +20,7 @@ public:
 
 	void update();
 	void move(Util::Direction direction);
-	void collide(std::vector<GameObject *> objects);
-	const std::string type() const { return "Segment"; }
+	const GameObjectTypes type() const { return SEGMENT; }
 
 	Point getFirst() const { return Point(this->_first); }
 	Point getSecond() const { return Point(this->_second); }
@@ -36,10 +35,16 @@ public:
 		return this->_first == other.getFirst() and
 					this->_second == other.getSecond();
 	}
-		
-	private:
-		Point _first;
-		Point _second;
+
+	void setColor(const Color color) { this->_renderColor = color; }
+	Color getColor() const { return this->_renderColor; }
+
+private:
+
+	Point _first;
+	Point _second;
+
+	Color _renderColor = Color::black();
 };
 
 #endif

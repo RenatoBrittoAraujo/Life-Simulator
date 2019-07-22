@@ -12,6 +12,15 @@
 	A GameObject is any object that APPEARS ON SCREEN.
  */
 
+enum GameObjectTypes
+{
+	GAMEOBJECT,
+	SPRITEOBJECT,
+	BOX,
+	CIRCLE,
+	SEGMENT
+};
+
 class GameObject
 {
 public:
@@ -49,13 +58,11 @@ public:
 	 */
 	virtual void update();
 
-	virtual const std::string type() const { return "GameObject"; };
+	virtual const GameObjectTypes type() const { return GAMEOBJECT; };
 
 	/*
 	 Basic getters and setters
 	 */
-	void setColor(const Color color) { this->_renderColor = color; }
-	Color getColor() const { return this->_renderColor; }
 
 	void setMovingObject(const bool movingObject) { this->_moves = movingObject; }
 	bool moves() const { return this->_moves; }
@@ -66,14 +73,7 @@ public:
 	void setUpdatingObject(const bool updatingObject) { this->_updates = updatingObject; }
 	bool updates() const { return this->_updates; }
 
-protected:
-
-	static std::map<std::string, Rectangle> images;
-	Sprite *_sprite = nullptr;
-
 private:
-
-	Color _renderColor = Color::black();
 
 	bool _moves;
 	bool _collides;

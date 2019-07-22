@@ -12,11 +12,7 @@ public:
 	~Player();
 
 	Player(Graphics &graphics, const char *assetName, float width, float height);
-
-	/*
-		Returns relative shift every object has to do in relation to centered object's position
-	*/
-	const Point getCenteredShift() const;
+	
 };
 
 #endif

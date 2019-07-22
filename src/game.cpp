@@ -190,7 +190,7 @@ void Game::render()
 
 	/* Rendering of different classes */
 
-	Point shift = this->_player.getCenteredShift();
+	Point shift = this->_player.getBox().getFixedShift();
 
 	for(int i = 0; i < boundingBox.size(); i++)
 	{

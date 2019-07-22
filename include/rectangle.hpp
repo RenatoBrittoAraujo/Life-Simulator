@@ -20,6 +20,13 @@ public:
 		_height(height)
 	{}
 
+	Rectangle(SDL_Rect rect) :
+		_x(rect.x),
+		_y(rect.y),
+		_width(rect.w),
+		_height(rect.h)
+	{}
+
 	const float getCenterX() const { return this->_x + this->_width / 2; }
 	const float getCenterY() const { return this->_y + this->_height / 2; }
 

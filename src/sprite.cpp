@@ -12,7 +12,7 @@ Sprite::Sprite()
 Sprite::~Sprite()
 {}
 
-Sprite::Sprite(Graphics &graphics, const std::string &path, Rectangle sourceRect, float destWidth, float destHeight) :
+Sprite::Sprite(Graphics &graphics, const std::string path, Rectangle sourceRect, float destWidth, float destHeight) :
 	_destHeight(destHeight), _destWidth(destWidth), _sourceRect(sourceRect.toSDLRect())
 {
 	this->_spriteSheet = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(path));
