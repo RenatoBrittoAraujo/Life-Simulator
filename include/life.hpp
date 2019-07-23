@@ -2,6 +2,7 @@
 #define LIFE_HPP
 
 #include "box.hpp"
+#include "circle.hpp"
 
 class Life
 {
@@ -15,11 +16,11 @@ public:
 	virtual void draw(Graphics &graphics);
 	virtual void update();
 
-	Box &getBox() { return _box; }
+	Circle &getBox() { return _box; }
 
 protected:
 
-	Box _box;
+	Circle _box;
 
 };
 

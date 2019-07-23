@@ -20,10 +20,6 @@ const char* Util::getGameName() { return GlobalVariables::GAME_NAME; }
 
 const int Util::randInt(int lower, int upper)
 {
-	if (lower > upper)
-	{
-		throw "randInt(): lower > upper";
-	}
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int> int_dist(lower, upper);

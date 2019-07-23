@@ -4,6 +4,7 @@
 #include "graphics.hpp"
 #include "util.hpp"
 #include "point.hpp"
+#include "vector2D.hpp"
 #include "gameobject.hpp"
 
 class SpriteObject : public GameObject
@@ -54,6 +55,9 @@ public:
 	float getYSpeed() const { return this->_ySpeed; }
 	void setXSpeed(const float xSpeed) { this->_xSpeed = xSpeed; }
 	void setYSpeed(const float ySpeed) { this->_ySpeed = ySpeed; }
+
+	Vector2D getSpeed() const { return Vector2D(this->_xSpeed, this->_ySpeed); }
+	void setSpeed(const Vector2D speed) { this->_xSpeed = speed.getX(); this->_ySpeed = speed.getY(); }
 
 	void setFixed(const bool fixed) { this->_fixed = fixed; }
 	bool getFixed() const { return this->_fixed; }

@@ -100,5 +100,7 @@ void SpriteObject::move(Util::Direction direction)
 
 std::map<std::string, Rectangle> SpriteObject::images({
 	{"npcSquare.png", Rectangle(0.0f, 0.0f, 512.0f, 512.0f)},
-	{"playerSquare.png", Rectangle(0.0f, 0.0f, 310.0f, 310.0f)}
+	{"playerSquare.png", Rectangle(0.0f, 0.0f, 310.0f, 310.0f)},
+	{"npcCircle.png", Rectangle(0.0f , 0.0f, 500.0f, 500.0f)},
+	{"playerCircle.png", Rectangle(0.0f, 0.0f, 500.0f, 500.0f)}
 });

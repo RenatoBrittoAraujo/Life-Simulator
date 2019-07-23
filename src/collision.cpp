@@ -6,9 +6,20 @@
 #include "point.hpp"
 #include "circle.hpp"
 #include "gameobject.hpp"
+#include "vector2D.hpp"
 
 #include <vector>
 #include <algorithm>
+
+const float pi = acos(-1.0);
+
+/*
+	Notes on segment collisions:
+	Segments are assumed to be fixed
+	This is not to be the case forever but
+	segment movement is a complicated topic
+	and will be worked on in the future
+ */
 
 // Public
 
@@ -171,12 +182,90 @@ const bool Collision::boxToCircle(Box *box, Circle *circle)
 
 }
 
-const bool Collision::circleToSegment(Circle *circle, Segment *segment)
-{
-
-}
-
 const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 {
+	float ra = circleA->getRadius();
+	float rb = circleB->getRadius();
+	float xa = circleA->getX() + ra;
+	float ya = circleA->getY() + ra;
+	float xb = circleB->getX() + rb;
+	float yb = circleB->getY() + rb;
 
+	Point centerA = Point(xa, ya);
+	Point centerB = Point(xb, yb);
+
+	float dist = centerA.euclidianDistance(centerB);
+
+	if (dist > ra + rb)
+	{
+		return false;
+	}
+
+	Vector2D vecFromAtoB(centerA, centerB);
+
+	vecFromAtoB.scale( (ra + rb - dist) / (dist * 2.0f) );
+
+	Point newBPos(circleB->getPosition());
+	newBPos.traverseVector(vecFromAtoB);
+	circleB->setPosition(newBPos);
+
+	vecFromAtoB.scale(-1.0f);
+	
+	Point newAPos(circleA->getPosition());
+	newAPos.traverseVector(vecFromAtoB);
+	circleA->setPosition(newAPos);
+
+	return true;
+}
+
+const bool Collision::circleToSegment(Circle *circle, Segment *segment)
+{
+	float cx = circle->getX();
+	float cy = circle->getY();
+	float r = circle->getRadius();
+	Vector2D vectorAtoB((Point) segment->getFirst(), segment->getSecond());
+	Point circleCenter(cx + r, cy + r);
+	Vector2D vectorAtoCenter(segment->getFirst(), circleCenter);
+	float epislon = vectorAtoCenter.dotProduct(vectorAtoB) / vectorAtoB.dotProduct(vectorAtoB);
+	
+	Point closest;
+	Vector2D speed = circle->getSpeed();
+	bool speedSet = false;
+	if (epislon < 0.0f or epislon > 1.0f)
+	{
+		closest = segment->getFirst();
+		if (circleCenter.euclidianDistance(segment->getSecond()) < 
+				circleCenter.euclidianDistance(closest))
+			closest = segment->getSecond();
+	}
+	else
+	{
+		closest = Point(segment->getFirst());
+		vectorAtoB.scale(epislon);
+		closest.traverseVector(vectorAtoB);
+	}
+
+	float dist = closest.euclidianDistance(circleCenter);
+	if (dist > r)
+	{
+		return false;
+	}
+	Vector2D moveBack(closest, circleCenter);
+	moveBack.scale((r - dist) / dist + 0.001f);
+	Point newPos = circle->getPosition();
+	newPos.traverseVector(moveBack);
+	circle->setPosition(newPos);
+	Vector2D vectorCenterToClosest(circleCenter, closest);
+	float angle = 
+		atan2(
+			vectorCenterToClosest.crossProduct(speed),
+			vectorCenterToClosest.dotProduct(speed)
+		);
+	angle = pi - 2.0f * angle;
+	float newX = speed.getX() * cos(angle) - speed.getY() * sin(angle);
+	float newY = speed.getX() * sin(angle) + speed.getY() * cos(angle);
+	speed = Vector2D(newX, newY);
+	speed.scale(PhysicsConstants::bounceSpeedFactor);
+	circle->setSpeed(speed);
+	return true;
 }

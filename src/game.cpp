@@ -58,13 +58,13 @@ bool Game::init(bool fullscreen)
 	/* Custom class initialization */
 
 	// Setting up player
-	_player = Player(*this->_graphics, "playerSquare.png", 50.0f, 50.0f);
+	_player = Player(*this->_graphics, "playerCircle.png", 25.0f, 25.0f);
 	_player.getBox().setPosition(Point(200,100));
 
 	// Setting up NPCs
 	for(int i = 0; i < Util::randInt(GameMap::MIN_NPC, GameMap::MAX_NPC); i++)
 	{
-		NPC npc = NPC(*this->_graphics, "npcSquare.png", 40.0f, 40.0f);
+		NPC npc = NPC(*this->_graphics, "npcCircle.png", 20.0f, 20.0f);
 		npc.getBox().setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
 		this->_npcs.push_back(npc);
 	}
@@ -74,7 +74,8 @@ bool Game::init(bool fullscreen)
 	Segment(Point(0, 0), Point(0, GameMap::MAP_HEIGHT)),
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(0, GameMap::MAP_HEIGHT)),
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(GameMap::MAP_WIDTH, 0)),
-	Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0))};
+	Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0)),
+	Segment(Point(200,700), Point(800, 200))};
 
 	/* End of class initialization */
 
