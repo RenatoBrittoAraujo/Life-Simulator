@@ -26,6 +26,11 @@ const int Util::randInt(int lower, int upper)
 	return int_dist(mt);
 }
 
+const float Util::randFloat(float lower, float upper)
+{
+	return (float( randInt(0, 100000000) ) / 100000000.0) * (upper - lower) + lower;
+}
+
 const bool Util::fileExists(const std::string &path)
 {
 	std::ifstream file;

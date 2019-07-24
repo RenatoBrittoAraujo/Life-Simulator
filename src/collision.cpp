@@ -66,6 +66,9 @@ const bool Collision::handleCollision(GameObject *objectA, GameObject *objectB)
 }
 // Private
 
+/*
+	Collision assumes box is upright
+ */
 const bool Collision::boxToBox(Box *boxA, Box *boxB)
 {
 	const Rectangle boxARect = boxA->getBoundingBox();
@@ -118,6 +121,10 @@ const bool Collision::boxToBox(Box *boxA, Box *boxB)
 	return true;
 }
 
+
+/*
+	Collision assumes vertical or horizontal segments
+ */
 const bool Collision::boxToSegment(Box *box, Segment *segment)
 {
 	const float fx = segment->getFirst().getX();
@@ -182,6 +189,18 @@ const bool Collision::boxToCircle(Box *box, Circle *circle)
 
 }
 
+/*
+	General 2D circle circle collision including bouncing speed factored by weight of the two circles
+
+	Pseudocode:
+		If distance between circle centers is bigger than the sum of the radii
+			Return no collision
+		End
+		Calculate dot product between vector from circle A to B and A speed vector
+		Calculate dot product between vector from circle B to A and B speed vector
+		Calculate momentum by summing modulus of vectors above pondered by cicle's weights
+		Divide pondered by weight the momentum calculated and apply to the circle's speeds
+ */
 const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 {
 	float ra = circleA->getRadius();
@@ -201,6 +220,22 @@ const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 		return false;
 	}
 
+	Vector2D vecAtoB(centerA, centerB);
+	Vector2D vecBtoA(centerB, centerA);
+	float dotProdAToBSpeed = circleA->getSpeed().dotProduct(vecAtoB);
+	float dotProdBToASpeed = circleB->getSpeed().dotProduct(vecBtoA);
+
+	float momentum = dotProdAToBSpeed * circleA->getWeight() + dotProdBToASpeed * circleB->getWeight();
+	float momentumForA = momentum * (circleB->getWeight() / (circleA->getWeight() + circleB->getWeight()));
+	float momentumForB = momentum * (circleA->getWeight() / (circleA->getWeight() + circleB->getWeight()));
+
+	Vector2D speedChangeA = vecBtoA;
+	Vector2D speedChangeB = vecAtoB;
+	speedChangeA.setModulus(momentumForA);
+	speedChangeB.setModulus(momentumForB);
+	circleA->setSpeed(circleA->getSpeed() + speedChangeA);
+	circleB->setSpeed(circleB->getSpeed() + speedChangeB);
+
 	Vector2D vecFromAtoB(centerA, centerB);
 
 	vecFromAtoB.scale( (ra + rb - dist) / (dist * 2.0f) );
@@ -218,6 +253,41 @@ const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 	return true;
 }
 
+/*
+	General 2D circle segment collision including bouncing speed
+	This function consumed a part of my sanity
+
+	References:
+	- [1] Closest point to segment
+		https://diego.assencio.com/?index=ec3d5dfdfc0b6a0d147a656f0af332bd
+	- [2] Angle between 2D vectors
+		https://stackoverflow.com/questions/14066933/direct-way-of-computing-clockwise-angle-between-2-vectors
+	- [3] 2D vector rotation
+		https://stackoverflow.com/questions/4780119/2d-euclidean-vector-rotations
+
+	Pseudocode:
+		Let A be any of the segment points and B be the other segment point
+		Find the vector from A to B
+		Find the vector from circle center to B
+		Calculate epislon [1]
+		If epislon is bigger than 1.0 or smaller than 0.0, 
+			Determine if closest point to circle center is A or B
+		Else
+			Closest point is in segment, then follow vector from \
+			A to B by it's size scaled by epislon
+		End
+		If the euclidian distance to closest point to circle center is bigger than radius
+			Return no collision
+		End
+		Move circle center by vector from closest to center with modulus 'Radius - |Closest to Center|'
+		=> Circle is now in correct position
+		Find vector between center to closest 
+		Find speed vector
+		Calculate the vector angle between center to closest and speed [2]
+		Reflect angle
+		Rotate speed vector by reflected angle0
+		Return collision
+ */
 const bool Collision::circleToSegment(Circle *circle, Segment *segment)
 {
 	float cx = circle->getX();

@@ -18,10 +18,10 @@
 
 namespace GameMap
 {
-	const int MAP_WIDTH = 1200;
-	const int MAP_HEIGHT = 1200;
-	const int MIN_NPC = 20;
-	const int MAX_NPC = 80;
+	const int MAP_WIDTH = 3000;
+	const int MAP_HEIGHT = 3000;
+	const int MIN_NPC = 50;
+	const int MAX_NPC = 200;
 	const int SPAWN_BORDER_DISTANCE = 40;
 }
 
@@ -74,8 +74,7 @@ bool Game::init(bool fullscreen)
 	Segment(Point(0, 0), Point(0, GameMap::MAP_HEIGHT)),
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(0, GameMap::MAP_HEIGHT)),
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(GameMap::MAP_WIDTH, 0)),
-	Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0)),
-	Segment(Point(200,700), Point(800, 200))};
+	Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0))};
 
 	/* End of class initialization */
 

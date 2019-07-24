@@ -20,9 +20,11 @@ public:
 	 */
 	void scale(const float &scaleValue);
 
-	bool operator<(const Point &other) const;
+	bool operator<(const Vector2D &other) const;
 
-	bool operator==(const Point &other) const;
+	bool operator==(const Vector2D &other) const;
+
+	Vector2D operator+(const Vector2D &other) const;
 
 	float dotProduct(const Vector2D &other) const;
 	float crossProduct(const Vector2D &other) const;
@@ -31,6 +33,8 @@ public:
 	float getY() const;
 	void setX(const float &x);
 	void setY(const float &y);
+	float getModulus() const;
+	void setModulus(const float modulus);
 
 private:
 

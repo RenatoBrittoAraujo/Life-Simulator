@@ -16,10 +16,11 @@ public:
 
 	SpriteObject(Graphics &graphics, const std::string assetName, float width, float height);
 
-	virtual void setSprite(Graphics &graphics, const std::string assetName, int imageWidth, int imageHeight);
-	virtual void draw(Graphics &graphics, Point shift = Point(0, 0));
-	virtual void update();
-	virtual void move(Util::Direction direction);
+	void updateSprite(Graphics &graphics);
+
+	void draw(Graphics &graphics, Point shift = Point(0, 0));
+	void update();
+	void move(Util::Direction direction);
 	virtual const GameObjectTypes type() const { return SPRITEOBJECT; };
 
 	Point getFixedShift() const;
@@ -64,8 +65,18 @@ public:
 	void setFixedPosition(const Point fixedPosition) { this->_fixedPosition = fixedPosition; }
 	Point getFixedPosition() const { return this->_fixedPosition; }
 
+	float getMovementSpeed() const { return this->_movementSpeed; }
+	float getWeight() const { return this->_weight; }
+	float getAttritionFactor() const { return this->_attritionFactor; }
+	float getSpeedCap() const { return this->_speedCap; }
+	void setMovementSpeed(const float movementSpeed) { this->_movementSpeed = movementSpeed; }
+	void setWeight(const float weight) { this->_weight = weight; }
+	void setAttritionFactor(const float attritionFactor) { this->_attritionFactor = attritionFactor; }
+	void setSpeedCap(const float speedCap) { this->_speedCap = speedCap; }
+
 private:
 
+	void setSprite(Graphics &graphics, const std::string assetName, int imageWidth, int imageHeight);
 	static std::map<std::string, Rectangle> images;
 	Sprite *_sprite = nullptr;
 
@@ -80,6 +91,12 @@ private:
 	bool _fixed;
 	Point _fixedPosition;
 
+	std::string _assetName;
+
+	float _movementSpeed;
+	float _weight;
+	float _attritionFactor;
+	float _speedCap;
 };
 
 #endif

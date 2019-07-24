@@ -8,7 +8,8 @@
 
 // Public
 
-Circle::Circle(Graphics &graphics, const char *assetName, float radius) : _radius(radius), 
+Circle::Circle(Graphics &graphics, const char *assetName, float radius) :
 	SpriteObject(graphics, assetName, 2.0f * radius, 2.0f * radius)
 {
+	this->_radius = getWidth() / 2.0f;
 }

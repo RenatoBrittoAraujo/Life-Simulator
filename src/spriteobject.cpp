@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 
+
 // Public
 
 SpriteObject::SpriteObject()
@@ -26,16 +27,12 @@ SpriteObject::SpriteObject(Graphics &graphics, const std::string assetName, floa
 	this->_ySpeed = 0.0f;
 	this->_xSpeed = 0.0f;
 	this->_fixed = false;
+	this->_assetName = assetName;
 }
 
-void SpriteObject::setSprite(Graphics &graphics, const std::string assetName, int width, int height)
+void SpriteObject::updateSprite(Graphics &graphics)
 {
-	Rectangle imageRect = this->images[std::string(assetName)];
-	Rectangle sourceRect = imageRect;
-	imageRect.fit(width, height);
-	this->_width = imageRect.getWidth();
-	this->_height = imageRect.getHeight();
-	this->_sprite = new Sprite(graphics, "assets/" + assetName, sourceRect, imageRect.getWidth(), imageRect.getHeight());
+	setSprite(graphics, this->_assetName, this->_width, this->_height);
 }
 
 void SpriteObject::draw(Graphics &graphics, Point shift)
@@ -60,43 +57,54 @@ Point SpriteObject::getFixedShift() const
 
 void SpriteObject::update()
 {
-	this->_ySpeed = std::max(std::min(this->_ySpeed + PhysicsConstants::gravity, MovementConstants::speedCap), -MovementConstants::speedCap);
+	if (!this->updates())
+	{
+		return;
+	}
+	this->_ySpeed = std::max(std::min(this->_ySpeed + PhysicsConstants::gravity, this->_speedCap), -this->_speedCap);
 	this->_x += _xSpeed;
 	this->_y += _ySpeed;
-	this->_xSpeed *= MovementConstants::attritionFactor;
-	this->_ySpeed *= MovementConstants::attritionFactor;
+	this->_xSpeed *= this->_attritionFactor;
+	this->_ySpeed *= this->_attritionFactor;
 }
 
 void SpriteObject::move(Util::Direction direction)
 {
-	if (!direction)
+	if (!direction or !this->moves())
+	{
 		return;
+	}
 	switch (direction)
 	{
 	case Util::Direction::BOTTOM:
 		this->_ySpeed = std::min(
-				MovementConstants::speedCap,
-				this->_ySpeed + MovementConstants::movementAcceleration);
+				this->_speedCap,
+				this->_ySpeed + this->_movementSpeed);
 		break;
 	case Util::Direction::TOP:
 		this->_ySpeed = std::max(
-				-MovementConstants::speedCap,
-				this->_ySpeed - MovementConstants::movementAcceleration);
+				-this->_speedCap,
+				this->_ySpeed - this->_movementSpeed);
 		break;
 	case Util::Direction::LEFT:
 		this->_xSpeed = std::max(
-				-MovementConstants::speedCap,
-				this->_xSpeed - MovementConstants::movementAcceleration);
+				-this->_speedCap,
+				this->_xSpeed - this->_movementSpeed);
 		break;
 	case Util::Direction::RIGHT:
 		this->_xSpeed = std::min(
-				MovementConstants::speedCap,
-				this->_xSpeed + MovementConstants::movementAcceleration);
+				this->_speedCap,
+				this->_xSpeed + this->_movementSpeed);
 		break;
 	default:
 		break;
 	}
 }
+
+/*
+	This is a vector that stores information about specific images in assets/
+	representing the source rectangle that is going to be cut from the image when read
+ */
 
 std::map<std::string, Rectangle> SpriteObject::images({
 	{"npcSquare.png", Rectangle(0.0f, 0.0f, 512.0f, 512.0f)},
@@ -104,3 +112,15 @@ std::map<std::string, Rectangle> SpriteObject::images({
 	{"npcCircle.png", Rectangle(0.0f , 0.0f, 500.0f, 500.0f)},
 	{"playerCircle.png", Rectangle(0.0f, 0.0f, 500.0f, 500.0f)}
 });
+
+// Private
+
+void SpriteObject::setSprite(Graphics &graphics, const std::string assetName, int width, int height)
+{
+	Rectangle imageRect = this->images[std::string(assetName)];
+	Rectangle sourceRect = imageRect;
+	imageRect.fit(width, height);
+	this->_width = imageRect.getWidth();
+	this->_height = imageRect.getHeight();
+	this->_sprite = new Sprite(graphics, "assets/" + assetName, sourceRect, imageRect.getWidth(), imageRect.getHeight());
+}

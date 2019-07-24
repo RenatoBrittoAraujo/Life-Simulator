@@ -26,14 +26,19 @@ void Vector2D::scale(const float &scaleValue)
 	this->_y *= scaleValue;
 }
 
-bool Vector2D::operator<(const Point &other) const
+bool Vector2D::operator<(const Vector2D &other) const
 {
 	return Util::fequals(this->_x, other.getX()) ? this->_y < other.getY() : this->_x < other.getX();
 }
 
-bool Vector2D::operator==(const Point &other) const
+bool Vector2D::operator==(const Vector2D &other) const
 {
 	return Util::fequals(this->_x, other.getX()) and Util::fequals(this->_y, other.getY());
+}
+
+Vector2D Vector2D::operator+(const Vector2D &other) const
+{
+	return Vector2D(this->_x + other.getX(), this->_y + other.getY());
 }
 
 float Vector2D::dotProduct(const Vector2D &other) const
@@ -44,6 +49,18 @@ float Vector2D::dotProduct(const Vector2D &other) const
 float Vector2D::crossProduct(const Vector2D &other) const
 {
 	return this->_x * other.getY() - this->_y * other.getX();
+}
+
+float Vector2D::getModulus() const
+{
+	return this->_x * this->_x + this->_y * this->_y;
+}
+
+void Vector2D::setModulus(const float modulus)
+{
+	float oldModulus = sqrt(getModulus());
+	this->_x /= oldModulus;
+	this->_y /= oldModulus;
 }
 
 float Vector2D::getX() const { return this->_x; }

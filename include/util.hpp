@@ -7,25 +7,22 @@
 
 namespace PhysicsConstants
 {
-const float gravity = 0.4;
+const float gravity = 0.0;
 const float bounceSpeedFactor = 0.6;
 } // namespace PhysicsConstants
-
-namespace MovementConstants
-{
-const float speedCap = 100.0;
-const float movementAcceleration = 0.9;
-const float attritionFactor = 0.95;
-}
 
 class Util
 {
 public:
 	/*
-		Returns an integer int the interval [lower,upper]
-		Throws exception if lower > upper
+		Returns an integer in the interval [lower,upper]
 	 */
 	static const int randInt(int lower, int upper);
+
+	/*
+		Returns an float in the interval [lower,upper]
+	 */
+	static const float randFloat(float lower, float upper);
 
 	/*
 		Returns true if any file was found in path passed
