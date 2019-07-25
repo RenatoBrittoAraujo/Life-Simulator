@@ -52,7 +52,6 @@ bool Game::init(bool fullscreen)
 	}
 	else
 	{
-		Util::setWindowedMode(1280, 720);
 		this->_graphics = new Graphics(Util::getGameName(), false, Util::getScreenWidth(), Util::getScreenHeight());
 	}
 	
@@ -214,7 +213,6 @@ void Game::exit()
 }
 
 bool Game::running()
-
 {
 	return _isRunning;
 }
@@ -251,4 +249,9 @@ void Game::setFramerate(int framerate)
 void Game::setVerbose(bool verbose)
 {
 	this->_verbose = verbose;
+}
+
+void Game::setScreenSize(int width, int height)
+{
+	Util::setWindowedMode(width, height);
 }

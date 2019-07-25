@@ -42,6 +42,7 @@ public:
 
 	void setVerbose(bool verbose);
 	void setFramerate(int framerate);
+	void setScreenSize(int width, int height);
 
 private:
 	/*

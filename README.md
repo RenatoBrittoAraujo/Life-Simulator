@@ -12,9 +12,14 @@ Running verbose:
 make runv
 ```
 
-Running with set framerate:
+Running fullscreen:
 ```
-make run framerate=60
+make runf
+```
+
+Running with custom settings (verbose, fullscreen, other framerate):
+```
+make runc
 ```
 
 ## Technical Stuff
