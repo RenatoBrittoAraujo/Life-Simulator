@@ -18,7 +18,8 @@ enum GameObjectTypes
 	SPRITEOBJECT,
 	BOX,
 	CIRCLE,
-	SEGMENT
+	SEGMENT,
+	FONT
 };
 
 class GameObject
@@ -34,11 +35,6 @@ public:
 	// Does it update? How does it update?
 
 	/*
-		Loads image as sprite
-	 */
-	virtual void setSprite(Graphics &graphics, const std::string assetName, Rectangle sourceRect, float targetWidth, float targetHeight);
-
-	/*
 		Draws GameObject to renderer
 	 */
 	virtual void draw(Graphics &graphics, Point shift = Point(0, 0)) = 0;
@@ -50,8 +46,9 @@ public:
 
 	/*
 		Handles collisions with other GameObjects
+		Returns number of collisions
 	 */
-	virtual void collide(std::vector<GameObject*> objects);
+	int collide(std::vector<GameObject*> objects);
 
 	/*
 		Updates GameObjects attributes

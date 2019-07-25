@@ -8,6 +8,7 @@
 #include "player.hpp"
 #include "segment.hpp"
 #include "npc.hpp"
+#include "fontobject.hpp"
 
 #include <vector>
 
@@ -85,6 +86,8 @@ private:
 	std::vector<Segment> boundingBox;
 
 	unsigned int _ticksLastNpcMove;
+
+	std::vector<GameObject*> collisionObjects;
 
 	// End of custom classes
 };

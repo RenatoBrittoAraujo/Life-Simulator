@@ -2,6 +2,7 @@
 #include "util.hpp"
 #include "input.hpp"
 #include "life.hpp"
+#include "fontobject.hpp"
 #include "segment.hpp"
 #include "time.hpp"
 #include "player.hpp"
@@ -33,7 +34,7 @@ Game::~Game()
 
 bool Game::init(bool fullscreen)
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() < 0)
 	{
 		Util::logError("Initalizing failure", "SDL Subsystems failed to initialize properly", SDL_GetError());
 		return false;
@@ -75,6 +76,18 @@ bool Game::init(bool fullscreen)
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(0, GameMap::MAP_HEIGHT)),
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(GameMap::MAP_WIDTH, 0)),
 	Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0))};
+
+	this->collisionObjects.push_back(&this->_player.getBox());
+
+	for (auto &seg : this->boundingBox)
+	{
+		this->collisionObjects.push_back((Segment *)&seg);
+	}
+
+	for (auto &npc : this->_npcs)
+	{
+		this->collisionObjects.push_back((Box *)&npc.getBox());
+	}
 
 	/* End of class initialization */
 
@@ -149,8 +162,6 @@ void Game::update()
 		npc.update();
 	}
 
-	/* Collisions */
-
 	if(SDL_GetTicks() - _ticksLastNpcMove > 150)
 	{
 		for (auto &npc : this->_npcs)
@@ -160,28 +171,15 @@ void Game::update()
 		_ticksLastNpcMove = SDL_GetTicks();
 	}
 
-	std::vector<GameObject*> gameObjects;
+	handleCollisions();
+}
 
-	gameObjects.push_back(&this->_player.getBox());
-
-	for(auto &seg : this->boundingBox)
+void Game::handleCollisions()
+{
+	for(auto &object : collisionObjects)
 	{
-		gameObjects.push_back((Segment*)&seg);
+		object->collide(collisionObjects);
 	}
-
-	for (auto &npc : this->_npcs)
-	{
-		gameObjects.push_back((Box*)&npc.getBox());
-	}
-
-	this->_player.getBox().collide(gameObjects);
-
-	for (auto &npc : this->_npcs)
-	{
-		npc.getBox().collide(gameObjects);
-	}
-
-	/* End of updating */
 }
 
 void Game::render()
@@ -216,6 +214,7 @@ void Game::exit()
 }
 
 bool Game::running()
+
 {
 	return _isRunning;
 }

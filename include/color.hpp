@@ -1,6 +1,8 @@
 #ifndef COLOR_HPP
 #define COLOR_HPP
 
+#include <SDL2/SDL.h>
+
 class Color
 {
 public:
@@ -30,6 +32,15 @@ public:
 	static Color darkGray() { return Color(70, 70, 70, 255); }
 	static Color lightGray() { return Color(200, 200, 200, 255); }
 
+	SDL_Color toSDLColor() const {
+		SDL_Color color;
+		color.r = this->_red;
+		color.g = this->_green;
+		color.b = this->_blue;
+		color.a = this->_alpha;
+		return color;
+	}
+	
 private:
 
 	int _red;

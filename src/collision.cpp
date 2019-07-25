@@ -71,8 +71,8 @@ const bool Collision::handleCollision(GameObject *objectA, GameObject *objectB)
  */
 const bool Collision::boxToBox(Box *boxA, Box *boxB)
 {
-	const Rectangle boxARect = boxA->getBoundingBox();
-	const Rectangle boxBRect = boxB->getBoundingBox();
+	const Rectangle<float> boxARect = boxA->getBoundingBox();
+	const Rectangle<float> boxBRect = boxB->getBoundingBox();
 
 	if(!boxARect.collidesWith(boxBRect) or boxARect == boxBRect)
 		return false;
@@ -199,7 +199,10 @@ const bool Collision::boxToCircle(Box *box, Circle *circle)
 		Calculate dot product between vector from circle A to B and A speed vector
 		Calculate dot product between vector from circle B to A and B speed vector
 		Calculate momentum by summing modulus of vectors above pondered by cicle's weights
-		Divide pondered by weight the momentum calculated and apply to the circle's speeds
+		Divide pondered by inverse of the weight the momentum calculated
+		Sum vector of circle speed to opposite of collision directions with modulus calculated before
+		Calculate intersection size
+		Move circles to opposite direction according to half the intersection size 
  */
 const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 {
@@ -226,6 +229,7 @@ const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 	float dotProdBToASpeed = circleB->getSpeed().dotProduct(vecBtoA);
 
 	float momentum = dotProdAToBSpeed * circleA->getWeight() + dotProdBToASpeed * circleB->getWeight();
+	momentum *= PhysicsConstants::bounceSpeedFactor;
 	float momentumForA = momentum * (circleB->getWeight() / (circleA->getWeight() + circleB->getWeight()));
 	float momentumForB = momentum * (circleA->getWeight() / (circleA->getWeight() + circleB->getWeight()));
 

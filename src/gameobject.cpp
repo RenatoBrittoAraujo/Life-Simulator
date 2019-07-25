@@ -14,11 +14,6 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::setSprite(Graphics &graphics, const std::string assetName, Rectangle sourceRect, float targetWidth, float targetHeight)
-{
-
-}
-
 void GameObject::update()
 {
 }
@@ -27,10 +22,15 @@ void GameObject::move(Util::Direction direction)
 {
 }
 
-void GameObject::collide(std::vector<GameObject *> objects)
+int GameObject::collide(std::vector<GameObject *> objects)
 {
+	int collisionNumber = 0;
 	for (auto &object : objects)
 	{
-		Collision::handleCollision(this, object);
+		if (Collision::handleCollision(this, object))
+		{
+			collisionNumber++;
+		}
 	}
+	return collisionNumber;
 }

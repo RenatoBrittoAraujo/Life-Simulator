@@ -29,10 +29,9 @@ public:
 		Getters and Setters
 	 */
 
-			Rectangle
-			getBoundingBox() const
+	Rectangle<float> getBoundingBox() const
 	{
-		return Rectangle(this->_x, this->_y, this->_width, this->_height);
+		return Rectangle<float>(this->_x, this->_y, this->_width, this->_height);
 	}
 
 	Point getPosition() const { return Point(this->_x, this->_y); }
@@ -77,7 +76,7 @@ public:
 private:
 
 	void setSprite(Graphics &graphics, const std::string assetName, int imageWidth, int imageHeight);
-	static std::map<std::string, Rectangle> images;
+	static std::map<std::string, Rectangle<int>> images;
 	Sprite *_sprite = nullptr;
 
 	float _x;

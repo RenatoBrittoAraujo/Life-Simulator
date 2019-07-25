@@ -106,19 +106,19 @@ void SpriteObject::move(Util::Direction direction)
 	representing the source rectangle that is going to be cut from the image when read
  */
 
-std::map<std::string, Rectangle> SpriteObject::images({
-	{"npcSquare.png", Rectangle(0.0f, 0.0f, 512.0f, 512.0f)},
-	{"playerSquare.png", Rectangle(0.0f, 0.0f, 310.0f, 310.0f)},
-	{"npcCircle.png", Rectangle(0.0f , 0.0f, 500.0f, 500.0f)},
-	{"playerCircle.png", Rectangle(0.0f, 0.0f, 500.0f, 500.0f)}
+std::map<std::string, Rectangle<int>> SpriteObject::images({
+	{"npcSquare.png", Rectangle<int>(0, 0, 512, 512)},
+	{"playerSquare.png", Rectangle<int>(0, 0, 310, 310)},
+	{"npcCircle.png", Rectangle<int>(0 , 0, 500, 500)},
+	{"playerCircle.png", Rectangle<int>(0, 0, 500, 500)}
 });
 
 // Private
 
 void SpriteObject::setSprite(Graphics &graphics, const std::string assetName, int width, int height)
 {
-	Rectangle imageRect = this->images[std::string(assetName)];
-	Rectangle sourceRect = imageRect;
+	Rectangle<int> imageRect = this->images[std::string(assetName)];
+	Rectangle<int> sourceRect = imageRect;
 	imageRect.fit(width, height);
 	this->_width = imageRect.getWidth();
 	this->_height = imageRect.getHeight();

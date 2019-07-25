@@ -8,12 +8,13 @@
 #include <iostream>
 #include <vector>
 
+template <typename T>
 class Rectangle
 {
 public:
 	Rectangle(){};
 
-	Rectangle(float x, float y, float width, float height) : 
+	Rectangle(T x, T y, T width, T height) : 
 		_x(x),
 		_y(y),
 		_width(width),
@@ -27,16 +28,16 @@ public:
 		_height(rect.h)
 	{}
 
-	const float getCenterX() const { return this->_x + this->_width / 2; }
-	const float getCenterY() const { return this->_y + this->_height / 2; }
+	const T getCenterX() const { return this->_x + this->_width / 2; }
+	const T getCenterY() const { return this->_y + this->_height / 2; }
 
-	const float getLeft() const { return this->_x; }
-	const float getRight() const { return this->_x + this->_width; }
-	const float getTop() const { return this->_y; }
-	const float getBottom() const { return this->_y + this->_height; }
+	const T getLeft() const { return this->_x; }
+	const T getRight() const { return this->_x + this->_width; }
+	const T getTop() const { return this->_y; }
+	const T getBottom() const { return this->_y + this->_height; }
 
-	const float getHeight() const { return this->_height; }
-	const float getWidth() const { return this->_width; }
+	const T getHeight() const { return this->_height; }
+	const T getWidth() const { return this->_width; }
 
 	bool operator == (const Rectangle &other) const
 	{
@@ -46,7 +47,7 @@ public:
 					 Util::fequals(getRight(), other.getRight());
 	}
 
-	const float getSide(const Util::Direction side) const
+	const T getSide(const Util::Direction side) const
 	{
 		return side == Util::Direction::LEFT ? this->getLeft() : side == Util::Direction::RIGHT ? this->getRight() : side == Util::Direction::TOP ? this->getTop() : side == Util::Direction::BOTTOM ? this->getBottom() : Util::Direction::NONE;
 	}
@@ -61,20 +62,20 @@ public:
 
 	const Util::Direction collisionSide(const Rectangle &other) const
 	{
-		std::vector<std::pair<float, Util::Direction>> distances;
+		std::vector<std::pair<T, Util::Direction>> distances;
 		distances.push_back({ fabs(getLeft() - other.getRight()), Util::Direction::LEFT });
 		distances.push_back({fabs(getRight() - other.getLeft()), Util::Direction::RIGHT});
 		distances.push_back({fabs(getTop() - other.getBottom()), Util::Direction::TOP});
 		distances.push_back({fabs(getBottom() - other.getTop()), Util::Direction::BOTTOM});
-		sort(distances.begin(), distances.end(), [&](std::pair<float, Util::Direction> a, std::pair<float, Util::Direction> b) {
+		sort(distances.begin(), distances.end(), [&](std::pair<T, Util::Direction> a, std::pair<T, Util::Direction> b) {
 			return a.first < b.first;
 		});
 		return distances[0].second;
 	}
 
-	const float collisionLength(const Rectangle &other) const
+	const T collisionLength(const Rectangle &other) const
 	{
-		std::vector<float> distances;
+		std::vector<T> distances;
 		distances.push_back(fabs(getLeft() - other.getRight()));
 		distances.push_back(fabs(getRight() - other.getLeft()));
 		distances.push_back(fabs(getTop() - other.getBottom()));
@@ -90,7 +91,7 @@ public:
 
 	const inline Rectangle getRect() const { return *this; }
 
-	void scale(const float scaleFactor)
+	void scale(const T scaleFactor)
 	{
 		this->_width *= scaleFactor;
 		this->_height *= scaleFactor;
@@ -99,11 +100,11 @@ public:
 	/*
 		Fits into a specficied width and height but without exceeding it. If fit is not perfect, fit as most as possible without exceeding
 	 */
-	void fit(float width, float height)
+	void fit(T width, T height)
 	{
-		float rel = this->_width / this->_height;
-		float newHeight = width / rel;
-		float newWidth = rel * height;
+		T rel = this->_width / this->_height;
+		T newHeight = width / rel;
+		T newWidth = rel * height;
 		if(newHeight > height)
 		{
 			this->_width = newWidth;
@@ -132,7 +133,7 @@ public:
 	}
 
 private:
-	float _x, _y, _width, _height;
+	T _x, _y, _width, _height;
 };
 
 #endif
