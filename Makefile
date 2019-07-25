@@ -30,3 +30,9 @@ run {flags} :
 
 runv:
 	./program -v
+
+runf:
+	./program -f
+
+runc:
+	./program -c

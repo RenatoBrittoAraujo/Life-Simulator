@@ -155,8 +155,6 @@ void Game::handleUserInput()
 
 void Game::update()
 {
-	/* Updating of game classes */
-
 	this->_player.update();
 
 	for(auto& npc : this->_npcs)
@@ -188,7 +186,7 @@ void Game::render()
 {
 	_graphics->fillBackground();
 
-	/* Rendering of different classes */
+	/* Rendering of custom classes */
 
 	Point shift = this->_player.getCircle().getFixedShift();
 
@@ -204,7 +202,7 @@ void Game::render()
 		npc.getCircle().draw(*this->_graphics, shift);
 	}
 
-	/* End of rendering */
+	/* End of custom rendering */
 
 	_graphics->flip();
 }
