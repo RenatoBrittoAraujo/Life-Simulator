@@ -17,7 +17,7 @@ Running fullscreen:
 make runf
 ```
 
-Running with custom settings (verbose, fullscreen, other framerate):
+Running with custom settings (verbose, fullscreen, framerate, screen size):
 ```
 make runc
 ```
