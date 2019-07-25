@@ -2,5 +2,5 @@
 obj/*.o
 obj/main.o
 obj/game.o
-!obj/.gitkeep
+obj/engine/*.o
 program
