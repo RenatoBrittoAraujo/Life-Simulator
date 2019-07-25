@@ -48,9 +48,11 @@ bool Game::init(bool fullscreen)
 	if (fullscreen)
 	{
 		this->_graphics = new Graphics(Util::getGameName());
+		Util::setFullscreenMode(*this->_graphics);
 	}
 	else
 	{
+		Util::setWindowedMode(1280, 720);
 		this->_graphics = new Graphics(Util::getGameName(), false, Util::getScreenWidth(), Util::getScreenHeight());
 	}
 	
@@ -59,14 +61,14 @@ bool Game::init(bool fullscreen)
 	/* Custom class initialization */
 
 	// Setting up player
-	_player = Player(*this->_graphics, "playerCircle.png", 25.0f, 25.0f);
-	_player.getBox().setPosition(Point(200,100));
+	_player = Player(*this->_graphics, "assets/playerCircle.png", 25.0f);
+	_player.getCircle().setPosition(Point(200,100));
 
 	// Setting up NPCs
 	for(int i = 0; i < Util::randInt(GameMap::MIN_NPC, GameMap::MAX_NPC); i++)
 	{
-		NPC npc = NPC(*this->_graphics, "npcCircle.png", 20.0f, 20.0f);
-		npc.getBox().setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
+		NPC npc = NPC(*this->_graphics, "assets/npcCircle.png", 20.0f);
+		npc.getCircle().setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
 		this->_npcs.push_back(npc);
 	}
 
@@ -77,7 +79,7 @@ bool Game::init(bool fullscreen)
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(GameMap::MAP_WIDTH, 0)),
 	Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0))};
 
-	this->collisionObjects.push_back(&this->_player.getBox());
+	this->collisionObjects.push_back(&this->_player.getCircle());
 
 	for (auto &seg : this->boundingBox)
 	{
@@ -86,7 +88,7 @@ bool Game::init(bool fullscreen)
 
 	for (auto &npc : this->_npcs)
 	{
-		this->collisionObjects.push_back((Box *)&npc.getBox());
+		this->collisionObjects.push_back((Box *)&npc.getCircle());
 	}
 
 	/* End of class initialization */
@@ -130,22 +132,22 @@ void Game::handleUserInput()
 
 	if(this->_input.isKeyHeld(SDL_SCANCODE_W))
 	{
-		this->_player.getBox().move(Util::Direction::TOP);
+		this->_player.getCircle().move(Util::Direction::TOP);
 	}
 	
 	if (this->_input.isKeyHeld(SDL_SCANCODE_A))
 	{
-		this->_player.getBox().move(Util::Direction::LEFT);
+		this->_player.getCircle().move(Util::Direction::LEFT);
 	}
 
 	if (this->_input.isKeyHeld(SDL_SCANCODE_S))
 	{
-		this->_player.getBox().move(Util::Direction::BOTTOM);
+		this->_player.getCircle().move(Util::Direction::BOTTOM);
 	}
 
 	if (this->_input.isKeyHeld(SDL_SCANCODE_D))
 	{
-		this->_player.getBox().move(Util::Direction::RIGHT);
+		this->_player.getCircle().move(Util::Direction::RIGHT);
 	}
 
 	// End of custom key handling
@@ -188,7 +190,7 @@ void Game::render()
 
 	/* Rendering of different classes */
 
-	Point shift = this->_player.getBox().getFixedShift();
+	Point shift = this->_player.getCircle().getFixedShift();
 
 	for(int i = 0; i < boundingBox.size(); i++)
 	{
@@ -199,7 +201,7 @@ void Game::render()
 
 	for (auto &npc : this->_npcs)
 	{
-		npc.getBox().draw(*this->_graphics, shift);
+		npc.getCircle().draw(*this->_graphics, shift);
 	}
 
 	/* End of rendering */

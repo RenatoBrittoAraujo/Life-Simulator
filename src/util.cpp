@@ -1,4 +1,5 @@
 #include "util.hpp"
+#include "graphics.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -7,15 +8,38 @@
 #include <fstream>
 #include <iostream>
 
+bool Util::_fullscreen = false;
+int Util::_screenWidth = 1280;
+int Util::_screenHeight = 720;
+
 namespace GlobalVariables
 {
 const char *GAME_NAME = "Life Simulator";
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;
 }
 
-const int Util::getScreenWidth() { return GlobalVariables::SCREEN_WIDTH; }
-const int Util::getScreenHeight() { return GlobalVariables::SCREEN_HEIGHT; }
+int Util::getScreenWidth() 
+{ 
+	return _screenWidth;
+}
+
+int Util::getScreenHeight() 
+{ 
+	return _screenHeight; 
+}
+
+void Util::setFullscreenMode(Graphics &graphics)
+{
+	_fullscreen = true;
+	SDL_GetRendererOutputSize(graphics.getRenderer(), &_screenWidth, &_screenHeight);
+}
+
+void Util::setWindowedMode(int width, int height)
+{
+	_fullscreen = false;
+	_screenWidth = width;
+	_screenHeight = height;
+}
+
 const char* Util::getGameName() { return GlobalVariables::GAME_NAME; }
 
 const int Util::randInt(int lower, int upper)

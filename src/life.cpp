@@ -20,20 +20,20 @@ Life::~Life()
 {
 }
 
-Life::Life(Graphics &graphics, const char *assetName, float width, float height)
+Life::Life(Graphics &graphics, const char *assetName, float radius)
 {
-	this->_box = Circle(graphics, assetName, (width + height) / 2.0f);
+	this->_circle = Circle(graphics, assetName, radius);
 	randomizeSize(graphics, 0.7, 2.0);
 }
 
 void Life::draw(Graphics &graphics)
 {
-	this->_box.draw(graphics);
+	this->_circle.draw(graphics);
 }
 
 void Life::update()
 {
-	this->_box.update();
+	this->_circle.update();
 }
 
 void Life::randomizeSize(Graphics &graphics, const float lowerBoundRandom, const float upperBoundRandom)
@@ -44,12 +44,12 @@ void Life::randomizeSize(Graphics &graphics, const float lowerBoundRandom, const
 
 void Life::setSize(Graphics &graphics, const float size)
 {
-	this->_box.setWidth(size * this->_box.getWidth());
-	this->_box.setHeight(size * this->_box.getHeight());
-	this->_box.setRadius(size * this->_box.getRadius());
-	this->_box.setWeight(STD_WEIGHT * size * size);
-	this->_box.setSpeedCap(STD_SPEED_CAP / size);
-	this->_box.setMovementSpeed(STD_MOVEMENT_SPEED / size);
-	this->_box.setAttritionFactor(STD_ATTRITION_FACTOR + (1.0 - size) * ATTRITION_FACTOR_DELTA);
-	this->_box.updateSprite(graphics);
+	this->_circle.setWidth(size * this->_circle.getWidth());
+	this->_circle.setHeight(size * this->_circle.getHeight());
+	this->_circle.setRadius(size * this->_circle.getRadius());
+	this->_circle.setWeight(STD_WEIGHT * size * size);
+	this->_circle.setSpeedCap(STD_SPEED_CAP / size);
+	this->_circle.setMovementSpeed(STD_MOVEMENT_SPEED / size);
+	this->_circle.setAttritionFactor(STD_ATTRITION_FACTOR + (1.0 - size) * ATTRITION_FACTOR_DELTA);
+	this->_circle.updateSprite(graphics);
 }

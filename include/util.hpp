@@ -1,6 +1,8 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
+#include "graphics.hpp"
+
 #include <string>
 #include <vector>
 #include <limits>
@@ -52,8 +54,8 @@ public:
 
 	static const void logInfo(std::string info);
 
-	const static int getScreenHeight();
-	const static int getScreenWidth();
+	static int getScreenHeight();
+	static int getScreenWidth();
 	const static char* getGameName();
 
 	enum Direction
@@ -78,6 +80,16 @@ public:
 	{
 		return std::numeric_limits<float>::max();
 	}
+
+	static void setFullscreenMode(Graphics &graphics);
+	static void setWindowedMode(int width = 1280, int height = 720);
+
+private:
+
+	static bool _fullscreen;
+	static int _screenWidth;
+	static int _screenHeight;
+
 };
 
 #endif

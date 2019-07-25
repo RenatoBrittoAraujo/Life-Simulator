@@ -76,7 +76,7 @@ public:
 private:
 
 	void setSprite(Graphics &graphics, const std::string assetName, int imageWidth, int imageHeight);
-	static std::map<std::string, Rectangle<int>> images;
+
 	Sprite *_sprite = nullptr;
 
 	float _x;

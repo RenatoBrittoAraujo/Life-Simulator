@@ -11,7 +11,7 @@ public:
 	Player();
 	~Player();
 
-	Player(Graphics &graphics, const char *assetName, float width, float height);
+	Player(Graphics &graphics, const char *assetName, float radius);
 	
 };
 

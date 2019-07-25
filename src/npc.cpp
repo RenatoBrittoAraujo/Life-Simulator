@@ -7,8 +7,8 @@ NPC::NPC()
 NPC::~NPC()
 {}
 
-NPC::NPC(Graphics &graphics, const char *assetName, float width, float height) :
-	Life(graphics, assetName, width, height)
+NPC::NPC(Graphics &graphics, const char *assetName, float radius) :
+	Life(graphics, assetName, radius)
 {
 }
 
@@ -50,5 +50,5 @@ void NPC::setRandomMovement(Util::Direction direction)
 
 void NPC::moveRandomly()
 {
-	this->_box.move(this->_randomMovementDirection);
+	this->_circle.move(this->_randomMovementDirection);
 }

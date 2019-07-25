@@ -10,7 +10,7 @@ public:
 	NPC();
 	~NPC();
 
-	NPC(Graphics &graphics, const char *assetName, float width, float height);
+	NPC(Graphics &graphics, const char *assetName, float radius);
 
 	void update();
 	void changeMovement();

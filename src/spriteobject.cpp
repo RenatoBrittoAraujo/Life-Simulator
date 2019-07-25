@@ -101,26 +101,16 @@ void SpriteObject::move(Util::Direction direction)
 	}
 }
 
-/*
-	This is a vector that stores information about specific images in assets/
-	representing the source rectangle that is going to be cut from the image when read
- */
-
-std::map<std::string, Rectangle<int>> SpriteObject::images({
-	{"npcSquare.png", Rectangle<int>(0, 0, 512, 512)},
-	{"playerSquare.png", Rectangle<int>(0, 0, 310, 310)},
-	{"npcCircle.png", Rectangle<int>(0 , 0, 500, 500)},
-	{"playerCircle.png", Rectangle<int>(0, 0, 500, 500)}
-});
-
 // Private
 
-void SpriteObject::setSprite(Graphics &graphics, const std::string assetName, int width, int height)
+void SpriteObject::setSprite(Graphics &graphics, const std::string assetPath, int width, int height)
 {
-	Rectangle<int> imageRect = this->images[std::string(assetName)];
-	Rectangle<int> sourceRect = imageRect;
+	SDL_Surface* image = graphics.loadImage(assetPath);
+	float sourceWidth = image->w;
+	float sourceHeight = image->h;
+	Rectangle<float> imageRect(0.0f, 0.0f, sourceWidth, sourceHeight);
 	imageRect.fit(width, height);
 	this->_width = imageRect.getWidth();
 	this->_height = imageRect.getHeight();
-	this->_sprite = new Sprite(graphics, "assets/" + assetName, sourceRect, imageRect.getWidth(), imageRect.getHeight());
+	this->_sprite = new Sprite(graphics, assetPath, imageRect.getWidth(), imageRect.getHeight());
 }

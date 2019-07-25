@@ -16,6 +16,7 @@ public:
 	~Sprite();
 
 	Sprite(Graphics &graphics, const std::string path, Rectangle<int> sourceRect, float destWidth, float destHeight);
+	Sprite(Graphics &graphics, const std::string path, float destWidth, float destHeight);
 
 	/*
 		Renders the sprite to screen

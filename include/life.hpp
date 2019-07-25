@@ -11,12 +11,12 @@ public:
 	Life();
 	~Life();
 
-	Life(Graphics &graphics, const char *assetName, float width, float height);
+	Life(Graphics &graphics, const char *assetName, float radius);
 
 	virtual void draw(Graphics &graphics);
 	virtual void update();
 
-	Circle &getBox() { return _box; }
+	Circle &getCircle() { return this->_circle; }
 
 	void randomizeSize(Graphics &graphics, const float lowerBoundRandom = MIN_RANDOMIZE_FACTOR, const float upperBoundRandom = MAX_RANDOMIZE_FACTOR);
 
@@ -39,7 +39,7 @@ protected:
 	static const float MIN_RANDOMIZE_FACTOR;
 	static const float MAX_RANDOMIZE_FACTOR;
 
-	Circle _box;
+	Circle _circle;
 
 };
 
