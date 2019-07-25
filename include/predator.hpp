@@ -1,5 +1,5 @@
-#ifndef PREY_HPP
-#define PREY_HPP
+#ifndef PREDATOR_HPP
+#define PREDATOR_HPP
 
 #include "npc.hpp"
 

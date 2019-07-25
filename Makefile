@@ -1,38 +1,28 @@
-IDIR =include
-CC=g++ -std=c++17
-CFLAGS=-I$(IDIR) -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+CC = g++ -std=c++17
+SRCDIR = src
+BUILDDIR = obj
+TARGET = program
+ 
+SRCEXT = cpp
 
-ODIR=obj
-LDIR=lib
+SOURCES = $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 
-SRCR=src
+OBJECTS = $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 
-_DEPS = $(notdir $(shell find $(IDIR) -name '*.hpp'))
-DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
-SOURCES = $(notdir $(shell find $(SRCR) -name '*.cpp'))
-_OBJ = $(SOURCES:%.cpp=%.o)
-OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+LIB = -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+INC = -I include -I include/engine
 
-$(ODIR)/%.o: $(SRCR)/%.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+$(TARGET): $(OBJECTS)
+	@echo " $(CC) $(INC) $^ -o $(TARGET) $(LIB)"; $(CC) $(INC) $^ -o $(TARGET) $(LIB)
 
-program: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
-
-.PHONY: clean
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	$(CC) $(INC) -c -o $@ $<
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
-	rm program
+	@echo " find . -type f -name '*.o' -delete"; find . -type f -name '*.o' -delete
+	@echo " rm ./$(TARGET)"; rm ./$(TARGET)
 
-run {flags} :
-	./program ${flags}
+run:
+	./$(TARGET)
 
-runv:
-	./program -v
-
-runf:
-	./program -f
-
-runc:
-	./program -c
+.PHONY: clean
