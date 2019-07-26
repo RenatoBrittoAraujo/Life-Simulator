@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <algorithm>
 
 namespace PhysicsConstants
 {
@@ -83,6 +84,12 @@ public:
 
 	static void setFullscreenMode(Graphics &graphics);
 	static void setWindowedMode(int width = 1280, int height = 720);
+
+	template <class T>
+	static void clearNullPointers(std::vector<T *> &vec)
+	{
+		vec.erase(std::remove_if(vec.begin(), vec.end(), [&](T *object) { return object == nullptr; }), vec.end());
+	}
 
 private:
 

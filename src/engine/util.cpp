@@ -1,5 +1,6 @@
 #include "util.hpp"
 #include "graphics.hpp"
+#include "food.hpp"
 
 #include <SDL2/SDL.h>
 

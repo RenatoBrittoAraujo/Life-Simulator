@@ -68,8 +68,8 @@ bool Game::init(bool fullscreen)
 	// Setting up food
 	for (int i = 0; i < 100; i++)
 	{
-		Food food = Food(*this->_graphics, "assets/food.png", 10.0f);
-		food.setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
+		Food* food = new Food(*this->_graphics, "assets/food.png", 10.0f);
+		food->setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
 		this->_foods.push_back(food);
 	}
 
@@ -92,10 +92,10 @@ bool Game::init(bool fullscreen)
 		this->collisionObjects.push_back(&npc.getCircle());
 	}
 
-	for (auto &food : this->_foods)
-	{
-		this->collisionObjects.push_back(food.getCircle());
-	}
+	// for (auto &food : this->_foods)
+	// {
+	// 	this->collisionObjects.push_back(food->getCircle());
+	// }
 
 	/* End of class initialization */
 
@@ -161,18 +161,27 @@ void Game::handleUserInput()
 
 void Game::update()
 {
-	handleCollisions();
 
 	this->_player.update();
+	for (auto &food : this->_foods)
+	{
+		this->_player.isInFoodRadius(&food);
+	}
 
 	for(auto& npc : this->_npcs)
 	{
 		npc.update();
+		for(auto &food : this->_foods)
+		{
+			npc.isInFoodRadius(&food);
+		}
 	}
+
+	Util::clearNullPointers(this->_foods);
 
 	for (auto &food : this->_foods)
 	{
-		food.update();
+		food->update();
 	}
 
 	if(SDL_GetTicks() - _ticksLastNpcMove > 150)
@@ -183,6 +192,8 @@ void Game::update()
 		}
 		_ticksLastNpcMove = SDL_GetTicks();
 	}
+
+	handleCollisions();
 }
 
 void Game::handleCollisions()
@@ -215,7 +226,11 @@ void Game::render()
 
 	for (auto &food : this->_foods)
 	{
-		food.draw(*this->_graphics, shift);
+		if(food == NULL)
+		{
+			continue;
+		}
+		food->draw(*this->_graphics, shift);
 	}
 
 	/* End of custom rendering */

@@ -22,7 +22,7 @@ public:
 
 	void randomizeSize(Graphics &graphics, const float lowerBoundRandom = MIN_RANDOMIZE_FACTOR, const float upperBoundRandom = MAX_RANDOMIZE_FACTOR);
 
-	void isInFoodRadius(Food &food);
+	void isInFoodRadius(Food **food);
 
 	/*
 		Standard size = 1.0
@@ -37,7 +37,7 @@ protected:
 
 	unsigned int _lastUpdate = SDL_GetTicks();
 
-	void eat(Food &food);
+	void eat(Food **food);
 
 	static const float MIN_RANDOMIZE_FACTOR;
 	static const float MAX_RANDOMIZE_FACTOR;

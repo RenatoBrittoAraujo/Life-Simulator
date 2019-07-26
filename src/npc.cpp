@@ -10,6 +10,7 @@ NPC::~NPC()
 NPC::NPC(Graphics &graphics, const char *assetName, float radius) :
 	Life(graphics, assetName, radius)
 {
+	setEatFood(true);
 }
 
 void NPC::update()

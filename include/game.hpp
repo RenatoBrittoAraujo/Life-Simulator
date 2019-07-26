@@ -86,7 +86,7 @@ private:
 
 	Player _player;
 	std::vector<NPC> _npcs;
-	std::vector<Food> _foods;
+	std::vector<Food*> _foods;
 
 	std::vector<Segment> boundingBox;
 
