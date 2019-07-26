@@ -1,14 +1,17 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+/* ENGINE HEADERS */
+#include "fontobject.hpp"
 #include "graphics.hpp"
 #include "input.hpp"
 #include "color.hpp"
 #include "box.hpp"
-#include "player.hpp"
 #include "segment.hpp"
+
+#include "player.hpp"
 #include "npc.hpp"
-#include "fontobject.hpp"
+#include "food.hpp"
 
 #include <vector>
 
@@ -83,6 +86,7 @@ private:
 
 	Player _player;
 	std::vector<NPC> _npcs;
+	std::vector<Food> _foods;
 
 	std::vector<Segment> boundingBox;
 

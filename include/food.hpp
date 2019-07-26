@@ -15,11 +15,8 @@ public:
 
 	Food(Graphics &graphics, const char* assetName, float radius);
 
-	void draw(Graphics &graphics);
+	void draw(Graphics &graphics, Point shift = Point(0,0));
 	void update();
-
-	void eat();
-
 	void randomSize(float lowerBound = randomLowerBound, float upperBound = randomUpperBound);
 
 	Circle* getCircle() { return &this->_circle; }

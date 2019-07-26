@@ -6,6 +6,12 @@
 #include <vector>
 #include <map>
 
+const float SpriteObject::STD_MOVEMENT_SPEED = 0.9;
+const float SpriteObject::STD_WEIGHT = 1.0;
+const float SpriteObject::STD_ATTRITION_FACTOR = 0.95;
+const float SpriteObject::STD_SPEED_CAP = 100.0;
+
+const float SpriteObject::ATTRITION_FACTOR_DELTA = 0.01;
 
 // Public
 

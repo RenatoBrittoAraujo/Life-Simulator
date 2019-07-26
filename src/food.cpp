@@ -15,9 +15,9 @@ Food::Food(Graphics &graphics, const char* assetName, float radius)
 	randomSize();
 }
 
-void Food::draw(Graphics &graphics)
+void Food::draw(Graphics &graphics, Point shift)
 {
-	this->_circle.draw(graphics);
+	this->_circle.draw(graphics, shift);
 }
 
 void Food::update()
@@ -32,9 +32,5 @@ void Food::randomSize(float lowerBound, float upperBound)
 	this->_circle.setHeight(size * this->_circle.getHeight());
 	this->_circle.setRadius(size * this->_circle.getRadius());
 	this->_size = size;
-}
-
-void Food::eat()
-{
-	this->~Food();
+	this->_circle.setWeight(this->_circle.getWeight() * 0.03f);
 }

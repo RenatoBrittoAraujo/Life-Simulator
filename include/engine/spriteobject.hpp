@@ -73,29 +73,42 @@ public:
 	void setAttritionFactor(const float attritionFactor) { this->_attritionFactor = attritionFactor; }
 	void setSpeedCap(const float speedCap) { this->_speedCap = speedCap; }
 
+	static float getSTDMovementSpeed() { return STD_MOVEMENT_SPEED; }
+	static float getSTDSpeedCap() { return STD_SPEED_CAP; }
+	static float getSTDWeight() { return STD_WEIGHT; }
+	static float getSTDAttritionFactor() { return STD_ATTRITION_FACTOR; }
+	static float getSTDAttritionFactorDelta() { return ATTRITION_FACTOR_DELTA; }
+
 private:
+
+	static const float STD_MOVEMENT_SPEED;
+	static const float STD_WEIGHT;
+	static const float STD_ATTRITION_FACTOR;
+	static const float STD_SPEED_CAP;
+
+	static const float ATTRITION_FACTOR_DELTA;
 
 	void setSprite(Graphics &graphics, const std::string assetName, int imageWidth, int imageHeight);
 
 	Sprite *_sprite = nullptr;
 
-	float _x;
-	float _y;
-	float _xSpeed;
-	float _ySpeed;
+	float _x = 0;
+	float _y = 0;
+	float _xSpeed = 0;
+	float _ySpeed = 0;
 
-	float _width;
-	float _height;
+	float _width = 100;
+	float _height = 100;
 
-	bool _fixed;
-	Point _fixedPosition;
+	bool _fixed = false;
+	Point _fixedPosition = Point(0,0);
 
 	std::string _assetName;
 
-	float _movementSpeed;
-	float _weight;
-	float _attritionFactor;
-	float _speedCap;
+	float _movementSpeed = getSTDMovementSpeed();
+	float _weight = getSTDWeight();
+	float _attritionFactor = getSTDAttritionFactor();
+	float _speedCap = getSTDSpeedCap();
 };
 
 #endif

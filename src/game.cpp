@@ -65,6 +65,14 @@ bool Game::init(bool fullscreen)
 		this->_npcs.push_back(npc);
 	}
 
+	// Setting up food
+	for (int i = 0; i < 100; i++)
+	{
+		Food food = Food(*this->_graphics, "assets/food.png", 10.0f);
+		food.setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
+		this->_foods.push_back(food);
+	}
+
 	// Set up map borders
 	this->boundingBox = {
 	Segment(Point(0, 0), Point(0, GameMap::MAP_HEIGHT)),
@@ -76,12 +84,17 @@ bool Game::init(bool fullscreen)
 
 	for (auto &seg : this->boundingBox)
 	{
-		this->collisionObjects.push_back((Segment *)&seg);
+		this->collisionObjects.push_back(&seg);
 	}
 
 	for (auto &npc : this->_npcs)
 	{
-		this->collisionObjects.push_back((Box *)&npc.getCircle());
+		this->collisionObjects.push_back(&npc.getCircle());
+	}
+
+	for (auto &food : this->_foods)
+	{
+		this->collisionObjects.push_back(food.getCircle());
 	}
 
 	/* End of class initialization */
@@ -157,6 +170,11 @@ void Game::update()
 		npc.update();
 	}
 
+	for (auto &food : this->_foods)
+	{
+		food.update();
+	}
+
 	if(SDL_GetTicks() - _ticksLastNpcMove > 150)
 	{
 		for (auto &npc : this->_npcs)
@@ -192,7 +210,12 @@ void Game::render()
 
 	for (auto &npc : this->_npcs)
 	{
-		npc.getCircle().draw(*this->_graphics, shift);
+		npc.draw(*this->_graphics, shift);
+	}
+
+	for (auto &food : this->_foods)
+	{
+		food.draw(*this->_graphics, shift);
 	}
 
 	/* End of custom rendering */
