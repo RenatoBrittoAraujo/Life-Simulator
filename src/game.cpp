@@ -11,12 +11,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-// =============== DEBUG ONLY =================
-
-#include <iostream>
-
-// ============================================
-
 namespace GameMap
 {
 	const int MAP_WIDTH = 3000;
@@ -117,12 +111,12 @@ void Game::handleUserInput()
 		}
 	}
 
+	// Custom key handling
+	
 	if (this->_input.wasKeyPressed(SDL_SCANCODE_ESCAPE))
 	{
 		exit();
 	}
-
-	// Custom key handling
 
 	if(this->_input.wasKeyPressed(SDL_SCANCODE_R))
 	{
@@ -154,6 +148,8 @@ void Game::handleUserInput()
 
 void Game::update()
 {
+	handleCollisions();
+
 	this->_player.update();
 
 	for(auto& npc : this->_npcs)
@@ -169,8 +165,6 @@ void Game::update()
 		}
 		_ticksLastNpcMove = SDL_GetTicks();
 	}
-
-	handleCollisions();
 }
 
 void Game::handleCollisions()

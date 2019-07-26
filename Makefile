@@ -25,4 +25,13 @@ clean:
 run:
 	./$(TARGET)
 
+runv:
+	./$(TARGET) -v
+
+runf:
+	./$(TARGET) -f
+
+runc:
+	./$(TARGET) -c
+
 .PHONY: clean

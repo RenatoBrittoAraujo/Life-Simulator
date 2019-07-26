@@ -5,7 +5,7 @@
 #include <iostream>
 
 bool verbose = false;
-int framerate = 60;
+int framerate = 100;
 bool fullscreen = false;
 int screenWidth = 1280;
 int screenHeight = 720;
