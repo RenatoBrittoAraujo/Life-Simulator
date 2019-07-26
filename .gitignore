@@ -1,6 +1,4 @@
 .vscode
 obj/*.o
-obj/main.o
-obj/game.o
 obj/engine/*.o
 program
