@@ -34,4 +34,16 @@ runf:
 runc:
 	./$(TARGET) -c
 
+makefiledebug:
+	@echo "MAKEFILE VARIABLES: ";
+	@echo "|CC| => $(CC)"
+	@echo "|SRCDIR| => $(SRCDIR)"
+	@echo "|BUILDDIR| => $(BUILDDIR)"
+	@echo "|TARGET| => $(TARGET)"
+	@echo "|SRCEXT| => $(SRCEXT)"
+	@echo "|SOURCES| => $(SOURCES)"
+	@echo "|OBJECTS| => $(OBJECTS)"
+	@echo "|LIB| => $(LIB)"
+	@echo "|INC| => $(INC)"
+
 .PHONY: clean
