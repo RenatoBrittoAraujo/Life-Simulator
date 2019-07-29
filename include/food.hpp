@@ -13,11 +13,10 @@ public:
 	Food();
 	~Food();
 
-	Food(Graphics &graphics, const char* assetName, float radius);
+	Food(const char* assetName, float radius);
 
-	void draw(Graphics &graphics, Point shift = Point(0,0));
+	void draw(Point shift = Point(0,0));
 	void update();
-	void randomSize(float lowerBound = randomLowerBound, float upperBound = randomUpperBound);
 
 	Circle* getCircle() { return &this->_circle; }
 	void setPosition(Point position) { this->_circle.setPosition(position); }
@@ -27,6 +26,8 @@ private:
 
 	static float randomLowerBound;
 	static float randomUpperBound;
+
+	static float foodWeightMultiplier;
 
 	float _size;
 	Circle _circle;

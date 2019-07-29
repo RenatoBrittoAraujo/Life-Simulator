@@ -118,5 +118,9 @@ void SpriteObject::setSprite(Graphics &graphics, const std::string assetPath, in
 	imageRect.fit(width, height);
 	this->_width = imageRect.getWidth();
 	this->_height = imageRect.getHeight();
+	if (this->_sprite != nullptr)
+	{
+		delete this->_sprite;
+	}
 	this->_sprite = new Sprite(graphics, assetPath, imageRect.getWidth(), imageRect.getHeight());
 }

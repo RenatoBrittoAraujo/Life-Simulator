@@ -2,6 +2,7 @@
 #define RECTANGLE_HPP
 
 #include "util.hpp"
+#include "point.hpp"
 #include <SDL2/SDL.h>
 
 #include <algorithm>
@@ -28,16 +29,18 @@ public:
 		_height(rect.h)
 	{}
 
-	const T getCenterX() const { return this->_x + this->_width / 2; }
-	const T getCenterY() const { return this->_y + this->_height / 2; }
+	T getCenterX() const { return this->_x + this->_width / 2; }
+	T getCenterY() const { return this->_y + this->_height / 2; }
 
-	const T getLeft() const { return this->_x; }
-	const T getRight() const { return this->_x + this->_width; }
-	const T getTop() const { return this->_y; }
-	const T getBottom() const { return this->_y + this->_height; }
+	T getLeft() const { return this->_x; }
+	T getRight() const { return this->_x + this->_width; }
+	T getTop() const { return this->_y; }
+	T getBottom() const { return this->_y + this->_height; }
 
-	const T getHeight() const { return this->_height; }
-	const T getWidth() const { return this->_width; }
+	T getHeight() const { return this->_height; }
+	T getWidth() const { return this->_width; }
+
+	T getArea() const { return this->_width * this->_height; }
 
 	bool operator == (const Rectangle &other) const
 	{
@@ -52,7 +55,7 @@ public:
 		return side == Util::Direction::LEFT ? this->getLeft() : side == Util::Direction::RIGHT ? this->getRight() : side == Util::Direction::TOP ? this->getTop() : side == Util::Direction::BOTTOM ? this->getBottom() : Util::Direction::NONE;
 	}
 
-	const bool collidesWith(const Rectangle &other) const
+	bool collidesWith(const Rectangle &other) const
 	{
 		return this->getRight() >= other.getLeft() and
 					 this->getLeft() <= other.getRight() and
@@ -60,7 +63,15 @@ public:
 					 this->getBottom() >= other.getTop();
 	}
 
-	const Util::Direction collisionSide(const Rectangle &other) const
+	bool contains(const Point &point) const
+	{
+		return 	this->getLeft() <= point.getX() and
+						this->getRight() >= point.getX() and
+						this->getTop() <= point.getY() and
+						this->getBottom() >= point.getX();
+	}
+
+	Util::Direction collisionSide(const Rectangle &other) const
 	{
 		std::vector<std::pair<T, Util::Direction>> distances;
 		distances.push_back({ fabs(getLeft() - other.getRight()), Util::Direction::LEFT });
@@ -73,7 +84,7 @@ public:
 		return distances[0].second;
 	}
 
-	const T collisionLength(const Rectangle &other) const
+	T collisionLength(const Rectangle &other) const
 	{
 		std::vector<T> distances;
 		distances.push_back(fabs(getLeft() - other.getRight()));
@@ -84,12 +95,12 @@ public:
 		return distances[0];
 	}
 
-	const bool isValid() const
+	bool isValid() const
 	{
 		return this->_x >= 0 and this->_y >= 0 and this->_width >= 0 and this->_height >= 0;
 	}
 
-	const inline Rectangle getRect() const { return *this; }
+	inline Rectangle getRect() const { return *this; }
 
 	void scale(const T scaleFactor)
 	{

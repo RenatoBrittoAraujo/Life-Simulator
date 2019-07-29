@@ -1,7 +1,9 @@
 #include "food.hpp"
+#include "graphics.hpp"
 
 float Food::randomLowerBound = 0.7;
 float Food::randomUpperBound = 1.3;
+float Food::foodWeightMultiplier = 0.003f;
 
 Food::Food()
 {}
@@ -9,15 +11,17 @@ Food::Food()
 Food::~Food()
 {}
 
-Food::Food(Graphics &graphics, const char* assetName, float radius)
+Food::Food(const char* assetName, float radius)
 {
-	this->_circle = Circle(graphics, assetName, radius);
-	randomSize();
+	float size = Util::randFloat(randomLowerBound, randomUpperBound);
+	this->_size = size;
+	this->_circle = Circle(*Graphics::getInstance(), assetName, radius * size);
+	this->_circle.setWeight(this->_circle.getWeight() * foodWeightMultiplier);
 }
 
-void Food::draw(Graphics &graphics, Point shift)
+void Food::draw(Point shift)
 {
-	this->_circle.draw(graphics, shift);
+	this->_circle.draw(*Graphics::getInstance(), shift);
 }
 
 void Food::update()
@@ -25,12 +29,3 @@ void Food::update()
 	this->_circle.update();
 }
 
-void Food::randomSize(float lowerBound, float upperBound)
-{
-	float size = Util::randFloat(lowerBound, upperBound);
-	this->_circle.setWidth(size * this->_circle.getWidth());
-	this->_circle.setHeight(size * this->_circle.getHeight());
-	this->_circle.setRadius(size * this->_circle.getRadius());
-	this->_size = size;
-	this->_circle.setWeight(this->_circle.getWeight() * 0.03f);
-}

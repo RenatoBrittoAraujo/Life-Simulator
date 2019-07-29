@@ -63,9 +63,9 @@ int main(int argc, char **argv)
 
 		game.exit();
 	}
-	catch(const std::exception& e)
+	catch(const char* e)
 	{
-		std::cerr << e.what() << '\n';
+		Util::logError("Só deus sabe aonde amigo", std::string(e));
 	}
 
 	return 0;

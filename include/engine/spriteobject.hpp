@@ -35,6 +35,7 @@ public:
 	}
 
 	Point getPosition() const { return Point(this->_x, this->_y); }
+	Point getCenteredPosition() const { return Point(this->_x + this->_width / 2.0f, this->_y + this->_height / 2.0f); }
 	void setPosition(const Point position)
 	{
 		this->_x = position.getX();

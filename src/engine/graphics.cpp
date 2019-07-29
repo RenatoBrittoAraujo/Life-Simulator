@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+Graphics* Graphics::_instance = nullptr;
+
 Graphics::Graphics(const char *windowTitle, bool fullscreen, int screenWidth, int screenHeight)
 {
 	if(fullscreen)

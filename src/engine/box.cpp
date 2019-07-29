@@ -12,5 +12,4 @@
 
 Box::Box(Graphics &graphics, const char *assetName, float width, float height) : 
 	SpriteObject(graphics, assetName, width, height)
-{
-}
+{}

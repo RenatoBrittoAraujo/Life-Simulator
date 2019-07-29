@@ -24,7 +24,11 @@ public:
 	 */
 
 	float getRadius() const { return this->_radius; }
-	void setRadius(const float radius) { this->_radius = radius; }
+	void setRadius(const float radius) { 
+		this->_radius = radius; 
+		setWidth(2.0f * radius); 
+		setHeight(2.0f * radius); 
+	}
 
 private:
 

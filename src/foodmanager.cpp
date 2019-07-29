@@ -1,4 +1,11 @@
 #include "foodmanager.hpp"
+#include "util.hpp"
+#include "life.hpp"
+#include "rectangle.hpp"
+#include "graphics.hpp"
+
+#include <algorithm>
+#include <vector>
 
 FoodManager* FoodManager::instance = nullptr;
 
@@ -20,38 +27,86 @@ void FoodManager::update()
   }
 }
 
-void FoodManager::eatCheck(std::vector<Life*> foodEaters)
+void FoodManager::eatCheck(std::vector<Life*> &foodEaters)
 {
-
+  for (auto &food : this->_foods)
+  {
+    for (auto &foodEater : foodEaters)
+    {
+      if(foodEater->isInFoodRadius(food))
+      {
+        foodEater->setNourishment(foodEater->getNourishment() + food->getNutritionalValue());
+        delete food;
+        food = NULL;
+        break;
+      }
+    }
+  }
+  Util::clearNullPointers(this->_foods);
 }
 
-void FoodManager::draw(Graphics &graphics)
+void FoodManager::collide(std::vector<GameObject*> foodColliders)
 {
   for (auto food : this->_foods)
   {
-    food->draw(graphics);
+    foodColliders.push_back(food->getCircle());
+  }
+  for (auto food : this->_foods)
+  {
+    food->getCircle()->collide(foodColliders);
   }
 }
 
-void FoodManager::destroy()
+void FoodManager::draw(Point shift)
 {
   for (auto food : this->_foods)
   {
-    delete food;
+    food->draw(shift);
   }
-  this->_foods.clear();
 }
 
-void FoodManager::populate(int gameWidth, int gameHeight)
+void FoodManager::destroy(Rectangle<int> areaToAnalize)
 {
-
+  for (auto &food : this->_foods)
+  {
+    if (areaToAnalize.contains(food->getCircle()->getCenteredPosition()))
+    {
+      delete food;
+      food = nullptr;
+    }
+  }
+  Util::clearNullPointers(this->_foods);
 }
 
-void FoodManager::reset(int gameWidth, int gameHeight)
+void FoodManager::populate(Rectangle<int> areaToAnalize, int numberOfFoods)
 {
-  this->destroy();
-  this->populate(gameWidth, gameHeight);
+  if (numberOfFoods == INVALID_AMOUNT)
+  {
+    numberOfFoods = (int) (this->_foodDensity * areaToAnalize.getArea());
+    numberOfFoods = std::min(numberOfFoods, this->_upperFoodBound + (int) this->_foods.size());
+    numberOfFoods = std::max(numberOfFoods, this->_lowerFoodBound - (int) this->_foods.size());
+  }
+  for (int i = 0; i < numberOfFoods; i++)
+  {
+    Food* food = new Food("assets/food.png", 10.0f);
+    food->setPosition(Point(
+      Util::randFloat(areaToAnalize.getLeft(), areaToAnalize.getRight()),
+      Util::randFloat(areaToAnalize.getTop(), areaToAnalize.getBottom())
+    ));
+    this->_foods.push_back(food);
+  }
 }
+
+void FoodManager::reset(Rectangle<int> areaToAnalize)
+{
+  this->destroy(areaToAnalize);
+  this->populate(areaToAnalize);
+}
+
+// void FoodManager::addFood(int numberOfNewFoods, Rectangle<int> areaToAnalize)
+// {
+
+// }
 
 FoodManager& FoodManager::getInstance()
 {

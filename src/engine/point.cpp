@@ -1,6 +1,7 @@
 #include "util.hpp"
 #include "vector2D.hpp"
 #include "point.hpp"
+#include "rectangle.hpp"
 
 #include <math.h>
 

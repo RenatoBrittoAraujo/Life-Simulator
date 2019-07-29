@@ -9,6 +9,8 @@
 #include "box.hpp"
 #include "segment.hpp"
 
+#include "foodmanager.hpp"
+#include "globals.hpp"
 #include "player.hpp"
 #include "npc.hpp"
 #include "food.hpp"
@@ -86,13 +88,17 @@ private:
 
 	Player _player;
 	std::vector<NPC> _npcs;
-	std::vector<Food*> _foods;
+
+	FoodManager foodManager = FoodManager::getInstance();
+	std::vector<Life*> foodEaters;
 
 	std::vector<Segment> boundingBox;
 
 	unsigned int _ticksLastNpcMove;
 
 	std::vector<GameObject*> collisionObjects;
+
+	Globals &_globals = Globals::getInstance();
 
 	// End of custom classes
 };

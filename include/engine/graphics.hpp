@@ -14,6 +14,20 @@ public:
 	Graphics(const char *windowTitle, bool fullscreen = true, int screenWidth = 0, int screenHeight = 0);
 	~Graphics();
 
+	static Graphics* getInstance()
+  {
+		if (_instance == nullptr)
+		{
+			throw "Graphics instance null";
+		}
+    return _instance;
+  }
+
+	static void setInstance(Graphics* receivedInstance)
+	{
+		_instance = receivedInstance;
+	}
+
 	/*
 		Loads image and stores it as texture in graphic card
 	 */
@@ -45,6 +59,9 @@ public:
 	Color getStandardColor() const { return this->_standardColor; }
 
 private:
+
+	static Graphics* _instance;
+
 	SDL_Window *_window;
 	SDL_Renderer *_renderer;
 

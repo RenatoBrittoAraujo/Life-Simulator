@@ -28,6 +28,9 @@ Game::~Game()
 
 bool Game::init(bool fullscreen)
 {
+	this->_globals.setGameMapWidth(GameMap::MAP_WIDTH);
+	this->_globals.setGameMapHeigth(GameMap::MAP_HEIGHT);
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() < 0)
 	{
 		Util::logError("Initalizing failure", "SDL Subsystems failed to initialize properly", SDL_GetError());
@@ -43,35 +46,42 @@ bool Game::init(bool fullscreen)
 	{
 		this->_graphics = new Graphics(Util::getGameName());
 		Util::setFullscreenMode(*this->_graphics);
+		this->_globals.setScreenWidth(Util::getScreenWidth());
+		this->_globals.setScreenHeight(Util::getScreenHeight());
 	}
 	else
 	{
 		this->_graphics = new Graphics(Util::getGameName(), false, Util::getScreenWidth(), Util::getScreenHeight());
 	}
 	
-	this->_graphics->setRenderColor(Color::white());
+	Graphics::setInstance(this->_graphics);
+	Graphics::getInstance()->setRenderColor(Color::white());
 
 	/* Custom class initialization */
 
 	// Setting up player
-	_player = Player(*this->_graphics, "assets/playerCircle.png", 25.0f);
+	_player = Player(*Graphics::getInstance(), "assets/playerCircle.png", 25.0f);
 	_player.getCircle().setPosition(Point(200,100));
 
 	// Setting up NPCs
 	for(int i = 0; i < Util::randInt(GameMap::MIN_NPC, GameMap::MAX_NPC); i++)
 	{
-		NPC npc = NPC(*this->_graphics, "assets/npcCircle.png", 20.0f);
+		NPC npc = NPC(*Graphics::getInstance(), "assets/npcCircle.png", 20.0f);
 		npc.getCircle().setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
 		this->_npcs.push_back(npc);
 	}
 
-	// Setting up food
-	for (int i = 0; i < 100; i++)
+	for(auto &npc : this->_npcs)
 	{
-		Food* food = new Food(*this->_graphics, "assets/food.png", 10.0f);
-		food->setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
-		this->_foods.push_back(food);
+		foodEaters.push_back(&npc);
 	}
+
+	foodEaters.push_back(&this->_player);
+
+	// Setting up food
+	this->foodManager = FoodManager::getInstance();
+
+	this->foodManager.populate();
 
 	// Set up map borders
 	this->boundingBox = {
@@ -91,11 +101,6 @@ bool Game::init(bool fullscreen)
 	{
 		this->collisionObjects.push_back(&npc.getCircle());
 	}
-
-	// for (auto &food : this->_foods)
-	// {
-	// 	this->collisionObjects.push_back(food->getCircle());
-	// }
 
 	/* End of class initialization */
 
@@ -133,7 +138,7 @@ void Game::handleUserInput()
 
 	if(this->_input.wasKeyPressed(SDL_SCANCODE_R))
 	{
-		this->_graphics->setStandardColor(Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255));
+		Graphics::getInstance()->setStandardColor(Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255));
 	}
 
 	if(this->_input.isKeyHeld(SDL_SCANCODE_W))
@@ -161,28 +166,16 @@ void Game::handleUserInput()
 
 void Game::update()
 {
-
 	this->_player.update();
-	for (auto &food : this->_foods)
-	{
-		this->_player.isInFoodRadius(&food);
-	}
 
 	for(auto& npc : this->_npcs)
 	{
 		npc.update();
-		for(auto &food : this->_foods)
-		{
-			npc.isInFoodRadius(&food);
-		}
 	}
 
-	Util::clearNullPointers(this->_foods);
+	foodManager.eatCheck(foodEaters);
 
-	for (auto &food : this->_foods)
-	{
-		food->update();
-	}
+	foodManager.update();
 
 	if(SDL_GetTicks() - _ticksLastNpcMove > 150)
 	{
@@ -214,24 +207,17 @@ void Game::render()
 
 	for(int i = 0; i < boundingBox.size(); i++)
 	{
-		boundingBox[i].draw(*this->_graphics, shift);
+		boundingBox[i].draw(*Graphics::getInstance(), shift);
 	}
 
-	this->_player.draw(*this->_graphics);
+	this->_player.draw(*Graphics::getInstance());
 
 	for (auto &npc : this->_npcs)
 	{
-		npc.draw(*this->_graphics, shift);
+		npc.draw(*Graphics::getInstance(), shift);
 	}
 
-	for (auto &food : this->_foods)
-	{
-		if(food == NULL)
-		{
-			continue;
-		}
-		food->draw(*this->_graphics, shift);
-	}
+	foodManager.draw(shift);
 
 	/* End of custom rendering */
 

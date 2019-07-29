@@ -53,18 +53,11 @@ void Life::setSize(Graphics &graphics, const float size)
 	this->_circle.updateSprite(graphics);
 }
 
-void Life::isInFoodRadius(Food **food)
+bool Life::isInFoodRadius(Food *food)
 {
-	// std::cout<<"FOOD IN RADIUS CALLED"<<std::endl;
-	if(*food != nullptr and Collision::handleCollision((*food)->getCircle(), &this->_circle) and this->_eatsFood)
+	if(food != nullptr and Collision::handleCollision(food->getCircle(), &this->_circle) and this->_eatsFood)
 	{
-		eat(food);
+		return true;
 	}
-}
-
-void Life::eat(Food **food)
-{
-	this->_nourishment += (*food)->getNutritionalValue();
-	delete (*food);
-	*food = NULL;
+	return false;
 }
