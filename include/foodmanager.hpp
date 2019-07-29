@@ -24,8 +24,7 @@ public:
   void reset(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect());
   void populate(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect(), int numberOfNewFoods = INVALID_AMOUNT);
   void destroy(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect());
-  // TODO
-  // void addFood(int numberOfNewFoods, Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect());
+  void addFood(int numberOfNewFoods, Rectangle<int> areaToAdd = Globals::getInstance().getGameMapRect());
 
   /*
     Getters and Setters
@@ -46,7 +45,7 @@ private:
   std::vector<Food*> _foods;
 
   float _foodDensity = 0.00001f;
-  int _lowerFoodBound = 0;
+  int _lowerFoodBound = 90;
   int _upperFoodBound = 100;
 
 };

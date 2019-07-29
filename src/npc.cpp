@@ -1,6 +1,9 @@
 #include "npc.hpp"
 #include "util.hpp"
 
+unsigned int NPC::stdMovementChangeDelta = 150;
+float NPC::stdLineOfSight = 100.0f;
+
 NPC::NPC()
 {}
 
@@ -11,17 +14,29 @@ NPC::NPC(Graphics &graphics, const char *assetName, float radius) :
 	Life(graphics, assetName, radius)
 {
 	setEatFood(true);
+	this->_movementChangeDelta = stdMovementChangeDelta;
+	setRandomMovement();
+	this->_lineOfSight = stdLineOfSight;
 }
 
 void NPC::update()
 {
-	moveRandomly();
+	if (this->followingTarget())
+	{
+		throw "Something really weird is going on";
+	}
+	else
+	{
+		unsigned int currentTime = SDL_GetTicks();
+		if(currentTime - this->_lastMovementChange > this->_movementChangeDelta)
+		{
+			setRandomMovement();
+			this->_lastMovementChange = currentTime;
+		}
+	}
+	
+	this->_circle.move(this->_randomMovementDirection);
 	Life::update();
-}
-
-void NPC::changeMovement()
-{
-	setRandomMovement();
 }
 
 void NPC::setRandomMovement(Util::Direction direction)
@@ -49,7 +64,4 @@ void NPC::setRandomMovement(Util::Direction direction)
 	}
 }
 
-void NPC::moveRandomly()
-{
-	this->_circle.move(this->_randomMovementDirection);
-}
+

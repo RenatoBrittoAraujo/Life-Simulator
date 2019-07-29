@@ -15,8 +15,8 @@ namespace GameMap
 {
 	const int MAP_WIDTH = 3000;
 	const int MAP_HEIGHT = 3000;
-	const int MIN_NPC = 50;
-	const int MAX_NPC = 200;
+	const int MIN_NPC = 20;
+	const int MAX_NPC = 100;
 	const int SPAWN_BORDER_DISTANCE = 40;
 }
 
@@ -141,25 +141,10 @@ void Game::handleUserInput()
 		Graphics::getInstance()->setStandardColor(Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255));
 	}
 
-	if(this->_input.isKeyHeld(SDL_SCANCODE_W))
-	{
-		this->_player.getCircle().move(Util::Direction::TOP);
-	}
-	
-	if (this->_input.isKeyHeld(SDL_SCANCODE_A))
-	{
-		this->_player.getCircle().move(Util::Direction::LEFT);
-	}
-
-	if (this->_input.isKeyHeld(SDL_SCANCODE_S))
-	{
-		this->_player.getCircle().move(Util::Direction::BOTTOM);
-	}
-
-	if (this->_input.isKeyHeld(SDL_SCANCODE_D))
-	{
-		this->_player.getCircle().move(Util::Direction::RIGHT);
-	}
+	if(this->_input.isKeyHeld(SDL_SCANCODE_W)) { this->_player.move(Util::Direction::TOP); }
+	if (this->_input.isKeyHeld(SDL_SCANCODE_A)) { this->_player.move(Util::Direction::LEFT); }
+	if (this->_input.isKeyHeld(SDL_SCANCODE_S)) { this->_player.move(Util::Direction::BOTTOM); }
+	if (this->_input.isKeyHeld(SDL_SCANCODE_D)) { this->_player.move(Util::Direction::RIGHT); }
 
 	// End of custom key handling
 }
@@ -176,15 +161,6 @@ void Game::update()
 	foodManager.eatCheck(foodEaters);
 
 	foodManager.update();
-
-	if(SDL_GetTicks() - _ticksLastNpcMove > 150)
-	{
-		for (auto &npc : this->_npcs)
-		{
-			npc.changeMovement();
-		}
-		_ticksLastNpcMove = SDL_GetTicks();
-	}
 
 	handleCollisions();
 }

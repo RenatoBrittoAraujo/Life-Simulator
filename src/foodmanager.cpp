@@ -25,6 +25,10 @@ void FoodManager::update()
   {
     food->update();
   }
+  if (this->_foods.size() < this->_lowerFoodBound)
+  {
+    addFood(this->_lowerFoodBound - this->_foods.size());
+  }
 }
 
 void FoodManager::eatCheck(std::vector<Life*> &foodEaters)
@@ -103,11 +107,6 @@ void FoodManager::reset(Rectangle<int> areaToAnalize)
   this->populate(areaToAnalize);
 }
 
-// void FoodManager::addFood(int numberOfNewFoods, Rectangle<int> areaToAnalize)
-// {
-
-// }
-
 FoodManager& FoodManager::getInstance()
 {
   if(FoodManager::instance == NULL)
@@ -115,4 +114,17 @@ FoodManager& FoodManager::getInstance()
     FoodManager::instance = new FoodManager();
   }
   return *FoodManager::instance;
+}
+
+void FoodManager::addFood(int numberOfNewFoods, Rectangle<int> areaToAdd)
+{
+  for (int i = 0; i < numberOfNewFoods; i++)
+  {
+    Food* food = new Food("assets/food.png", 10.0f);
+    food->setPosition(Point(
+      Util::randFloat(areaToAdd.getLeft(), areaToAdd.getRight()),
+      Util::randFloat(areaToAdd.getTop(), areaToAdd.getBottom())
+    ));
+    this->_foods.push_back(food);
+  }
 }

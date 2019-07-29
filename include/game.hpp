@@ -50,6 +50,7 @@ public:
 	void setScreenSize(int width, int height);
 
 private:
+
 	/*
 		Configure starting game conditions such as spawn point and labirinth
 	 */
@@ -84,23 +85,22 @@ private:
 
 	SDL_Event _event;
 
-	// Custom game classes
+	/* Custom game classes */
 
+	// In game objects
 	Player _player;
-	std::vector<NPC> _npcs;
-
 	FoodManager foodManager = FoodManager::getInstance();
+	std::vector<NPC> _npcs;
 	std::vector<Life*> foodEaters;
-
 	std::vector<Segment> boundingBox;
 
-	unsigned int _ticksLastNpcMove;
-
+	// Collision handling
 	std::vector<GameObject*> collisionObjects;
 
+	// Other settings
 	Globals &_globals = Globals::getInstance();
 
-	// End of custom classes
+	/* End of custom classes */
 };
 
 #endif

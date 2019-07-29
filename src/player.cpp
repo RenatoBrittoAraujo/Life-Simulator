@@ -15,3 +15,8 @@ Player::Player(Graphics &graphics, const char *assetName, float radius) :
 	this->_circle.setFixedPosition(Point(float(Util::getScreenWidth()) / 2.0f - adjustedRadius, float(Util::getScreenHeight()) / 2.0f - adjustedRadius));
 	setEatFood(true);
 }
+
+void Player::move(Util::Direction direction)
+{
+	this->_circle.move(direction);
+}
