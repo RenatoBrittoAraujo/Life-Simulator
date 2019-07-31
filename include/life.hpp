@@ -1,12 +1,11 @@
 #ifndef LIFE_HPP
 #define LIFE_HPP
 
-#include "circle.hpp"
-#include "food.hpp"
+#include "circledecorator.hpp"
 
 #include <SDL2/SDL.h>
 
-class Life
+class Life : public CircleDecorator
 {
 public:
 
@@ -18,11 +17,9 @@ public:
 	void draw(Graphics &graphics, Point shift = Point(0,0));
 	virtual void update(unsigned int ticks = 0);
 
-	Circle &getCircle() { return this->_circle; }
-
 	void randomizeSize(Graphics &graphics, const float lowerBoundRandom = MIN_RANDOMIZE_FACTOR, const float upperBoundRandom = MAX_RANDOMIZE_FACTOR);
 
-	bool isInFoodRadius(Food *food);
+	bool targetInRadius(CircleDecorator *target);
 
 	/*
 		Standard size = 1.0
@@ -34,14 +31,17 @@ public:
 	void setNourishment(const int nourishment) { this->_nourishment = nourishment; }
 	int getNourishment() const { return this->_nourishment; }
 
+	/*
+		Forcing implementation
+	 */
+	virtual const std::string type() = 0;
+
 protected:
 
 	unsigned int _lastUpdate = SDL_GetTicks();
 
 	static const float MIN_RANDOMIZE_FACTOR;
 	static const float MAX_RANDOMIZE_FACTOR;
-
-	Circle _circle;
 
 	bool _eatsFood = false;
 

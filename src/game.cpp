@@ -16,7 +16,7 @@ namespace GameMap
 	const int MAP_WIDTH = 3000;
 	const int MAP_HEIGHT = 3000;
 	const int MIN_NPC = 20;
-	const int MAX_NPC = 100;
+	const int MAX_NPC = 80;
 	const int SPAWN_BORDER_DISTANCE = 40;
 }
 
@@ -81,6 +81,9 @@ bool Game::init(bool fullscreen)
 	// Setting up food
 	this->foodManager = FoodManager::getInstance();
 
+	this->foodManager.setLowerFoodBound(70);
+	this->foodManager.setUpperFoodBound(70);
+
 	this->foodManager.populate();
 
 	// Set up map borders
@@ -101,6 +104,10 @@ bool Game::init(bool fullscreen)
 	{
 		this->collisionObjects.push_back(&npc.getCircle());
 	}
+
+	this->_player.setNourishment(100);
+	this->_nourishmentDisplay = FontObject(200, 30);
+	this->_nourishmentDisplay.setPosition(Point(Util::getScreenWidth() / 2 - 200 / 2, 10));
 
 	/* End of class initialization */
 
@@ -153,9 +160,16 @@ void Game::update()
 {
 	this->_player.update();
 
+	// if(this->_player.getNourishment() <= 0)
+	// {
+	// 	std::cout<<"MISSION FAILED, TRY AGAIN NEXT TIME"<<std::endl;
+	// 	this->exit();
+	// }
+
 	for(auto& npc : this->_npcs)
 	{
 		npc.update();
+		npc.findTarget(foodManager.getFoodsAsTargets());
 	}
 
 	foodManager.eatCheck(foodEaters);
@@ -194,6 +208,9 @@ void Game::render()
 	}
 
 	foodManager.draw(shift);
+
+	this->_nourishmentDisplay.update(*Graphics::getInstance(), "NOURISHMENT: " + std::to_string(this->_player.getNourishment()));
+	this->_nourishmentDisplay.draw(*Graphics::getInstance());
 
 	/* End of custom rendering */
 

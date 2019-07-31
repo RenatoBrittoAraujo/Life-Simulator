@@ -14,6 +14,8 @@ public:
 	Player(Graphics &graphics, const char *assetName, float radius);
 
 	void move(Util::Direction direction);
+
+	virtual const std::string type() { return "PLAYER"; }
 	
 };
 

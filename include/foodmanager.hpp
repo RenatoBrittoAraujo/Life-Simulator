@@ -37,6 +37,17 @@ public:
   int getUpperFoodBound() const { return this->_upperFoodBound; }
   float getFoodDensity() const { return this->_foodDensity; }
 
+  std::vector<Food*> getFoods() const { return this->_foods; }
+  std::vector<CircleDecorator*> getFoodsAsTargets() const 
+  {
+    std::vector<CircleDecorator*> foods;
+    for(auto &food : this->_foods)
+    {
+      foods.push_back(food);
+    }
+    return foods;
+  }
+
 private:
 
   static const int INVALID_AMOUNT = -1;

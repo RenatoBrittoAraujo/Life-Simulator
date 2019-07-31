@@ -23,6 +23,13 @@ const float pi = acos(-1.0);
 
 // Public
 
+/*
+	TODO
+	The amount of if's below is terrible, and if more objects are added, it will keep growing.
+	Implement a 2D table of gameobject types, each key will be a game object, each value formed
+	by 2 keys is a functions for it's collision handling.
+ */
+
 const bool Collision::handleCollision(GameObject *objectA, GameObject *objectB)
 {
 	// If any of the objects are an instance of the virtual class GameObject or 
@@ -284,12 +291,11 @@ const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 			Return no collision
 		End
 		Move circle center by vector from closest to center with modulus 'Radius - |Closest to Center|'
-		=> Circle is now in correct position
 		Find vector between center to closest 
 		Find speed vector
 		Calculate the vector angle between center to closest and speed [2]
 		Reflect angle
-		Rotate speed vector by reflected angle0
+		Rotate speed vector by reflected angle [3]
 		Return collision
  */
 const bool Collision::circleToSegment(Circle *circle, Segment *segment)
@@ -325,7 +331,7 @@ const bool Collision::circleToSegment(Circle *circle, Segment *segment)
 		return false;
 	}
 	Vector2D moveBack(closest, circleCenter);
-	moveBack.scale((r - dist) / dist + 0.001f);
+	moveBack.scale((r - dist) / dist + 0.001f /* Adjusting position a little off the collision boundry so the same collision is not detected twice */);
 	Point newPos = circle->getPosition();
 	newPos.traverseVector(moveBack);
 	circle->setPosition(newPos);

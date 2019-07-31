@@ -89,10 +89,11 @@ private:
 
 	// In game objects
 	Player _player;
-	FoodManager foodManager = FoodManager::getInstance();
+	FoodManager foodManager;
 	std::vector<NPC> _npcs;
 	std::vector<Life*> foodEaters;
 	std::vector<Segment> boundingBox;
+	FontObject _nourishmentDisplay;
 
 	// Collision handling
 	std::vector<GameObject*> collisionObjects;

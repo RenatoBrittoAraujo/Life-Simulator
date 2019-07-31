@@ -7,6 +7,8 @@ class Prey : public NPC
 {
 public:
 
+  virtual const std::string type() { return "PREY"; }
+
 private:
 
 };

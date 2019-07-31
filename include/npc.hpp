@@ -3,6 +3,7 @@
 
 #include "food.hpp"
 #include "life.hpp"
+#include "circledecorator.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -19,9 +20,12 @@ public:
 
 	unsigned int getMovementChangeDelta() const { return this->_movementChangeDelta; }
 	void getMovementChangeDelta(const unsigned int movementChangeDelta) { this->_movementChangeDelta = movementChangeDelta; }
-	void foodToFollow(std::vector<Food*> _foods);
 
-	bool followingTarget() const { return !(this->_targetFollowing == nullptr); }
+	virtual const std::string type() { return "NPC"; }
+
+	void findTarget(std::vector<CircleDecorator*> targets);
+	CircleDecorator* getTarget() const { return this->_targetFollowing; }
+	void setTarget(CircleDecorator* newTarget) { this->_targetFollowing = newTarget; }
 
 private:
 
@@ -32,7 +36,10 @@ private:
 		if null, no target
 		else currently following the target pointer
 	*/
-	Food* _targetFollowing = nullptr;
+	CircleDecorator* _targetFollowing = nullptr;
+	bool followingTarget() const { return !(this->_targetFollowing == nullptr); }
+
+	void followTarget();
 
 	void setRandomMovement(Util::Direction direction = Util::Direction::NONE);
 

@@ -2,7 +2,7 @@
 #include "util.hpp"
 
 unsigned int NPC::stdMovementChangeDelta = 150;
-float NPC::stdLineOfSight = 100.0f;
+float NPC::stdLineOfSight = 300.0f;
 
 NPC::NPC()
 {}
@@ -23,7 +23,7 @@ void NPC::update()
 {
 	if (this->followingTarget())
 	{
-		throw "Something really weird is going on";
+		this->followTarget();
 	}
 	else
 	{
@@ -33,9 +33,8 @@ void NPC::update()
 			setRandomMovement();
 			this->_lastMovementChange = currentTime;
 		}
+		this->_circle->move(this->_randomMovementDirection);
 	}
-	
-	this->_circle.move(this->_randomMovementDirection);
 	Life::update();
 }
 
@@ -64,4 +63,55 @@ void NPC::setRandomMovement(Util::Direction direction)
 	}
 }
 
+void NPC::findTarget(std::vector<CircleDecorator*> targets)
+{
+	if (this->followingTarget())
+	{
+		return;
+	}
+	CircleDecorator* validTarget = nullptr;
+	for (auto &CircleDecorator : targets)
+	{
+		float distance = CircleDecorator->getPosition().euclidianDistance(this->getPosition());
+		if (distance <= _lineOfSight and
+				(validTarget == nullptr or 
+				 validTarget->getPosition().euclidianDistance(this->getPosition()) > distance))
+		{
+			validTarget = CircleDecorator;
+		}
+	}
+	this->_targetFollowing = validTarget;
+	if (followingTarget())
+	{
+		this->_targetFollowing->addFollower(this);
+	}
+}
 
+void NPC::followTarget()
+{
+	if(this->_targetFollowing == nullptr)
+	{
+		return;
+	}
+	Point npcPosition = this->getPosition();
+	Point targetPosition = this->_targetFollowing->getPosition();
+	float x = npcPosition.getX();
+	float y = npcPosition.getY();
+	Point top(x, y - 1);
+	Point bottom(x, y + 1);
+	Point left(x - 1, y);
+	Point right(x + 1, y);
+	std::vector<std::pair<float, Util::Direction>> directionToFollow =
+	{
+		{targetPosition.euclidianDistance(top) ,Util::Direction::TOP},
+		{targetPosition.euclidianDistance(bottom) ,Util::Direction::BOTTOM},
+		{targetPosition.euclidianDistance(left) ,Util::Direction::LEFT},
+		{targetPosition.euclidianDistance(right) ,Util::Direction::RIGHT}
+	};
+	sort(directionToFollow.begin(), directionToFollow.end(), 
+		[&] (std::pair<float, Util::Direction> a, std::pair<float, Util::Direction> b){
+			return a.first < b.first;
+	});
+	Util::Direction movementDirection = directionToFollow[0].second;
+	this->_circle->move(movementDirection);
+}

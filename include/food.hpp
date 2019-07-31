@@ -1,12 +1,14 @@
 #ifndef FOOD_HPP
 #define FOOD_HPP
 
-#include "circle.hpp"
 #include "point.hpp"
+#include "circledecorator.hpp"
+#include "npc.hpp"
 
 #include <string>
+#include <vector>
 
-class Food
+class Food : public CircleDecorator
 {
 public:
 
@@ -18,9 +20,9 @@ public:
 	void draw(Point shift = Point(0,0));
 	void update();
 
-	Circle* getCircle() { return &this->_circle; }
-	void setPosition(Point position) { this->_circle.setPosition(position); }
 	int getNutritionalValue() const { return (int) (this->_size * 100.0f); }
+
+	const std::string type() { return "FOOD"; }
 
 private:
 
@@ -30,8 +32,6 @@ private:
 	static float foodWeightMultiplier;
 
 	float _size;
-	Circle _circle;
-
 };
 
 #endif

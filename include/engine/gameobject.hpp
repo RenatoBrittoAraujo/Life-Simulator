@@ -45,17 +45,17 @@ public:
 	virtual void move(Util::Direction direction);
 
 	/*
-		Handles collisions with other GameObjects
-		Returns number of collisions
-	 */
-	int collide(std::vector<GameObject*> objects);
-
-	/*
 		Updates GameObjects attributes
 	 */
 	virtual void update();
 
 	virtual const GameObjectTypes type() const { return GAMEOBJECT; };
+	
+	/*
+		Handles collisions with other GameObjects
+		Returns number of collisions
+	 */
+	int collide(std::vector<GameObject*> objects);
 
 	/*
 	 Basic getters and setters
