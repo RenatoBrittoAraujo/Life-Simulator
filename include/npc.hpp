@@ -14,7 +14,7 @@ public:
 	NPC();
 	~NPC();
 
-	NPC(Graphics &graphics, const char *assetName, float radius);
+	NPC(const char *assetName, float radius);
 
 	void update();
 

@@ -12,12 +12,11 @@ public:
 	Life();
 	~Life();
 
-	Life(Graphics &graphics, const char *assetName, float radius);
+	Life(const char *assetName, float radius);
 
-	void draw(Graphics &graphics, Point shift = Point(0,0));
 	virtual void update(unsigned int ticks = 0);
 
-	void randomizeSize(Graphics &graphics, const float lowerBoundRandom = MIN_RANDOMIZE_FACTOR, const float upperBoundRandom = MAX_RANDOMIZE_FACTOR);
+	void randomizeSize(const float lowerBoundRandom = MIN_RANDOMIZE_FACTOR, const float upperBoundRandom = MAX_RANDOMIZE_FACTOR);
 
 	bool targetInRadius(CircleDecorator *target);
 
@@ -26,7 +25,7 @@ public:
 		0.0 means no size at all
 		3.0 means original size ^ 3.0
 	 */
-	void setSize(Graphics &graphics, const float size);
+	void setSize(const float size);
 	void setEatFood(const bool eatsFood) { this->_eatsFood = eatsFood; }
 	void setNourishment(const int nourishment) { this->_nourishment = nourishment; }
 	int getNourishment() const { return this->_nourishment; }
@@ -34,7 +33,7 @@ public:
 	/*
 		Forcing implementation
 	 */
-	virtual const std::string type() = 0;
+	virtual const std::string type() const { return "LIFE"; };
 
 protected:
 

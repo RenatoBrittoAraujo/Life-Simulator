@@ -12,6 +12,7 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+	std::cout<<"GAMEOBJECT DESTRUCTOR"<<std::endl;
 }
 
 void GameObject::update()

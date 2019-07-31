@@ -85,6 +85,9 @@ public:
 	static void setFullscreenMode(Graphics &graphics);
 	static void setWindowedMode(int width = 1280, int height = 720);
 
+	/*
+		Receives a vector of pointers and cleans NULL pointers
+	 */
 	template <class T>
 	static void clearNullPointers(std::vector<T *> &vec)
 	{

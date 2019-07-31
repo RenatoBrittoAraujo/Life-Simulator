@@ -7,10 +7,10 @@ Player::Player()
 Player::~Player()
 {}
 
-Player::Player(Graphics &graphics, const char *assetName, float radius) : 
-	Life(graphics, assetName, radius)
+Player::Player(const char *assetName, float radius) : 
+	Life(assetName, radius)
 {
-	float adjustedRadius = this->_circle->getRadius();
+	float adjustedRadius = this->getRadius();
 	this->_circle->setFixed(true);
 	this->_circle->setFixedPosition(Point(float(Util::getScreenWidth()) / 2.0f - adjustedRadius, float(Util::getScreenHeight()) / 2.0f - adjustedRadius));
 	setEatFood(true);

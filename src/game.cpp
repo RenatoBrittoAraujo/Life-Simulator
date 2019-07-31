@@ -15,8 +15,8 @@ namespace GameMap
 {
 	const int MAP_WIDTH = 3000;
 	const int MAP_HEIGHT = 3000;
-	const int MIN_NPC = 20;
-	const int MAX_NPC = 80;
+	const int MIN_NPC = 1;
+	const int MAX_NPC = 1;
 	const int SPAWN_BORDER_DISTANCE = 40;
 }
 
@@ -60,13 +60,13 @@ bool Game::init(bool fullscreen)
 	/* Custom class initialization */
 
 	// Setting up player
-	_player = Player(*Graphics::getInstance(), "assets/playerCircle.png", 25.0f);
+	_player = Player("assets/playerCircle.png", 25.0f);
 	_player.getCircle().setPosition(Point(200,100));
 
 	// Setting up NPCs
 	for(int i = 0; i < Util::randInt(GameMap::MIN_NPC, GameMap::MAX_NPC); i++)
 	{
-		NPC npc = NPC(*Graphics::getInstance(), "assets/npcCircle.png", 20.0f);
+		NPC npc = NPC("assets/npcCircle.png", 20.0f);
 		npc.getCircle().setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
 		this->_npcs.push_back(npc);
 	}
@@ -81,8 +81,8 @@ bool Game::init(bool fullscreen)
 	// Setting up food
 	this->foodManager = FoodManager::getInstance();
 
-	this->foodManager.setLowerFoodBound(70);
-	this->foodManager.setUpperFoodBound(70);
+	this->foodManager.setLowerFoodBound(30);
+	this->foodManager.setUpperFoodBound(30);
 
 	this->foodManager.populate();
 
@@ -193,6 +193,7 @@ void Game::render()
 
 	/* Rendering of custom classes */
 
+	// Position shift as the world is rendered in function of player position
 	Point shift = this->_player.getCircle().getFixedShift();
 
 	for(int i = 0; i < boundingBox.size(); i++)
@@ -200,11 +201,11 @@ void Game::render()
 		boundingBox[i].draw(*Graphics::getInstance(), shift);
 	}
 
-	this->_player.draw(*Graphics::getInstance());
+	this->_player.draw();
 
 	for (auto &npc : this->_npcs)
 	{
-		npc.draw(*Graphics::getInstance(), shift);
+		npc.draw(shift);
 	}
 
 	foodManager.draw(shift);

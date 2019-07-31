@@ -10,8 +10,8 @@ NPC::NPC()
 NPC::~NPC()
 {}
 
-NPC::NPC(Graphics &graphics, const char *assetName, float radius) :
-	Life(graphics, assetName, radius)
+NPC::NPC(const char *assetName, float radius) :
+	Life(assetName, radius)
 {
 	setEatFood(true);
 	this->_movementChangeDelta = stdMovementChangeDelta;
@@ -70,14 +70,14 @@ void NPC::findTarget(std::vector<CircleDecorator*> targets)
 		return;
 	}
 	CircleDecorator* validTarget = nullptr;
-	for (auto &CircleDecorator : targets)
+	for (auto &target : targets)
 	{
-		float distance = CircleDecorator->getPosition().euclidianDistance(this->getPosition());
+		float distance = target->getPosition().euclidianDistance(this->getPosition());
 		if (distance <= _lineOfSight and
 				(validTarget == nullptr or 
 				 validTarget->getPosition().euclidianDistance(this->getPosition()) > distance))
 		{
-			validTarget = CircleDecorator;
+			validTarget = target;
 		}
 	}
 	this->_targetFollowing = validTarget;

@@ -21,7 +21,9 @@ SpriteObject::SpriteObject()
 
 SpriteObject::~SpriteObject()
 {
-
+	std::cout << "SPRITEOBJECT DESTRUCTOR" << std::endl;
+	// delete this->_sprite;
+	// this->_sprite = nullptr;
 }
 
 SpriteObject::SpriteObject(Graphics &graphics, const std::string assetName, float width, float height)

@@ -17,10 +17,9 @@ public:
 
 	Food(const char* assetName, float radius);
 
-	void draw(Point shift = Point(0,0));
 	void update();
 
-	int getNutritionalValue() const { return (int) (this->_size * 100.0f); }
+	int getNutritionalValue() const;
 
 	const std::string type() { return "FOOD"; }
 
@@ -30,8 +29,9 @@ private:
 	static float randomUpperBound;
 
 	static float foodWeightMultiplier;
+	static float nutritionalValueMultiplier;
 
-	float _size;
+			float _size;
 };
 
 #endif

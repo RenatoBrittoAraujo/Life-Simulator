@@ -11,7 +11,7 @@ public:
 	Player();
 	~Player();
 
-	Player(Graphics &graphics, const char *assetName, float radius);
+	Player(const char *assetName, float radius);
 
 	void move(Util::Direction direction);
 

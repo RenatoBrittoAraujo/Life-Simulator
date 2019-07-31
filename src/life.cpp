@@ -15,15 +15,10 @@ Life::~Life()
 {
 }
 
-Life::Life(Graphics &graphics, const char *assetName, float radius)
+Life::Life(const char *assetName, float radius) :
+	CircleDecorator(assetName, radius)
 {
-	this->_circle = new Circle(graphics, assetName, radius);
-	randomizeSize(graphics, 0.7, 2.0);
-}
-
-void Life::draw(Graphics &graphics, Point shift)
-{
-	this->_circle->draw(graphics, shift);
+	randomizeSize(0.7f, 2.0f);
 }
 
 void Life::update(unsigned int ticks)
@@ -35,13 +30,13 @@ void Life::update(unsigned int ticks)
 	}
 }
 
-void Life::randomizeSize(Graphics &graphics, const float lowerBoundRandom, const float upperBoundRandom)
+void Life::randomizeSize(const float lowerBoundRandom, const float upperBoundRandom)
 {
 	float ratio = Util::randFloat(lowerBoundRandom, upperBoundRandom);
-	setSize(graphics, ratio);
+	setSize(ratio);
 }
 
-void Life::setSize(Graphics &graphics, const float size)
+void Life::setSize(const float size)
 {
 	this->_circle->setWidth(size * this->_circle->getWidth());
 	this->_circle->setHeight(size * this->_circle->getHeight());
@@ -50,7 +45,7 @@ void Life::setSize(Graphics &graphics, const float size)
 	this->_circle->setSpeedCap(Circle::getSTDSpeedCap() / size);
 	this->_circle->setMovementSpeed(Circle::getSTDMovementSpeed() / size);
 	this->_circle->setAttritionFactor(Circle::getSTDAttritionFactor() + (1.0 - size) * Circle::getSTDAttritionFactorDelta());
-	this->_circle->updateSprite(graphics);
+	this->_circle->updateSprite(*Graphics::getInstance());
 }
 
 bool Life::targetInRadius(CircleDecorator *target)

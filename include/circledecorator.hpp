@@ -9,36 +9,28 @@ class CircleDecorator {
 
 public:
 
-	CircleDecorator() {}
-	
-	~CircleDecorator() {
-		if (this->_circle != nullptr)
-		{
-				// delete this->_circle;
-		}
-	}
+	CircleDecorator();
 
-	CircleDecorator(Graphics &graphics, const char *assetName, float radius) :
-		_circle(new Circle(graphics, assetName, radius))
-	{}
+	~CircleDecorator();
 
-	Point getPosition() { return this->_circle->getCenteredPosition(); }
+	CircleDecorator(const char *assetName, float radius);
 
-	Point setPosition(const Point newPosition) { 
-		this->_circle->setPosition(
-			Point(
-				newPosition.getX() - this->_circle->getWidth() / 2.0f,
-				newPosition.getY() - this->_circle->getHeight() / 2.0f
-			)
-		); 
-	}
+	Point setPosition(const Point newPosition);
+	Point getPosition() const;
+
+	float getWeight() const;
+	void setWeight(const float weight);
+
+	float getRadius() const { return this->_circle->getRadius(); }
+
+	void draw(Point shift = Point(0,0));
 
 	Circle& getCircle() { return *this->_circle; }
 
 	void addFollower(NPC* newFollower);
 	void removeFollower(NPC* oldFollower);
 
-	virtual const std::string type() = 0;
+	virtual const std::string type() const { return "CIRCLEDECORATOR"; }
 
 protected:
 

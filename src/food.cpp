@@ -4,6 +4,7 @@
 float Food::randomLowerBound = 0.7;
 float Food::randomUpperBound = 1.3;
 float Food::foodWeightMultiplier = 0.003f;
+float Food::nutritionalValueMultiplier = 500.0f;
 
 Food::Food()
 {}
@@ -16,17 +17,11 @@ Food::~Food()
 	}
 }
 
-Food::Food(const char* assetName, float radius)
+Food::Food(const char *assetName, float radius) :
+	_size(Util::randFloat(randomLowerBound, randomUpperBound)), 
+	CircleDecorator(assetName, radius * this->_size)
 {
-	float size = Util::randFloat(randomLowerBound, randomUpperBound);
-	this->_size = size;
-	this->_circle = new Circle(*Graphics::getInstance(), assetName, radius * size);
-	this->_circle->setWeight(this->_circle->getWeight() * foodWeightMultiplier);
-}
-
-void Food::draw(Point shift)
-{
-	this->_circle->draw(*Graphics::getInstance(), shift);
+	this->setWeight(this->getWeight() * foodWeightMultiplier);
 }
 
 void Food::update()
@@ -34,3 +29,7 @@ void Food::update()
 	this->_circle->update();
 }
 
+int Food::getNutritionalValue() const 
+{
+	return (int)(this->_size * nutritionalValueMultiplier);
+}

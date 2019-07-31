@@ -10,7 +10,7 @@ class Circle : public SpriteObject
 public:
 
 	Circle() {}
-	~Circle() {}
+	~Circle() { std::cout << "CIRCLE DESTRUCTOR" << std::endl; }
 
 	Circle(Graphics &graphics, const char *assetName, float radius);
 
