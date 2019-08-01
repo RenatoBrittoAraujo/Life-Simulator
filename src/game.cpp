@@ -15,8 +15,8 @@ namespace GameMap
 {
 	const int MAP_WIDTH = 3000;
 	const int MAP_HEIGHT = 3000;
-	const int MIN_NPC = 30;
-	const int MAX_NPC = 30;
+	const int MIN_NPC = 50;
+	const int MAX_NPC = 100;
 	const int SPAWN_BORDER_DISTANCE = 40;
 }
 

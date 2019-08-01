@@ -24,7 +24,7 @@ void FoodManager::update()
 {
   for (auto food : this->_foods)
   {
-    food->update();
+    food.update();
   }
   if (this->_foods.size() < this->_lowerFoodBound)
   {
@@ -35,8 +35,9 @@ void FoodManager::update()
 
 void FoodManager::eatCheck(std::vector<Life*> &foodEaters)
 {
-  for (auto &food : this->_foods)
+  for (int foodIndex = 0; foodIndex < this->_foods.size(); foodIndex++)
   {
+		Food* food = &this->_foods[foodIndex];
     for (auto &foodEater : foodEaters)
     {
       if(foodEater->targetInRadius(food))
@@ -46,24 +47,22 @@ void FoodManager::eatCheck(std::vector<Life*> &foodEaters)
         {
           ((NPC*) foodEater)->setTarget(nullptr);
         }
-        delete food;
-        food = NULL;
+				removeFood(foodIndex);
         break;
       }
     }
   }
-  Util::clearNullPointers(this->_foods);
 }
 
 void FoodManager::collide(std::vector<GameObject*> foodColliders)
 {
   for (auto food : this->_foods)
   {
-    foodColliders.push_back(&food->getCircle());
+    foodColliders.push_back(&food.getCircle());
   }
   for (auto food : this->_foods)
   {
-    food->getCircle().collide(foodColliders);
+    food.getCircle().collide(foodColliders);
   }
 }
 
@@ -71,21 +70,20 @@ void FoodManager::draw(Point shift)
 {
   for (auto food : this->_foods)
   {
-    food->draw(shift);
+    food.draw(shift);
   }
 }
 
 void FoodManager::destroy(Rectangle<int> areaToAnalize)
 {
-  for (auto &food : this->_foods)
-  {
-    if (areaToAnalize.contains(food->getCircle().getCenteredPosition()))
+	for (int foodIndex = 0; foodIndex < this->_foods.size(); foodIndex++)
+	{
+		Food food = this->_foods[foodIndex];
+		if (areaToAnalize.contains(food.getCircle().getCenteredPosition()))
     {
-      delete food;
-      food = nullptr;
-    }
+			removeFood(foodIndex);
+		}
   }
-  Util::clearNullPointers(this->_foods);
 }
 
 void FoodManager::populate(Rectangle<int> areaToAnalize, int numberOfFoods)
@@ -118,13 +116,25 @@ void FoodManager::addFood(int numberOfNewFoods, Rectangle<int> areaToAdd)
 {
   for (int i = 0; i < numberOfNewFoods; i++)
   {
-    Food* food = new Food("assets/food.png", 10.0f);
-    food->setPosition(
+    Food food("assets/food.png", 10.0f);
+    food.setPosition(
       Point(
         Util::randFloat(areaToAdd.getLeft(), areaToAdd.getRight()),
         Util::randFloat(areaToAdd.getTop(), areaToAdd.getBottom())
       )
     );
-    this->_foods.push_back(food);
+    storeFood(food);
   }
+}
+
+void FoodManager::storeFood(Food &food)
+{
+	this->_foods.push_back(food);
+	this->_foodsAsTargets.push_back(&this->_foods.back());
+}
+
+void FoodManager::removeFood(int index)
+{
+	this->_foods.erase(this->_foods.begin() + index);
+	this->_foodsAsTargets.erase(this->_foodsAsTargets.begin() + index);
 }
