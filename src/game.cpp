@@ -15,8 +15,8 @@ namespace GameMap
 {
 	const int MAP_WIDTH = 3000;
 	const int MAP_HEIGHT = 3000;
-	const int MIN_NPC = 1;
-	const int MAX_NPC = 1;
+	const int MIN_NPC = 30;
+	const int MAX_NPC = 30;
 	const int SPAWN_BORDER_DISTANCE = 40;
 }
 
@@ -28,6 +28,8 @@ Game::~Game()
 
 bool Game::init(bool fullscreen)
 {
+	this->_graphics = Graphics::getInstance();
+
 	this->_globals.setGameMapWidth(GameMap::MAP_WIDTH);
 	this->_globals.setGameMapHeigth(GameMap::MAP_HEIGHT);
 
@@ -37,30 +39,25 @@ bool Game::init(bool fullscreen)
 		return false;
 	}
 
-	if (this->_verbose)
-	{
-		Util::logInfo("SDL Subsystems initialized");
-	}
-
 	if (fullscreen)
 	{
-		this->_graphics = new Graphics(Util::getGameName());
+		this->_graphics->setWindowMode(Util::getGameName());
 		Util::setFullscreenMode(*this->_graphics);
 		this->_globals.setScreenWidth(Util::getScreenWidth());
 		this->_globals.setScreenHeight(Util::getScreenHeight());
 	}
 	else
 	{
-		this->_graphics = new Graphics(Util::getGameName(), false, Util::getScreenWidth(), Util::getScreenHeight());
+		this->_graphics->setWindowMode(Util::getGameName(), false, Util::getScreenWidth(), Util::getScreenHeight());
 	}
-	
-	Graphics::setInstance(this->_graphics);
-	Graphics::getInstance()->setRenderColor(Color::white());
+
+	this->_graphics->setRenderColor(Color::white());
 
 	/* Custom class initialization */
 
 	// Setting up player
 	_player = Player("assets/playerCircle.png", 25.0f);
+
 	_player.getCircle().setPosition(Point(200,100));
 
 	// Setting up NPCs
@@ -70,7 +67,7 @@ bool Game::init(bool fullscreen)
 		npc.getCircle().setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
 		this->_npcs.push_back(npc);
 	}
-
+	
 	for(auto &npc : this->_npcs)
 	{
 		foodEaters.push_back(&npc);
@@ -81,8 +78,8 @@ bool Game::init(bool fullscreen)
 	// Setting up food
 	this->foodManager = FoodManager::getInstance();
 
-	this->foodManager.setLowerFoodBound(30);
-	this->foodManager.setUpperFoodBound(30);
+	this->foodManager.setLowerFoodBound(70);
+	this->foodManager.setUpperFoodBound(70);
 
 	this->foodManager.populate();
 
@@ -108,7 +105,7 @@ bool Game::init(bool fullscreen)
 	this->_player.setNourishment(100);
 	this->_nourishmentDisplay = FontObject(200, 30);
 	this->_nourishmentDisplay.setPosition(Point(Util::getScreenWidth() / 2 - 200 / 2, 10));
-
+	
 	/* End of class initialization */
 
 	this->_isRunning = true;
@@ -145,7 +142,7 @@ void Game::handleUserInput()
 
 	if(this->_input.wasKeyPressed(SDL_SCANCODE_R))
 	{
-		Graphics::getInstance()->setStandardColor(Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255));
+		this->_graphics->setStandardColor(Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255));
 	}
 
 	if(this->_input.isKeyHeld(SDL_SCANCODE_W)) { this->_player.move(Util::Direction::TOP); }
@@ -159,12 +156,6 @@ void Game::handleUserInput()
 void Game::update()
 {
 	this->_player.update();
-
-	// if(this->_player.getNourishment() <= 0)
-	// {
-	// 	std::cout<<"MISSION FAILED, TRY AGAIN NEXT TIME"<<std::endl;
-	// 	this->exit();
-	// }
 
 	for(auto& npc : this->_npcs)
 	{
@@ -189,7 +180,7 @@ void Game::handleCollisions()
 
 void Game::render()
 {
-	_graphics->fillBackground();
+	this->_graphics->fillBackground();
 
 	/* Rendering of custom classes */
 
@@ -198,7 +189,7 @@ void Game::render()
 
 	for(int i = 0; i < boundingBox.size(); i++)
 	{
-		boundingBox[i].draw(*Graphics::getInstance(), shift);
+		boundingBox[i].draw(*this->_graphics, shift);
 	}
 
 	this->_player.draw();
@@ -210,17 +201,18 @@ void Game::render()
 
 	foodManager.draw(shift);
 
-	this->_nourishmentDisplay.update(*Graphics::getInstance(), "NOURISHMENT: " + std::to_string(this->_player.getNourishment()));
-	this->_nourishmentDisplay.draw(*Graphics::getInstance());
+	this->_nourishmentDisplay.update(*this->_graphics, "NOURISHMENT: " + std::to_string(this->_player.getNourishment()));
+	this->_nourishmentDisplay.draw(*this->_graphics);
 
 	/* End of custom rendering */
 
-	_graphics->flip();
+	this->_graphics->flip();
 }
 
 void Game::exit()
 {
-	_isRunning = false;
+	this->_isRunning = false;
+	this->_graphics->~Graphics();
 	SDL_Quit();
 }
 
@@ -236,10 +228,16 @@ void Game::run()
 
 	while (this->running())
 	{
-		timeElapsed = SDL_GetTicks() - last;
-
 		this->handleUserInput();
+
+		if (!this->running())
+		{
+			return;
+		}
+
 		this->update();
+	
+		timeElapsed = SDL_GetTicks() - last;
 
 		if (timeElapsed >= (1000 / _framerate))
 		{

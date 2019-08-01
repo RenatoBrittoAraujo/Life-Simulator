@@ -2,28 +2,22 @@
 #include "npc.hpp"
 
 CircleDecorator::CircleDecorator() 
-{
-
-}
+{}
 
 CircleDecorator::~CircleDecorator()
-{
-	std::cout << "CIRCLEDECORATOR DESTRUCTOR" << std::endl;
-	// delete this->_circle;
-	// this->_circle = nullptr;
-}
+{}
 
 CircleDecorator::CircleDecorator(const char *assetName, float radius)
 {
-		this->_circle = new Circle(*Graphics::getInstance(), assetName, radius);
+	this->_circle = Circle(*Graphics::getInstance(), assetName, radius);
 }
 
 Point CircleDecorator::setPosition(const Point newPosition)
 {
-	this->_circle->setPosition(
+	this->_circle.setPosition(
 		Point(
-				newPosition.getX() - this->_circle->getWidth() / 2.0f,
-				newPosition.getY() - this->_circle->getHeight() / 2.0f
+				newPosition.getX() - this->_circle.getWidth() / 2.0f,
+				newPosition.getY() - this->_circle.getHeight() / 2.0f
 		)
 	);
 }
@@ -31,17 +25,17 @@ Point CircleDecorator::setPosition(const Point newPosition)
 Point CircleDecorator::getPosition() const
 {
 	return Point(
-		this->_circle->getX() + this->_circle->getWidth() / 2.0f,
-		this->_circle->getY() + this->_circle->getHeight() / 2.0f
+		this->_circle.getX() + this->_circle.getWidth() / 2.0f,
+		this->_circle.getY() + this->_circle.getHeight() / 2.0f
 	);
 }
 
-float CircleDecorator::getWeight() const { return this->_circle->getWeight(); }
-void CircleDecorator::setWeight(const float weight) { this->_circle->setWeight(weight); }
+float CircleDecorator::getWeight() const { return this->_circle.getWeight(); }
+void CircleDecorator::setWeight(const float weight) { this->_circle.setWeight(weight); }
 
 void CircleDecorator::draw(Point shift)
 {
-	this->_circle->draw(*Graphics::getInstance(), shift);
+	this->_circle.draw(*Graphics::getInstance(), shift);
 }
 
 void CircleDecorator::addFollower(NPC* newFollower)

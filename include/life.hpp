@@ -46,6 +46,7 @@ protected:
 
 	int _nourishment = 100;
 	int _nourishmentLossPerSecond = 1;
+	
 };
 
 #endif

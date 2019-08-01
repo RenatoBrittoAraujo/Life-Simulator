@@ -16,15 +16,10 @@ const float SpriteObject::ATTRITION_FACTOR_DELTA = 0.01;
 // Public
 
 SpriteObject::SpriteObject()
-{
-}
+{}
 
 SpriteObject::~SpriteObject()
-{
-	std::cout << "SPRITEOBJECT DESTRUCTOR" << std::endl;
-	// delete this->_sprite;
-	// this->_sprite = nullptr;
-}
+{}
 
 SpriteObject::SpriteObject(Graphics &graphics, const std::string assetName, float width, float height)
 {
@@ -47,11 +42,11 @@ void SpriteObject::draw(Graphics &graphics, Point shift)
 {
 	if (this->_fixed)
 	{
-		this->_sprite->draw(graphics, this->_fixedPosition.getX(), this->_fixedPosition.getY());
+		this->_sprite.draw(graphics, this->_fixedPosition.getX(), this->_fixedPosition.getY());
 	}
 	else
 	{
-		this->_sprite->draw(graphics, this->_x - shift.getX(), this->_y - shift.getY());
+		this->_sprite.draw(graphics, this->_x - shift.getX(), this->_y - shift.getY());
 	}
 }
 
@@ -120,9 +115,5 @@ void SpriteObject::setSprite(Graphics &graphics, const std::string assetPath, in
 	imageRect.fit(width, height);
 	this->_width = imageRect.getWidth();
 	this->_height = imageRect.getHeight();
-	if (this->_sprite != nullptr)
-	{
-		delete this->_sprite;
-	}
-	this->_sprite = new Sprite(graphics, assetPath, imageRect.getWidth(), imageRect.getHeight());
+	this->_sprite = Sprite(graphics, assetPath, imageRect.getWidth(), imageRect.getHeight());
 }

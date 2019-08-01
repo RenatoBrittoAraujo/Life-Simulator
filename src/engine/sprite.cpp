@@ -3,7 +3,6 @@
 #include "util.hpp"
 #include "rectangle.hpp"
 
-#include <iostream>
 #include <algorithm>
 
 Sprite::Sprite()
@@ -15,13 +14,13 @@ Sprite::~Sprite()
 Sprite::Sprite(Graphics &graphics, const std::string path, Rectangle<int> sourceRect, float destWidth, float destHeight) :
 	_destHeight(destHeight), _destWidth(destWidth), _sourceRect(sourceRect.toSDLRect())
 {
-	this->_spriteSheet = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(path));
+	this->_spriteSheet = graphics.getTextureFromImage(path.c_str());
 }
 
 Sprite::Sprite(Graphics &graphics, const std::string path, float destWidth, float destHeight) :
 	_destHeight(destHeight), _destWidth(destWidth)
 {
-	this->_spriteSheet = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(path));
+	this->_spriteSheet = graphics.getTextureFromImage(path.c_str());
 	this->_sourceRect = { 0, 0, 0, 0 };
 }
 

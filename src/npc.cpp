@@ -33,7 +33,7 @@ void NPC::update()
 			setRandomMovement();
 			this->_lastMovementChange = currentTime;
 		}
-		this->_circle->move(this->_randomMovementDirection);
+		this->_circle.move(this->_randomMovementDirection);
 	}
 	Life::update();
 }
@@ -113,5 +113,5 @@ void NPC::followTarget()
 			return a.first < b.first;
 	});
 	Util::Direction movementDirection = directionToFollow[0].second;
-	this->_circle->move(movementDirection);
+	this->_circle.move(movementDirection);
 }

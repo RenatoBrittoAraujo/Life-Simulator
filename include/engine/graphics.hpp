@@ -11,22 +11,20 @@ class Graphics
 {
 public:
 
-	Graphics(const char *windowTitle, bool fullscreen = true, int screenWidth = 0, int screenHeight = 0);
+	Graphics();
 	~Graphics();
+	Graphics(const Graphics& graphics) = delete;
 
-	static Graphics* getInstance()
-  {
+	void setWindowMode(const char *windowTitle, bool fullscreen = true, int screenWidth = 0, int screenHeight = 0);
+
+	static Graphics *getInstance()
+	{
 		if (_instance == nullptr)
 		{
-			throw "Graphics instance null";
+			_instance = new Graphics();
 		}
     return _instance;
   }
-
-	static void setInstance(Graphics* receivedInstance)
-	{
-		_instance = receivedInstance;
-	}
 
 	/*
 		Loads image and stores it as texture in graphic card
@@ -58,6 +56,8 @@ public:
 	void setStandardColor(const Color color) { this->_standardColor = color; }
 	Color getStandardColor() const { return this->_standardColor; }
 
+	SDL_Texture *getTextureFromImage(const char* path);
+
 private:
 
 	static Graphics* _instance;
@@ -65,7 +65,8 @@ private:
 	SDL_Window *_window;
 	SDL_Renderer *_renderer;
 
-	std::map<std::string, SDL_Surface *> _spriteSheets;
+	static std::map<std::string, SDL_Surface *> _spriteSheets;
+	static std::map<std::string, SDL_Texture *> _textureSheets;
 
 	Color _standardColor = Color(255,255,255,255);
 };

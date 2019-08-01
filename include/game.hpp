@@ -80,7 +80,6 @@ private:
 	int _framerate;
 
 	bool _isRunning;
-	Graphics *_graphics;
 	Input _input;
 
 	SDL_Event _event;
@@ -89,11 +88,13 @@ private:
 
 	// In game objects
 	Player _player;
-	FoodManager foodManager;
 	std::vector<NPC> _npcs;
-	std::vector<Life*> foodEaters;
 	std::vector<Segment> boundingBox;
+	FoodManager foodManager;
+	std::vector<Life*> foodEaters;
 	FontObject _nourishmentDisplay;
+
+	Graphics* _graphics;
 
 	// Collision handling
 	std::vector<GameObject*> collisionObjects;

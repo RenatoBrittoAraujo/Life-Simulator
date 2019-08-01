@@ -11,17 +11,13 @@ GameObject::GameObject()
 {}
 
 GameObject::~GameObject()
-{
-	std::cout<<"GAMEOBJECT DESTRUCTOR"<<std::endl;
-}
+{}
 
 void GameObject::update()
-{
-}
+{}
 
 void GameObject::move(Util::Direction direction)
-{
-}
+{}
 
 int GameObject::collide(std::vector<GameObject *> objects)
 {

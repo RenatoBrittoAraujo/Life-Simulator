@@ -91,7 +91,7 @@ private:
 
 	void setSprite(Graphics &graphics, const std::string assetName, int imageWidth, int imageHeight);
 
-	Sprite *_sprite = nullptr;
+	Sprite _sprite;
 
 	float _x = 0;
 	float _y = 0;

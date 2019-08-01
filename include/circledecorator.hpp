@@ -21,11 +21,11 @@ public:
 	float getWeight() const;
 	void setWeight(const float weight);
 
-	float getRadius() const { return this->_circle->getRadius(); }
+	float getRadius() const { return this->_circle.getRadius(); }
 
 	void draw(Point shift = Point(0,0));
 
-	Circle& getCircle() { return *this->_circle; }
+	Circle& getCircle() { return this->_circle; }
 
 	void addFollower(NPC* newFollower);
 	void removeFollower(NPC* oldFollower);
@@ -34,8 +34,7 @@ public:
 
 protected:
 
-	Circle *_circle;
-
+	Circle _circle;
 	std::vector<NPC*> _followers;
 
 };

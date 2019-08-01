@@ -1,0 +1,8 @@
+#!/bin/bash
+while true
+do
+	clear
+	FILE=`cat /proc/meminfo`
+	echo "$FILE"
+	sleep 0.5
+done

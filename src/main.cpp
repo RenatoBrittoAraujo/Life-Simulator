@@ -6,7 +6,7 @@
 
 bool verbose = false;
 int framerate = 100;
-bool fullscreen = false;
+bool fullscreenMode = false;
 int screenWidth = 1280;
 int screenHeight = 720;
 
@@ -17,8 +17,8 @@ void customRun()
 	char op = '.';
 	std::cout<<"Do you want to run fullscreen? (y/n) ";
 	while(std::cin>>op, !(op == 'y' or op == 'n')) {}
-	fullscreen = op == 'y';
-	if (!fullscreen)
+	fullscreenMode = op == 'y';
+	if (!fullscreenMode)
 	{
 		std::cout<<"Screen width: ";
 		std::cin>>screenWidth;
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 	}
 	else if (argc > 1 and argv[1][1] == 'f')
 	{
-		fullscreen = true;
+		fullscreenMode = true;
 	}
 
 	try
@@ -55,13 +55,10 @@ int main(int argc, char **argv)
 		game.setFramerate(framerate);
 		game.setVerbose(verbose);
 		game.setScreenSize(screenWidth, screenHeight);
-
-		if (game.init(fullscreen))
+		if (game.init(fullscreenMode))
 		{
 			game.run();
 		}
-
-		game.exit();
 	}
 	catch(const char* e)
 	{

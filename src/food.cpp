@@ -26,7 +26,7 @@ Food::Food(const char *assetName, float radius) :
 
 void Food::update()
 {
-	this->_circle->update();
+	this->_circle.update();
 }
 
 int Food::getNutritionalValue() const 

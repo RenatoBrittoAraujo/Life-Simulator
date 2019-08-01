@@ -8,12 +8,10 @@ const float Life::MIN_RANDOMIZE_FACTOR = 0.5;
 const float Life::MAX_RANDOMIZE_FACTOR = 2.0;
 
 Life::Life()
-{
-}
+{}
 
 Life::~Life()
-{
-}
+{}
 
 Life::Life(const char *assetName, float radius) :
 	CircleDecorator(assetName, radius)
@@ -23,7 +21,7 @@ Life::Life(const char *assetName, float radius) :
 
 void Life::update(unsigned int ticks)
 {
-	this->_circle->update();
+	this->_circle.update();
 	if(ticks - _lastUpdate > Time::secondToMilis(1))
 	{
 		this->_nourishment -= this->_nourishmentLossPerSecond;
@@ -38,19 +36,19 @@ void Life::randomizeSize(const float lowerBoundRandom, const float upperBoundRan
 
 void Life::setSize(const float size)
 {
-	this->_circle->setWidth(size * this->_circle->getWidth());
-	this->_circle->setHeight(size * this->_circle->getHeight());
-	this->_circle->setRadius(size * this->_circle->getRadius());
-	this->_circle->setWeight(Circle::getSTDWeight() * size * size);
-	this->_circle->setSpeedCap(Circle::getSTDSpeedCap() / size);
-	this->_circle->setMovementSpeed(Circle::getSTDMovementSpeed() / size);
-	this->_circle->setAttritionFactor(Circle::getSTDAttritionFactor() + (1.0 - size) * Circle::getSTDAttritionFactorDelta());
-	this->_circle->updateSprite(*Graphics::getInstance());
+	this->_circle.setWidth(size * this->_circle.getWidth());
+	this->_circle.setHeight(size * this->_circle.getHeight());
+	this->_circle.setRadius(size * this->_circle.getRadius());
+	this->_circle.setWeight(Circle::getSTDWeight() * size * size);
+	this->_circle.setSpeedCap(Circle::getSTDSpeedCap() / size);
+	this->_circle.setMovementSpeed(Circle::getSTDMovementSpeed() / size);
+	this->_circle.setAttritionFactor(Circle::getSTDAttritionFactor() + (1.0 - size) * Circle::getSTDAttritionFactorDelta());
+	this->_circle.updateSprite(*Graphics::getInstance());
 }
 
 bool Life::targetInRadius(CircleDecorator *target)
 {
-	if(target != nullptr and Collision::handleCollision(&target->getCircle(), this->_circle))
+	if(target != nullptr and Collision::handleCollision(&target->getCircle(), &this->_circle))
 	{
 		return true;
 	}
