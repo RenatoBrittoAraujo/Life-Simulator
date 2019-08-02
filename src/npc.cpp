@@ -63,7 +63,7 @@ void NPC::setRandomMovement(Util::Direction direction)
 	}
 }
 
-void NPC::findTarget(std::vector<CircleDecorator*> targets)
+void NPC::findTarget(const std::vector<CircleDecorator*> &targets)
 {
 	if (this->followingTarget())
 	{

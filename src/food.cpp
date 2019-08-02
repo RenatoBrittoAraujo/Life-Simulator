@@ -3,25 +3,18 @@
 
 float Food::randomLowerBound = 0.7;
 float Food::randomUpperBound = 1.3;
-float Food::foodWeightMultiplier = 0.003f;
 float Food::nutritionalValueMultiplier = 500.0f;
 
 Food::Food()
 {}
 
 Food::~Food()
-{
-	for(auto follower : this->_followers)
-	{
-		follower->setTarget(nullptr);
-	}
-}
+{}
 
 Food::Food(const char *assetName, float radius) :
-	_size(Util::randFloat(randomLowerBound, randomUpperBound)), 
-	CircleDecorator(assetName, radius * this->_size)
+	_size(Util::randFloat(randomLowerBound, randomUpperBound))
 {
-	this->setWeight(this->getWeight() * foodWeightMultiplier);
+	this->init(assetName, radius * this->_size);
 }
 
 void Food::update()

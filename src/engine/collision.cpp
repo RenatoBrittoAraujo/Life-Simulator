@@ -30,7 +30,7 @@ const float pi = acos(-1.0);
 	by 2 keys is a functions for it's collision handling.
  */
 
-const bool Collision::handleCollision(GameObject *objectA, GameObject *objectB)
+const bool Collision::handleCollision(GameObject *objectA, GameObject *objectB, bool noHandling)
 {
 	// If any of the objects are an instance of the virtual class GameObject or 
 	// both objects are actually the same or
@@ -51,23 +51,23 @@ const bool Collision::handleCollision(GameObject *objectA, GameObject *objectB)
 	// Hardcoded handlers
 	if (objectA->type() == BOX and objectB->type() == BOX)
 	{
-		return boxToBox((Box *)objectA, (Box *)objectB);
+		return boxToBox((Box *)objectA, (Box *)objectB, noHandling);
 	}
 	if (objectA->type() == BOX and objectB->type() == CIRCLE)
 	{
-		return boxToCircle((Box *)objectA, (Circle *)objectB);
+		return boxToCircle((Box *)objectA, (Circle *)objectB, noHandling);
 	}
 	if (objectA->type() == BOX and objectB->type() == SEGMENT)
 	{
-		return boxToSegment((Box *)objectA, (Segment *)objectB);
+		return boxToSegment((Box *)objectA, (Segment *)objectB, noHandling);
 	}
 	if (objectA->type() == CIRCLE and objectB->type() == CIRCLE)
 	{
-		return circleToCircle((Circle *)objectA, (Circle *)objectB);
+		return circleToCircle((Circle *)objectA, (Circle *)objectB, noHandling);
 	}
 	if (objectA->type() == CIRCLE and objectB->type() == SEGMENT)
 	{
-		return circleToSegment((Circle *)objectA, (Segment *)objectB);
+		return circleToSegment((Circle *)objectA, (Segment *)objectB, noHandling);
 	}
 	return false;
 }
@@ -76,7 +76,7 @@ const bool Collision::handleCollision(GameObject *objectA, GameObject *objectB)
 /*
 	Collision assumes box is upright
  */
-const bool Collision::boxToBox(Box *boxA, Box *boxB)
+const bool Collision::boxToBox(Box *boxA, Box *boxB, bool noHandling)
 {
 	const Rectangle<float> boxARect = boxA->getBoundingBox();
 	const Rectangle<float> boxBRect = boxB->getBoundingBox();
@@ -132,7 +132,7 @@ const bool Collision::boxToBox(Box *boxA, Box *boxB)
 /*
 	Collision assumes vertical or horizontal segments
  */
-const bool Collision::boxToSegment(Box *box, Segment *segment)
+const bool Collision::boxToSegment(Box *box, Segment *segment, bool noHandling)
 {
 	const float fx = segment->getFirst().getX();
 	const float fy = segment->getFirst().getY();
@@ -191,7 +191,7 @@ const bool Collision::boxToSegment(Box *box, Segment *segment)
 	return true;
 }
 
-const bool Collision::boxToCircle(Box *box, Circle *circle)
+const bool Collision::boxToCircle(Box *box, Circle *circle, bool noHandling)
 {
 
 }
@@ -211,7 +211,7 @@ const bool Collision::boxToCircle(Box *box, Circle *circle)
 		Calculate intersection size
 		Move circles to opposite direction according to half the intersection size 
  */
-const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
+const bool Collision::circleToCircle(Circle *circleA, Circle *circleB, bool noHandling)
 {
 	float ra = circleA->getRadius();
 	float rb = circleB->getRadius();
@@ -228,6 +228,10 @@ const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 	if (dist > ra + rb)
 	{
 		return false;
+	}
+	else if (noHandling)
+	{
+		return true;
 	}
 
 	Vector2D vecAtoB(centerA, centerB);
@@ -298,7 +302,7 @@ const bool Collision::circleToCircle(Circle *circleA, Circle *circleB)
 		Rotate speed vector by reflected angle [3]
 		Return collision
  */
-const bool Collision::circleToSegment(Circle *circle, Segment *segment)
+const bool Collision::circleToSegment(Circle *circle, Segment *segment, bool noHandling)
 {
 	float cx = circle->getX();
 	float cy = circle->getY();
@@ -329,6 +333,10 @@ const bool Collision::circleToSegment(Circle *circle, Segment *segment)
 	if (dist > r)
 	{
 		return false;
+	}
+	else if(noHandling)
+	{
+		return true;
 	}
 	Vector2D moveBack(closest, circleCenter);
 	moveBack.scale((r - dist) / dist + 0.001f /* Adjusting position a little off the collision boundry so the same collision is not detected twice */);

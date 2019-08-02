@@ -6,6 +6,8 @@
 #include "rectangle.hpp"
 #include "globals.hpp"
 
+#include <memory>
+
 class FoodManager
 {
 public:
@@ -37,21 +39,19 @@ public:
   int getUpperFoodBound() const { return this->_upperFoodBound; }
   float getFoodDensity() const { return this->_foodDensity; }
 
-  const std::vector<Food>& getFoods() const { return this->_foods; }
-  const std::vector<CircleDecorator*>& getFoodsAsTargets() const { return this->_foodsAsTargets; }
+	const std::vector<CircleDecorator*> &getFoodsAsTargets() const { return this->_foodsAsTargets; }
 
 private:
-
-	void storeFood(Food &food);
+	void storeFood(Food* food);
 	void removeFood(int index);
 
   static const int INVALID_AMOUNT = -1;
 
   static FoodManager* instance;
-  std::vector<Food> _foods;
+  std::vector<Food*> _foods;
 	std::vector<CircleDecorator*> _foodsAsTargets;
 
-  float _foodDensity = 0.00001f;
+	float _foodDensity = 0.00001f;
   int _lowerFoodBound = 90;
   int _upperFoodBound = 100;
 

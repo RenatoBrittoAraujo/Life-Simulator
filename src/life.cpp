@@ -46,9 +46,9 @@ void Life::setSize(const float size)
 	this->_circle.updateSprite(*Graphics::getInstance());
 }
 
-bool Life::targetInRadius(CircleDecorator *target)
+bool Life::targetInRadius(CircleDecorator* target)
 {
-	if(target != nullptr and Collision::handleCollision(&target->getCircle(), &this->_circle))
+	if(target != nullptr and Collision::handleCollision(&target->getCircle(), &this->_circle, true /* NO HANDLING */))
 	{
 		return true;
 	}

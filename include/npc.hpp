@@ -23,7 +23,7 @@ public:
 
 	virtual const std::string type() { return "NPC"; }
 
-	void findTarget(std::vector<CircleDecorator*> targets);
+	void findTarget(const std::vector<CircleDecorator*> &targets);
 	CircleDecorator* getTarget() const { return this->_targetFollowing; }
 	void setTarget(CircleDecorator* newTarget) { this->_targetFollowing = newTarget; }
 

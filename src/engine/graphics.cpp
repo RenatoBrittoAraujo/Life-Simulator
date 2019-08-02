@@ -83,7 +83,7 @@ SDL_Surface *Graphics::loadImage(const std::string &path)
 
 SDL_Texture* Graphics::getTextureFromImage(const char *path)
 {
-	if (_textureSheets.count(std::string(path)))
+	if (!_textureSheets.count(std::string(path)))
 	{
 		_textureSheets[(std::string)path] = SDL_CreateTextureFromSurface(this->getRenderer(), this->loadImage(path));
 	}

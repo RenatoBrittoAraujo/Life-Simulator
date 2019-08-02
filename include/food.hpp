@@ -23,6 +23,8 @@ public:
 
 	const std::string type() { return "FOOD"; }
 
+	float getSize() const { return this->_size; }
+
 private:
 
 	static float randomLowerBound;
@@ -31,7 +33,7 @@ private:
 	static float foodWeightMultiplier;
 	static float nutritionalValueMultiplier;
 
-			float _size;
+	float _size;
 };
 
 #endif

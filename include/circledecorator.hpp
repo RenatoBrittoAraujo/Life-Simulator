@@ -34,6 +34,7 @@ public:
 
 protected:
 
+	void init(const char *assetName, float radius);
 	Circle _circle;
 	std::vector<NPC*> _followers;
 

@@ -4,6 +4,7 @@
 #include "circledecorator.hpp"
 
 #include <SDL2/SDL.h>
+#include <memory>
 
 class Life : public CircleDecorator
 {
@@ -18,7 +19,7 @@ public:
 
 	void randomizeSize(const float lowerBoundRandom = MIN_RANDOMIZE_FACTOR, const float upperBoundRandom = MAX_RANDOMIZE_FACTOR);
 
-	bool targetInRadius(CircleDecorator *target);
+	bool targetInRadius(CircleDecorator* target);
 
 	/*
 		Standard size = 1.0

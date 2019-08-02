@@ -5,9 +5,19 @@ CircleDecorator::CircleDecorator()
 {}
 
 CircleDecorator::~CircleDecorator()
-{}
+{
+	for (auto &follower : this->_followers)
+	{
+		follower->setTarget(nullptr);
+	}
+}
 
 CircleDecorator::CircleDecorator(const char *assetName, float radius)
+{
+	this->_circle = Circle(*Graphics::getInstance(), assetName, radius);
+}
+
+void CircleDecorator::init(const char *assetName, float radius)
 {
 	this->_circle = Circle(*Graphics::getInstance(), assetName, radius);
 }

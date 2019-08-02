@@ -22,7 +22,7 @@ public:
 		_height(height)
 	{}
 
-	Rectangle(SDL_Rect rect) :
+	Rectangle(SDL_Rect &rect) :
 		_x(rect.x),
 		_y(rect.y),
 		_width(rect.w),

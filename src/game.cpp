@@ -78,10 +78,8 @@ bool Game::init(bool fullscreen)
 	// Setting up food
 	this->foodManager = FoodManager::getInstance();
 
-	this->foodManager.setLowerFoodBound(70);
-	this->foodManager.setUpperFoodBound(70);
-
 	this->foodManager.populate();
+
 
 	// Set up map borders
 	this->boundingBox = {
