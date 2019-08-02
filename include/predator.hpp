@@ -5,9 +5,13 @@
 
 class Predator : public NPC
 {
-public:
 
-  virtual const std::string type() { return "PREDATOR"; }
+	Predator();
+	~Predator();
+
+	Predator(const char *assetName, float radius);
+
+	virtual const std::string type() { return "PREDATOR"; }
 
 private:
 
