@@ -23,15 +23,11 @@ void PreyManager::update()
 	}
 }
 
-void PreyManager::collide(std::vector<GameObject *> preyColliders)
+void PreyManager::findFood(std::vector<CircleDecorator*> foods)
 {
 	for (auto &prey : this->_entities)
 	{
-		preyColliders.push_back(&prey->getCircle());
-	}
-	for (auto &prey : this->_entities)
-	{
-		prey->getCircle().collide(preyColliders);
+		((Prey*) prey)->findTarget(foods);
 	}
 }
 
@@ -46,12 +42,5 @@ PreyManager &PreyManager::getInstance()
 
 CircleDecorator *PreyManager::newEntityInstance(Rectangle<int> areaToAdd)
 {
-	Prey *prey = new Prey("preyCircle/food.png", 10.0f);
-	prey->setPosition(
-		Point(
-			Util::randFloat(areaToAdd.getLeft(), areaToAdd.getRight()),
-			Util::randFloat(areaToAdd.getTop(), areaToAdd.getBottom())
-		)
-	);
-	return prey;
+	return new Prey("assets/preyCircle.png", 10.0f);
 }

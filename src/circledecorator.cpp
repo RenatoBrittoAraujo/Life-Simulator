@@ -65,7 +65,7 @@ void CircleDecorator::removeFollower(NPC* oldFollower)
   }
 }
 
-
-
-
-
+void CircleDecorator::collide(std::vector<GameObject*> &objects)
+{
+	this->_circle.collide(objects);
+}

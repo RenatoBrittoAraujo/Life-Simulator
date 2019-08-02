@@ -12,9 +12,10 @@ public:
 	static PreyManager &getInstance();
 
 	void update();
-	void collide(std::vector<GameObject *> foodColliders);
 
 	CircleDecorator *newEntityInstance(Rectangle<int> areaToAdd);
+
+	void findFood(std::vector<CircleDecorator*> _foods);
 
 private:
 	static PreyManager *instance;

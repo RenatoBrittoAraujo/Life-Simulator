@@ -14,6 +14,7 @@
 #include "player.hpp"
 #include "npc.hpp"
 #include "food.hpp"
+#include "preymanager.hpp"
 
 #include <vector>
 
@@ -71,11 +72,6 @@ private:
 	 */
 	void render();
 
-	/*
-		Process collisions between game objects
-	 */
-	void handleCollisions();
-
 	bool _verbose;
 	int _framerate;
 
@@ -88,10 +84,10 @@ private:
 
 	// In game objects
 	Player _player;
-	std::vector<NPC> _npcs;
+	PreyManager _preyManager;
 	std::vector<Segment> _boundingBox;
 	FoodManager _foodManager;
-	std::vector<Life*> _foodEaters;
+	std::vector<CircleDecorator*> _foodEaters;
 	FontObject _nourishmentDisplay;
 
 	Graphics* _graphics;

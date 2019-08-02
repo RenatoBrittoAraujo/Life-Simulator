@@ -15,9 +15,16 @@ namespace GameMap
 {
 	const int MAP_WIDTH = 3000;
 	const int MAP_HEIGHT = 3000;
-	const int MIN_NPC = 50;
-	const int MAX_NPC = 100;
-	const int SPAWN_BORDER_DISTANCE = 40;
+
+	const int MIN_PREY = 1;
+	const int MAX_PREY = 5;
+
+	const int MIN_PREDATOR = 1;
+	const int MAX_PREDATOR = 5;
+
+	const int MIN_FOOD = 100;
+	const int MAX_FOOD = 100;
+	const float FOOD_DENSITY = 0.00001f;
 }
 
 Game::Game()
@@ -57,37 +64,38 @@ bool Game::init(bool fullscreen)
 
 	// Setting up player
 	_player = Player("assets/playerCircle.png", 25.0f);
+	_player.setPosition(Point(200,100));
 
-	_player.getCircle().setPosition(Point(200,100));
+	// Setting up prey
+	this->_preyManager = PreyManager::getInstance();
+	this->_preyManager.setLowerEntityBound(GameMap::MIN_PREY);
+	this->_preyManager.setUpperEntityBound(GameMap::MAX_PREY);
+	this->_preyManager.populate();
 
-	// Setting up NPCs
-	for(int i = 0; i < Util::randInt(GameMap::MIN_NPC, GameMap::MAX_NPC); i++)
+	// Setting up food
+	this->_foodManager = FoodManager::getInstance();
+	this->_foodManager.setEntityDensity(GameMap::FOOD_DENSITY);
+	this->_foodManager.setLowerEntityBound(GameMap::MIN_FOOD);
+	this->_foodManager.setUpperEntityBound(GameMap::MAX_FOOD);
+	this->_foodManager.populate();
+
+	// Setting up eating relationships
+	for (auto &prey : this->_preyManager.getEntities())
 	{
-		NPC npc = NPC("assets/npcCircle.png", 20.0f);
-		npc.getCircle().setPosition(Point(Util::randInt(50, GameMap::MAP_WIDTH - 50), Util::randInt(50, GameMap::MAP_HEIGHT)));
-		this->_npcs.push_back(npc);
-	}
-	
-	for(auto &npc : this->_npcs)
-	{
-		this->_foodEaters.push_back(&npc);
+		this->_foodEaters.push_back(prey);
 	}
 
 	this->_foodEaters.push_back(&this->_player);
 
-	// Setting up food
-	this->_foodManager = FoodManager::getInstance();
-
-	this->_foodManager.populate();
-
-
-	// Set up map borders
+	// Setting up map borders
 	this->_boundingBox = {
-	Segment(Point(0, 0), Point(0, GameMap::MAP_HEIGHT)),
-	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(0, GameMap::MAP_HEIGHT)),
-	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(GameMap::MAP_WIDTH, 0)),
-	Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0))};
+		Segment(Point(0, 0), Point(0, GameMap::MAP_HEIGHT)),
+		Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(0, GameMap::MAP_HEIGHT)),
+		Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(GameMap::MAP_WIDTH, 0)),
+		Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0))
+	};
 
+	// Setting up all collisions
 	this->collisionObjects.push_back(&this->_player.getCircle());
 
 	for (auto &seg : this->_boundingBox)
@@ -95,12 +103,6 @@ bool Game::init(bool fullscreen)
 		this->collisionObjects.push_back(&seg);
 	}
 
-	for (auto &npc : this->_npcs)
-	{
-		this->collisionObjects.push_back(&npc.getCircle());
-	}
-
-	this->_player.setNourishment(100);
 	this->_nourishmentDisplay = FontObject(200, 30);
 	this->_nourishmentDisplay.setPosition(Point(Util::getScreenWidth() / 2 - 200 / 2, 10));
 	this->_nourishmentDisplay.setColor(Color::grey());
@@ -156,25 +158,19 @@ void Game::update()
 {
 	this->_player.update();
 
-	for(auto& npc : this->_npcs)
-	{
-		npc.update();
-		npc.findTarget(this->_foodManager.getTargets());
-	}
-
+	// this->_preyManager.eatCheck(this->_preyEaters);
+	this->_preyManager.findFood(this->_foodManager.getEntities());
+	this->_preyManager.update();
 	this->_foodManager.eatCheck(this->_foodEaters);
-
 	this->_foodManager.update();
 
-	handleCollisions();
-}
+	this->_player.collide(this->collisionObjects);
 
-void Game::handleCollisions()
-{
-	for(auto &object : collisionObjects)
-	{
-		object->collide(collisionObjects);
-	}
+	this->_preyManager.collide(this->collisionObjects);
+	this->_preyManager.collide(this->_preyManager.getCollisionObjects());
+
+	this->_foodManager.collide(this->collisionObjects);
+	this->_foodManager.collide(this->_foodManager.getCollisionObjects());
 }
 
 void Game::render()
@@ -192,13 +188,8 @@ void Game::render()
 	}
 
 	this->_player.draw();
-
-	for (auto &npc : this->_npcs)
-	{
-		npc.draw(shift);
-	}
-
 	this->_foodManager.draw(shift);
+	this->_preyManager.draw(shift);
 
 	this->_nourishmentDisplay.update(*this->_graphics, "NOURISHMENT: " + std::to_string(this->_player.getNourishment()));
 	this->_nourishmentDisplay.draw(*this->_graphics);

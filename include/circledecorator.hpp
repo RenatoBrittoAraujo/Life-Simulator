@@ -31,6 +31,9 @@ public:
 	void addFollower(NPC* newFollower);
 	void removeFollower(NPC* oldFollower);
 
+	void collide(std::vector<GameObject*> &objects);
+	void collide(std::vector<CircleDecorator *> &objects);
+
 	virtual const std::string type() const { return "CIRCLEDECORATOR"; }
 
 	int getNutritionalValue() const { return (int)(this->_circle.getRadius() * this->_nutritionalValueMultiplier); }

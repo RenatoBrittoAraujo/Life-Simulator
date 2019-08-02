@@ -4,6 +4,7 @@
 #include "rectangle.hpp"
 #include "graphics.hpp"
 #include "npc.hpp"
+#include "collision.hpp"
 
 #include <algorithm>
 #include <vector>
@@ -32,16 +33,16 @@ void EntityManager::update()
 	// }
 }
 
-void EntityManager::eatCheck(std::vector<Life *> &entityEaters)
+void EntityManager::eatCheck(std::vector<CircleDecorator*> &entityEaters)
 {
 	for (int entityIndex = 0; entityIndex < this->_entities.size(); entityIndex++)
 	{
 		CircleDecorator *entity = this->_entities[entityIndex];
 		for (auto &entityEater : entityEaters)
 		{
-			if (entityEater->targetInRadius(entity))
+			if (Collision::handleCollision(&entity->getCircle(), &entityEater->getCircle(), true /* just detection */))
 			{
-				entityEater->setNourishment(entityEater->getNourishment() + entity->getNutritionalValue());
+				((Life *)entityEater)->setNourishment(((Life *)entityEater)->getNourishment() + entity->getNutritionalValue());
 				if (entityEater->type() == "NPC")
 				{
 					((NPC *)entityEater)->setTarget(nullptr);
@@ -53,13 +54,9 @@ void EntityManager::eatCheck(std::vector<Life *> &entityEaters)
 	}
 }
 
-void EntityManager::collide(std::vector<GameObject *> entityColliders)
+void EntityManager::collide(std::vector<GameObject *> &entityColliders)
 {
-	for (auto entity : this->_entities)
-	{
-		entityColliders.push_back(&entity->getCircle());
-	}
-	for (auto entity : this->_entities)
+	for (auto &entity : this->_entities)
 	{
 		entity->getCircle().collide(entityColliders);
 	}
@@ -106,10 +103,13 @@ void EntityManager::addEntity(int numberOfNewEntitys, Rectangle<int> areaToAdd)
 	for (int i = 0; i < numberOfNewEntitys; i++)
 	{
 		CircleDecorator *entity = newEntityInstance(areaToAdd);
+		float radius = entity->getRadius();
 		entity->setPosition(
-				Point(
-						Util::randFloat(areaToAdd.getLeft(), areaToAdd.getRight()),
-						Util::randFloat(areaToAdd.getTop(), areaToAdd.getBottom())));
+			Point(
+				Util::randFloat(areaToAdd.getLeft() + radius, areaToAdd.getRight() - radius),
+				Util::randFloat(areaToAdd.getTop() + radius, areaToAdd.getBottom() - radius)
+			)
+		);
 		storeEntity(entity);
 	}
 }
@@ -117,10 +117,12 @@ void EntityManager::addEntity(int numberOfNewEntitys, Rectangle<int> areaToAdd)
 void EntityManager::storeEntity(CircleDecorator *entity)
 {
 	this->_entities.push_back(entity);
+	this->_entitiesObjects.push_back(&entity->getCircle());
 }
 
 void EntityManager::removeEntity(int index)
 {
 	delete this->_entities[index];
 	this->_entities.erase(this->_entities.begin() + index);
+	this->_entitiesObjects.erase(this->_entitiesObjects.begin() + index);
 }

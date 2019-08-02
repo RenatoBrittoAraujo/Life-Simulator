@@ -17,7 +17,6 @@ public:
   static FoodManager& getInstance();
 
   void update();
-  void collide(std::vector<GameObject*> foodColliders);
 
 	CircleDecorator* newEntityInstance(Rectangle<int> areaToAdd);
 

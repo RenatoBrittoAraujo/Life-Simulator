@@ -3,6 +3,8 @@
 
 #include "circledecorator.hpp"
 #include "globals.hpp"
+#include "gameobject.hpp"
+
 class Life;
 
 #include <vector>
@@ -15,10 +17,10 @@ public:
 
 	EntityManager(int lowerEntityBound, int upperEntityBound, float EntityDensity);
 
-	virtual void collide(std::vector<GameObject *> EntityColliders);
+	void collide(std::vector<GameObject *> &entityColliders);
 	virtual void update();
 	void draw(Point shift);
-	void eatCheck(std::vector<Life*> &EntityEaters);
+	void eatCheck(std::vector<CircleDecorator*> &entityEaters);
 	void reset(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect());
 	void populate(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect(), int numberOfNewEntities = INVALID_AMOUNT);
 	void destroy(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect());
@@ -37,13 +39,15 @@ public:
 	int getUpperEntityBound() const { return this->_upperEntityBound; }
 	float getEntityDensity() const { return this->_entityDensity; }
 
-	const std::vector<CircleDecorator*>& getTargets() const { return this->_entities; }
+	std::vector<CircleDecorator*>& getEntities() { return this->_entities; }
+	std::vector<GameObject*>& getCollisionObjects() { return this->_entitiesObjects; }
 
 protected:
 
 	static const int INVALID_AMOUNT = -1;
 
 	std::vector<CircleDecorator*> _entities;
+	std::vector<GameObject*> _entitiesObjects;
 
 	void storeEntity(CircleDecorator* entity);
 	void removeEntity(int index);

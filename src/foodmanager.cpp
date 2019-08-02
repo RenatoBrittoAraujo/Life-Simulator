@@ -28,18 +28,6 @@ void FoodManager::update()
   }
 }
 
-void FoodManager::collide(std::vector<GameObject*> foodColliders)
-{
-	for (auto food : this->_entities)
-  {
-    foodColliders.push_back(&food->getCircle());
-  }
-  for (auto food : this->_entities)
-  {
-    food->getCircle().collide(foodColliders);
-  }
-}
-
 FoodManager& FoodManager::getInstance()
 {
   if(FoodManager::instance == nullptr)
@@ -51,12 +39,5 @@ FoodManager& FoodManager::getInstance()
 
 CircleDecorator *FoodManager::newEntityInstance(Rectangle<int> areaToAdd)
 {
-	Food *food = new Food("assets/food.png", 10.0f);
-	food->setPosition(
-		Point(
-			Util::randFloat(areaToAdd.getLeft(), areaToAdd.getRight()),
-			Util::randFloat(areaToAdd.getTop(), areaToAdd.getBottom())
-		)
-	);
-	return food;
+	return new Food("assets/food.png", 10.0f);
 }
