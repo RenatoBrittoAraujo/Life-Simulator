@@ -28,8 +28,12 @@ public:
 
 	Circle& getCircle() { return this->_circle; }
 
-	void addFollower(NPC* newFollower);
-	void removeFollower(NPC* oldFollower);
+	void addFollower(CircleDecorator* newFollower);
+	void removeFollower(CircleDecorator* oldFollower);
+	void addFollowing(CircleDecorator* followTarget);
+	void setTarget(CircleDecorator* toFollow);
+	CircleDecorator* getTarget() const;
+	bool isFollowingSomething() const;
 
 	void collide(std::vector<GameObject*> &objects);
 	void collide(std::vector<CircleDecorator *> &objects);
@@ -44,8 +48,10 @@ protected:
 
 	void init(const char *assetName, float radius);
 	Circle _circle;
-	std::vector<NPC*> _followers;
+	std::vector<CircleDecorator*> _followers;
+	std::vector<CircleDecorator*> _following;
 
+	CircleDecorator* _target = nullptr;
 };
 
 #endif

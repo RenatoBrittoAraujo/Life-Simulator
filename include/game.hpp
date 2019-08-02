@@ -9,12 +9,13 @@
 #include "box.hpp"
 #include "segment.hpp"
 
-#include "foodmanager.hpp"
 #include "globals.hpp"
 #include "player.hpp"
 #include "npc.hpp"
 #include "food.hpp"
+#include "foodmanager.hpp"
 #include "preymanager.hpp"
+#include "predatormanager.hpp"
 
 #include <vector>
 
@@ -84,10 +85,10 @@ private:
 
 	// In game objects
 	Player _player;
-	PreyManager _preyManager;
+	FoodManager &_foodManager = FoodManager::getInstance();
+	PreyManager &_preyManager = PreyManager::getInstance();
+	PredatorManager &_predatorManager = PredatorManager::getInstance();
 	std::vector<Segment> _boundingBox;
-	FoodManager _foodManager;
-	std::vector<CircleDecorator*> _foodEaters;
 	FontObject _nourishmentDisplay;
 
 	Graphics* _graphics;

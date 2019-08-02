@@ -6,6 +6,10 @@ CircleDecorator::CircleDecorator()
 
 CircleDecorator::~CircleDecorator()
 {
+	if (isFollowingSomething())
+	{
+		this->_target->removeFollower(this);
+	}
 	for (auto &follower : this->_followers)
 	{
 		follower->setTarget(nullptr);
@@ -48,12 +52,13 @@ void CircleDecorator::draw(Point shift)
 	this->_circle.draw(*Graphics::getInstance(), shift);
 }
 
-void CircleDecorator::addFollower(NPC* newFollower)
+void CircleDecorator::addFollower(CircleDecorator* newFollower)
 {
   this->_followers.push_back(newFollower);
+	newFollower->addFollowing(this);
 }
 
-void CircleDecorator::removeFollower(NPC* oldFollower)
+void CircleDecorator::removeFollower(CircleDecorator* oldFollower)
 {
   for (int i = 0; i < this->_followers.size(); i++)
   {
@@ -63,6 +68,25 @@ void CircleDecorator::removeFollower(NPC* oldFollower)
       break;
     }
   }
+}
+void CircleDecorator::addFollowing(CircleDecorator *followTarget)
+{
+	this->_following.push_back(followTarget);
+}
+
+void CircleDecorator::setTarget(CircleDecorator *toFollow)
+{
+	this->_target = toFollow;
+}
+
+CircleDecorator* CircleDecorator::getTarget() const
+{
+	return this->_target;
+}
+
+bool CircleDecorator::isFollowingSomething() const
+{
+	return this->_target != nullptr;
 }
 
 void CircleDecorator::collide(std::vector<GameObject*> &objects)

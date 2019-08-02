@@ -21,7 +21,7 @@ NPC::NPC(const char *assetName, float radius) :
 
 void NPC::update()
 {
-	if (this->followingTarget())
+	if (this->isFollowingSomething())
 	{
 		this->followTarget();
 	}
@@ -65,7 +65,7 @@ void NPC::setRandomMovement(Util::Direction direction)
 
 void NPC::findTarget(const std::vector<CircleDecorator*> &targets)
 {
-	if (this->followingTarget())
+	if (this->isFollowingSomething())
 	{
 		return;
 	}
@@ -80,21 +80,21 @@ void NPC::findTarget(const std::vector<CircleDecorator*> &targets)
 			validTarget = target;
 		}
 	}
-	this->_targetFollowing = validTarget;
-	if (followingTarget())
+	this->_target = validTarget;
+	if (isFollowingSomething())
 	{
-		this->_targetFollowing->addFollower(this);
+		this->_target->addFollower(this);
 	}
 }
 
 void NPC::followTarget()
 {
-	if(this->_targetFollowing == nullptr)
+	if(not isFollowingSomething())
 	{
 		return;
 	}
 	Point npcPosition = this->getPosition();
-	Point targetPosition = this->_targetFollowing->getPosition();
+	Point targetPosition = this->_target->getPosition();
 	float x = npcPosition.getX();
 	float y = npcPosition.getY();
 	Point top(x, y - 1);

@@ -54,6 +54,24 @@ void EntityManager::eatCheck(std::vector<CircleDecorator*> &entityEaters)
 	}
 }
 
+void EntityManager::eatCheck(CircleDecorator* entityEater)
+{
+	for (int entityIndex = 0; entityIndex < this->_entities.size(); entityIndex++)
+	{
+		CircleDecorator *entity = this->_entities[entityIndex];
+		if (Collision::handleCollision(&entity->getCircle(), &entityEater->getCircle(), true /* just detection */))
+		{
+			((Life *)entityEater)->setNourishment(((Life *)entityEater)->getNourishment() + entity->getNutritionalValue());
+			if (entityEater->type() == "NPC")
+			{
+				((NPC *)entityEater)->setTarget(nullptr);
+			}
+			removeEntity(entityIndex);
+			break;
+		}
+	}
+}
+
 void EntityManager::collide(std::vector<GameObject *> &entityColliders)
 {
 	for (auto &entity : this->_entities)

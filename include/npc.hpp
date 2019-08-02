@@ -24,20 +24,11 @@ public:
 	virtual const std::string type() { return "NPC"; }
 
 	void findTarget(const std::vector<CircleDecorator*> &targets);
-	CircleDecorator* getTarget() const { return this->_targetFollowing; }
-	void setTarget(CircleDecorator* newTarget) { this->_targetFollowing = newTarget; }
 
 private:
 
 	static unsigned int stdMovementChangeDelta;
 	static float stdLineOfSight;
-
-	/*
-		if null, no target
-		else currently following the target pointer
-	*/
-	CircleDecorator* _targetFollowing = nullptr;
-	bool followingTarget() const { return !(this->_targetFollowing == nullptr); }
 
 	void followTarget();
 

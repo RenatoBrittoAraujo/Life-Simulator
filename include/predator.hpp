@@ -5,7 +5,7 @@
 
 class Predator : public NPC
 {
-
+public:
 	Predator();
 	~Predator();
 

@@ -42,5 +42,5 @@ PreyManager &PreyManager::getInstance()
 
 CircleDecorator *PreyManager::newEntityInstance(Rectangle<int> areaToAdd)
 {
-	return new Prey("assets/preyCircle.png", 10.0f);
+	return new Prey("assets/preyCircle.png", 20.0f);
 }

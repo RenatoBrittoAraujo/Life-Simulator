@@ -20,11 +20,13 @@ public:
 	void collide(std::vector<GameObject *> &entityColliders);
 	virtual void update();
 	void draw(Point shift);
-	void eatCheck(std::vector<CircleDecorator*> &entityEaters);
 	void reset(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect());
 	void populate(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect(), int numberOfNewEntities = INVALID_AMOUNT);
 	void destroy(Rectangle<int> areaToAnalize = Globals::getInstance().getGameMapRect());
 	void addEntity(int numberOfNewEntitys, Rectangle<int> areaToAdd = Globals::getInstance().getGameMapRect());
+
+	void eatCheck(std::vector<CircleDecorator*> &entityEaters);
+	void eatCheck(CircleDecorator *entityEater);
 
 	virtual CircleDecorator *newEntityInstance(Rectangle<int> areaToAdd) = 0;
 
@@ -52,9 +54,9 @@ protected:
 	void storeEntity(CircleDecorator* entity);
 	void removeEntity(int index);
 
-	float _entityDensity = 0.00001f;
-	int _lowerEntityBound = 90;
-	int _upperEntityBound = 100;
+	float _entityDensity;
+	int _lowerEntityBound;
+	int _upperEntityBound;
 };
 
 #endif
