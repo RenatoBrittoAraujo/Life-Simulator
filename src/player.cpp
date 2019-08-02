@@ -20,3 +20,8 @@ void Player::move(Util::Direction direction)
 {
 	this->_circle.move(direction);
 }
+
+void Player::update()
+{
+	this->_circle.update();
+}

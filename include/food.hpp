@@ -19,8 +19,6 @@ public:
 
 	void update();
 
-	int getNutritionalValue() const;
-
 	const std::string type() { return "FOOD"; }
 
 	float getSize() const { return this->_size; }
@@ -31,7 +29,6 @@ private:
 	static float randomUpperBound;
 
 	static float foodWeightMultiplier;
-	static float nutritionalValueMultiplier;
 
 	float _size;
 };

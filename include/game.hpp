@@ -89,9 +89,9 @@ private:
 	// In game objects
 	Player _player;
 	std::vector<NPC> _npcs;
-	std::vector<Segment> boundingBox;
-	FoodManager foodManager;
-	std::vector<Life*> foodEaters;
+	std::vector<Segment> _boundingBox;
+	FoodManager _foodManager;
+	std::vector<Life*> _foodEaters;
 	FontObject _nourishmentDisplay;
 
 	Graphics* _graphics;

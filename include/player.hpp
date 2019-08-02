@@ -14,6 +14,7 @@ public:
 	Player(const char *assetName, float radius);
 
 	void move(Util::Direction direction);
+	void update();
 
 	virtual const std::string type() { return "PLAYER"; }
 	

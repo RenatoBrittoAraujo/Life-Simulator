@@ -24,6 +24,7 @@ public:
 	float getRadius() const { return this->_circle.getRadius(); }
 
 	void draw(Point shift = Point(0,0));
+	virtual void update() = 0;
 
 	Circle& getCircle() { return this->_circle; }
 
@@ -32,7 +33,11 @@ public:
 
 	virtual const std::string type() const { return "CIRCLEDECORATOR"; }
 
+	int getNutritionalValue() const { return (int)(this->_circle.getRadius() * this->_nutritionalValueMultiplier); }
+
 protected:
+
+	float _nutritionalValueMultiplier = 100.0f;
 
 	void init(const char *assetName, float radius);
 	Circle _circle;

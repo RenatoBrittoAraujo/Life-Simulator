@@ -70,19 +70,19 @@ bool Game::init(bool fullscreen)
 	
 	for(auto &npc : this->_npcs)
 	{
-		foodEaters.push_back(&npc);
+		this->_foodEaters.push_back(&npc);
 	}
 
-	foodEaters.push_back(&this->_player);
+	this->_foodEaters.push_back(&this->_player);
 
 	// Setting up food
-	this->foodManager = FoodManager::getInstance();
+	this->_foodManager = FoodManager::getInstance();
 
-	this->foodManager.populate();
+	this->_foodManager.populate();
 
 
 	// Set up map borders
-	this->boundingBox = {
+	this->_boundingBox = {
 	Segment(Point(0, 0), Point(0, GameMap::MAP_HEIGHT)),
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(0, GameMap::MAP_HEIGHT)),
 	Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(GameMap::MAP_WIDTH, 0)),
@@ -90,7 +90,7 @@ bool Game::init(bool fullscreen)
 
 	this->collisionObjects.push_back(&this->_player.getCircle());
 
-	for (auto &seg : this->boundingBox)
+	for (auto &seg : this->_boundingBox)
 	{
 		this->collisionObjects.push_back(&seg);
 	}
@@ -103,6 +103,7 @@ bool Game::init(bool fullscreen)
 	this->_player.setNourishment(100);
 	this->_nourishmentDisplay = FontObject(200, 30);
 	this->_nourishmentDisplay.setPosition(Point(Util::getScreenWidth() / 2 - 200 / 2, 10));
+	this->_nourishmentDisplay.setColor(Color::grey());
 	
 	/* End of class initialization */
 
@@ -158,12 +159,12 @@ void Game::update()
 	for(auto& npc : this->_npcs)
 	{
 		npc.update();
-		npc.findTarget(foodManager.getFoodsAsTargets());
+		npc.findTarget(this->_foodManager.getTargets());
 	}
 
-	foodManager.eatCheck(foodEaters);
+	this->_foodManager.eatCheck(this->_foodEaters);
 
-	foodManager.update();
+	this->_foodManager.update();
 
 	handleCollisions();
 }
@@ -185,9 +186,9 @@ void Game::render()
 	// Position shift as the world is rendered in function of player position
 	Point shift = this->_player.getCircle().getFixedShift();
 
-	for(int i = 0; i < boundingBox.size(); i++)
+	for(int i = 0; i < _boundingBox.size(); i++)
 	{
-		boundingBox[i].draw(*this->_graphics, shift);
+		_boundingBox[i].draw(*this->_graphics, shift);
 	}
 
 	this->_player.draw();
@@ -197,7 +198,7 @@ void Game::render()
 		npc.draw(shift);
 	}
 
-	foodManager.draw(shift);
+	this->_foodManager.draw(shift);
 
 	this->_nourishmentDisplay.update(*this->_graphics, "NOURISHMENT: " + std::to_string(this->_player.getNourishment()));
 	this->_nourishmentDisplay.draw(*this->_graphics);
