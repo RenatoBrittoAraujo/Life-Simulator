@@ -89,6 +89,11 @@ bool CircleDecorator::isFollowingSomething() const
 	return this->_target != nullptr;
 }
 
+bool CircleDecorator::hasFollowers() const
+{
+	return this->_followers.size() > 0;
+}
+
 void CircleDecorator::collide(std::vector<GameObject*> &objects)
 {
 	this->_circle.collide(objects);

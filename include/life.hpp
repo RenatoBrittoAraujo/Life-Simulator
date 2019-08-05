@@ -15,7 +15,7 @@ public:
 
 	Life(const char *assetName, float radius);
 
-	virtual void update(unsigned int ticks = 0);
+	virtual void update();
 
 	void randomizeSize(const float lowerBoundRandom = MIN_RANDOMIZE_FACTOR, const float upperBoundRandom = MAX_RANDOMIZE_FACTOR);
 
@@ -45,8 +45,8 @@ protected:
 
 	bool _eatsFood = false;
 
-	int _nourishment = 100;
-	int _nourishmentLossPerSecond = 1;
+	int _nourishment = 1000;
+	int _nourishmentLossPerSecond = 15;
 	
 };
 

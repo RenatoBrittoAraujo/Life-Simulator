@@ -49,7 +49,13 @@ public:
 		Permutes a list randomly
 	 */
 	template <typename T>
-	static void permute(std::vector<T> &vector);
+	static void permute(std::vector<T> &vector)
+	{
+		for (int i = 0; i < vector.size(); i++)
+		{
+			std::swap(vector[i], vector[randInt(0, vector.size() - 1)]);
+		}
+	}
 
 	static void logError(std::string errorModule, std::string errorDescription, std::string sdlError = "");
 
@@ -68,6 +74,15 @@ public:
 		RIGHT
 	};
 
+	static const Direction getOppositeSide(const Direction direction)
+	{
+		return 	direction == LEFT ? RIGHT :
+						direction == RIGHT ? LEFT :
+						direction == TOP ? BOTTOM :
+						direction == BOTTOM ? TOP :
+						NONE;
+	}
+
 	static const std::string getStringFromDirection(Direction direction)
 	{
 		return direction == Direction::TOP ? "TOP" :
@@ -80,6 +95,11 @@ public:
 	static const float floatMax()
 	{
 		return std::numeric_limits<float>::max();
+	}
+
+	static const int intMax()
+	{
+		return std::numeric_limits<int>::max();
 	}
 
 	static void setFullscreenMode(Graphics &graphics);

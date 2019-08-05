@@ -19,12 +19,13 @@ Life::Life(const char *assetName, float radius) :
 	randomizeSize(0.7f, 2.0f);
 }
 
-void Life::update(unsigned int ticks)
+void Life::update()
 {
 	this->_circle.update();
-	if(ticks - _lastUpdate > Time::secondToMilis(1))
+	if(Time::timeSince(_lastUpdate) > Time::secondToMilis(1))
 	{
 		this->_nourishment -= this->_nourishmentLossPerSecond;
+		_lastUpdate = Time::current();
 	}
 }
 

@@ -108,46 +108,6 @@ bool Game::init(bool fullscreen)
 	return true;
 }
 
-void Game::handleUserInput()
-{
-	this->_input.beginNewFrame();
-
-	if (SDL_PollEvent(&this->_event))
-	{
-		if (this->_event.type == SDL_QUIT)
-		{
-			exit();
-		}
-		else if (this->_event.type == SDL_KEYDOWN)
-		{
-			if (this->_event.key.repeat == 0)
-				this->_input.keyDownEvent(this->_event);
-		}
-		else if (this->_event.type == SDL_KEYUP)
-		{
-			this->_input.keyUpEvent(this->_event);
-		}
-	}
-
-	// Custom key handling
-	
-	if (this->_input.wasKeyPressed(SDL_SCANCODE_ESCAPE))
-	{
-		exit();
-	}
-
-	if(this->_input.wasKeyPressed(SDL_SCANCODE_R))
-	{
-		this->_graphics->setStandardColor(Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255));
-	}
-
-	if(this->_input.isKeyHeld(SDL_SCANCODE_W)) { this->_player.move(Util::Direction::TOP); }
-	if (this->_input.isKeyHeld(SDL_SCANCODE_A)) { this->_player.move(Util::Direction::LEFT); }
-	if (this->_input.isKeyHeld(SDL_SCANCODE_S)) { this->_player.move(Util::Direction::BOTTOM); }
-	if (this->_input.isKeyHeld(SDL_SCANCODE_D)) { this->_player.move(Util::Direction::RIGHT); }
-
-	// End of custom key handling
-}
 
 void Game::update()
 {
@@ -224,7 +184,6 @@ bool Game::running()
 void Game::run()
 {
 	unsigned int last = SDL_GetTicks();
-	unsigned int timeElapsed;
 
 	while (this->running())
 	{
@@ -236,17 +195,68 @@ void Game::run()
 		}
 
 		this->update();
-	
-		timeElapsed = SDL_GetTicks() - last;
 
-		if (timeElapsed >= (1000 / _framerate))
+		if (Time::timeSince(last) >= (1000 / _framerate))
 		{
 			this->render();
-			last = SDL_GetTicks();
+			last = Time::current();
 		}
 
 		SDL_Delay(10);
 	}
+}
+
+void Game::handleUserInput()
+{
+	this->_input.beginNewFrame();
+
+	if (SDL_PollEvent(&this->_event))
+	{
+		if (this->_event.type == SDL_QUIT)
+		{
+			exit();
+		}
+		else if (this->_event.type == SDL_KEYDOWN)
+		{
+			if (this->_event.key.repeat == 0)
+				this->_input.keyDownEvent(this->_event);
+		}
+		else if (this->_event.type == SDL_KEYUP)
+		{
+			this->_input.keyUpEvent(this->_event);
+		}
+	}
+
+	// Custom key handling
+
+	if (this->_input.wasKeyPressed(SDL_SCANCODE_ESCAPE))
+	{
+		exit();
+	}
+
+	// if (this->_input.wasKeyPressed(SDL_SCANCODE_R))
+	// {
+	// 	this->_graphics->setStandardColor(Color(Util::randInt(150, 255), Util::randInt(150, 255), Util::randInt(150, 255), 255));
+	// }
+
+	if (this->_input.isKeyHeld(SDL_SCANCODE_W))
+	{
+		this->_player.move(Util::Direction::TOP);
+	}
+	if (this->_input.isKeyHeld(SDL_SCANCODE_A))
+	{
+		this->_player.move(Util::Direction::LEFT);
+	}
+	if (this->_input.isKeyHeld(SDL_SCANCODE_S))
+	{
+		this->_player.move(Util::Direction::BOTTOM);
+	}
+	if (this->_input.isKeyHeld(SDL_SCANCODE_D))
+	{
+		this->_player.move(Util::Direction::RIGHT);
+	}
+
+	// End of custom key handling
 }
 
 // Getters and Setters

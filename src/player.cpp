@@ -23,5 +23,5 @@ void Player::move(Util::Direction direction)
 
 void Player::update()
 {
-	this->_circle.update();
+	this->Life::update();
 }

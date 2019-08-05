@@ -34,6 +34,7 @@ public:
 	void setTarget(CircleDecorator* toFollow);
 	CircleDecorator* getTarget() const;
 	bool isFollowingSomething() const;
+	bool hasFollowers() const;
 
 	void collide(std::vector<GameObject*> &objects);
 	void collide(std::vector<CircleDecorator *> &objects);
@@ -44,7 +45,7 @@ public:
 
 protected:
 
-	float _nutritionalValueMultiplier = 100.0f;
+	float _nutritionalValueMultiplier = 1.0f;
 
 	void init(const char *assetName, float radius);
 	Circle _circle;
