@@ -19,8 +19,8 @@ namespace GameMap
 	const int MIN_PREY = 40;
 	const int MAX_PREY = 100;
 
-	const int MIN_PREDATOR = 1;
-	const int MAX_PREDATOR = 4;
+	const int MIN_PREDATOR = 6;
+	const int MAX_PREDATOR = 15;
 
 	const int MIN_FOOD = 100;
 	const int MAX_FOOD = 100;
@@ -179,6 +179,7 @@ void Game::update()
 
 	this->_predatorManager.collide(this->collisionObjects);
 	this->_predatorManager.collide(this->_foodManager.getCollisionObjects());
+	this->_predatorManager.collide(this->_predatorManager.getCollisionObjects());
 }
 
 void Game::render()

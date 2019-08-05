@@ -27,10 +27,10 @@ void EntityManager::update()
 	{
 		entity->update();
 	}
-	// if (this->_entities.size() < this->_lowerEntityBound)
-	// {
-	// 	addEntity(this->_lowerEntityBound - this->_entities.size());
-	// }
+	if (this->_entities.size() < this->_lowerEntityBound)
+	{
+		addEntity(this->_lowerEntityBound - this->_entities.size());
+	}
 }
 
 void EntityManager::eatCheck(std::vector<CircleDecorator*> &entityEaters)

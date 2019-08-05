@@ -1,7 +1,10 @@
 #include "npc.hpp"
 #include "util.hpp"
+#include "time.hpp"
 
 unsigned int NPC::stdMovementChangeDelta = 150;
+unsigned int NPC::stdScanForTargetTime = 50;
+unsigned int NPC::stdFollowTargetTime = 150;
 float NPC::stdLineOfSight = 300.0f;
 
 NPC::NPC()
@@ -17,18 +20,24 @@ NPC::NPC(const char *assetName, float radius) :
 	this->_movementChangeDelta = stdMovementChangeDelta;
 	setRandomMovement();
 	this->_lineOfSight = stdLineOfSight;
+	this->_targetFollowTime = stdFollowTargetTime;
+	this->_targetScanTime = stdScanForTargetTime;
 }
 
 void NPC::update()
 {
-	if (this->isFollowingSomething())
+	if (isFollowingSomething())
 	{
-		this->followTarget();
+		followTarget();
+		if (this->_targetFollowTime + this->_targetScanTime < Time::timeSince(this->_targetCycleTime))
+		{
+			this->_targetCycleTime = Time::current();
+		}
 	}
 	else
 	{
 		unsigned int currentTime = SDL_GetTicks();
-		if(currentTime - this->_lastMovementChange > this->_movementChangeDelta)
+		if(currentTime - this->_lastMovementChange < this->_movementChangeDelta)
 		{
 			setRandomMovement();
 			this->_lastMovementChange = currentTime;
@@ -65,20 +74,33 @@ void NPC::setRandomMovement(Util::Direction direction)
 
 void NPC::findTarget(const std::vector<CircleDecorator*> &targets)
 {
-	if (this->isFollowingSomething())
+	bool scanningPhase = Time::timeSince(this->_targetCycleTime) < this->_targetScanTime;
+	if (isFollowingSomething() and !scanningPhase)
 	{
 		return;
 	}
-	CircleDecorator* validTarget = nullptr;
+	CircleDecorator *validTarget = nullptr;
 	for (auto &target : targets)
 	{
 		float distance = target->getPosition().euclidianDistance(this->getPosition());
-		if (distance <= _lineOfSight and
-				(validTarget == nullptr or 
-				 validTarget->getPosition().euclidianDistance(this->getPosition()) > distance))
+
+		bool inLineOfSight = (distance <= this->_lineOfSight);
+		bool targetNotFound = (validTarget == nullptr);
+		bool newTargetCloserThanOlder = false;
+
+		if(validTarget)
+		{
+			newTargetCloserThanOlder = (validTarget->getPosition().euclidianDistance(this->getPosition()) > distance);
+		}
+
+		if (inLineOfSight and (targetNotFound or newTargetCloserThanOlder))
 		{
 			validTarget = target;
 		}
+	}
+	if (isFollowingSomething())
+	{
+		this->_target->removeFollower(this);
 	}
 	this->_target = validTarget;
 	if (isFollowingSomething())

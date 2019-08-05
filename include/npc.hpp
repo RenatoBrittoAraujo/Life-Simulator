@@ -4,8 +4,7 @@
 #include "food.hpp"
 #include "life.hpp"
 #include "circledecorator.hpp"
-
-#include <SDL2/SDL.h>
+#include "time.hpp"
 
 class NPC : public Life
 {
@@ -29,6 +28,8 @@ private:
 
 	static unsigned int stdMovementChangeDelta;
 	static float stdLineOfSight;
+	static unsigned int stdScanForTargetTime;
+	static unsigned int stdFollowTargetTime;
 
 	void followTarget();
 
@@ -36,8 +37,12 @@ private:
 
 	Util::Direction _randomMovementDirection = Util::Direction::NONE;
 
-	unsigned int _lastMovementChange = SDL_GetTicks();
+	unsigned int _lastMovementChange = Time::current();
 	unsigned int _movementChangeDelta = stdMovementChangeDelta;
+	
+	unsigned int _targetScanTime;
+	unsigned int _targetFollowTime;
+	unsigned int _targetCycleTime = Time::current();
 
 	float _lineOfSight;
 

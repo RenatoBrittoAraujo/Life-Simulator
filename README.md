@@ -21,7 +21,7 @@ Running with custom settings (verbose, fullscreen, framerate, screen size):
 ```
 make runc
 ```
-
+.
 ## Technical Stuff
 
 Messages to future me who intents to keep working on this project:
