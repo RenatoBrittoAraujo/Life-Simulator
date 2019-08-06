@@ -18,9 +18,14 @@ FoodManager::~FoodManager()
 
 void FoodManager::update()
 {
-	for (auto &food : this->_entities)
+	for (int i = 0; i < this->_entities.size(); i++)
   {
+		Food* food = (Food*) this->_entities[i];
     food->update();
+		if (((Food*) food)->getRot() >= 1.0f)
+		{
+			removeEntity(i);
+		}
   }
   if (this->_entities.size() < this->_lowerEntityBound)
   {
@@ -37,7 +42,7 @@ FoodManager& FoodManager::getInstance()
   return *FoodManager::instance;
 }
 
-CircleDecorator *FoodManager::newEntityInstance(Rectangle<int> areaToAdd)
+Life *FoodManager::newEntityInstance(Rectangle<int> areaToAdd)
 {
-	return new Food("assets/food.png", 10.0f);
+	return new Food(10.0f);
 }

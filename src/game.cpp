@@ -6,6 +6,7 @@
 #include "segment.hpp"
 #include "time.hpp"
 #include "player.hpp"
+#include "collision.hpp"
 #include "npc.hpp"
 
 #include <SDL2/SDL.h>
@@ -13,14 +14,14 @@
 
 namespace GameMap
 {
-	const int MAP_WIDTH = 3000;
-	const int MAP_HEIGHT = 3000;
+	const int MAP_WIDTH =	1000;
+	const int MAP_HEIGHT = 1000;
 
-	const int MIN_PREY = 40;
-	const int MAX_PREY = 100;
+	const int MIN_PREY = 0;
+	const int MAX_PREY = 0;
 
-	const int MIN_PREDATOR = 6;
-	const int MAX_PREDATOR = 15;
+	const int MIN_PREDATOR = 0;
+	const int MAX_PREDATOR = 0;
 
 	const int MIN_FOOD = 100;
 	const int MAX_FOOD = 100;
@@ -65,12 +66,13 @@ bool Game::init(bool fullscreen)
 	// Setting up player
 	_player = Player("assets/playerCircle.png", 20.0f);
 	_player.setPosition(Point(200,100));
-
+	
 	// Setting up food
 	this->_foodManager.setEntityDensity(GameMap::FOOD_DENSITY);
 	this->_foodManager.setLowerEntityBound(GameMap::MIN_FOOD);
 	this->_foodManager.setUpperEntityBound(GameMap::MAX_FOOD);
 	this->_foodManager.populate();
+
 
 	// Setting up prey
 	this->_preyManager.setLowerEntityBound(GameMap::MIN_PREY);
@@ -89,9 +91,6 @@ bool Game::init(bool fullscreen)
 		Segment(Point(GameMap::MAP_WIDTH, GameMap::MAP_HEIGHT), Point(GameMap::MAP_WIDTH, 0)),
 		Segment(Point(0, 0), Point(GameMap::MAP_WIDTH, 0))
 	};
-
-	// Setting up all collisions
-	this->collisionObjects.push_back(&this->_player.getCircle());
 
 	for (auto &seg : this->_boundingBox)
 	{
@@ -129,7 +128,14 @@ void Game::update()
 
 	/* COLLISIONS */
 
+	if (this->_player.collide(this->_predatorManager.getCollisionObjects()))
+	{
+		_player = Player("assets/playerCircle.png", 20.0f);
+		_player.setPosition(Point(200, 100));
+	}
+
 	this->_player.collide(this->collisionObjects);
+	this->_player.collide(this->_preyManager.getCollisionObjects());
 
 	this->_preyManager.collide(this->collisionObjects);
 	this->_preyManager.collide(this->_preyManager.getCollisionObjects());

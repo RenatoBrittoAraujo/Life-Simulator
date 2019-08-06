@@ -2,35 +2,39 @@
 #define FOOD_HPP
 
 #include "point.hpp"
-#include "circledecorator.hpp"
+#include "life.hpp"
 #include "npc.hpp"
+#include "color.hpp"
 
 #include <string>
 #include <vector>
 
-class Food : public CircleDecorator
+class Food : public Life
 {
 public:
 
 	Food();
 	~Food();
 
-	Food(const char* assetName, float radius);
+	Food(float radius);
 
 	void update();
 
 	const std::string type() { return "FOOD"; }
 
-	float getSize() const { return this->_size; }
+	float getRot() const { return this->_rot; }
 
 private:
 
-	static float randomLowerBound;
-	static float randomUpperBound;
+	static const int rotLevels = 5;
+	static float rotRate;
 
 	static float foodWeightMultiplier;
 
-	float _size;
+	Color getRotShift();
+
+	float _rot = 0.0;
+
 };
 
 #endif

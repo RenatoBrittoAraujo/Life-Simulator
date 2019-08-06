@@ -19,7 +19,7 @@ void GameObject::update()
 void GameObject::move(Util::Direction direction)
 {}
 
-int GameObject::collide(std::vector<GameObject *> objects)
+int GameObject::collide(std::vector<GameObject *> &objects)
 {
 	int collisionNumber = 0;
 	for (auto &object : objects)

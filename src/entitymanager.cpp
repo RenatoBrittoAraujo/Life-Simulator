@@ -33,11 +33,11 @@ void EntityManager::update()
 	}
 }
 
-void EntityManager::eatCheck(std::vector<CircleDecorator*> &entityEaters)
+void EntityManager::eatCheck(std::vector<Life*> &entityEaters)
 {
 	for (int entityIndex = 0; entityIndex < this->_entities.size(); entityIndex++)
 	{
-		CircleDecorator *entity = this->_entities[entityIndex];
+		Life *entity = this->_entities[entityIndex];
 		for (auto &entityEater : entityEaters)
 		{
 			if (Collision::handleCollision(&entity->getCircle(), &entityEater->getCircle(), true /* just detection */))
@@ -54,11 +54,11 @@ void EntityManager::eatCheck(std::vector<CircleDecorator*> &entityEaters)
 	}
 }
 
-void EntityManager::eatCheck(CircleDecorator* entityEater)
+void EntityManager::eatCheck(Life* entityEater)
 {
 	for (int entityIndex = 0; entityIndex < this->_entities.size(); entityIndex++)
 	{
-		CircleDecorator *entity = this->_entities[entityIndex];
+		Life *entity = this->_entities[entityIndex];
 		if (Collision::handleCollision(&entity->getCircle(), &entityEater->getCircle(), true /* just detection */))
 		{
 			((Life *)entityEater)->setNourishment(((Life *)entityEater)->getNourishment() + entity->getNutritionalValue());
@@ -120,7 +120,7 @@ void EntityManager::addEntity(int numberOfNewEntitys, Rectangle<int> areaToAdd)
 {
 	for (int i = 0; i < numberOfNewEntitys; i++)
 	{
-		CircleDecorator *entity = newEntityInstance(areaToAdd);
+		Life *entity = newEntityInstance(areaToAdd);
 		float radius = entity->getRadius();
 		entity->setPosition(
 			Point(
@@ -132,7 +132,7 @@ void EntityManager::addEntity(int numberOfNewEntitys, Rectangle<int> areaToAdd)
 	}
 }
 
-void EntityManager::storeEntity(CircleDecorator *entity)
+void EntityManager::storeEntity(Life *entity)
 {
 	this->_entities.push_back(entity);
 	this->_entitiesObjects.push_back(&entity->getCircle());

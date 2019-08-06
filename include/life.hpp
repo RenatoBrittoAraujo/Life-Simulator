@@ -19,7 +19,7 @@ public:
 
 	void randomizeSize(const float lowerBoundRandom = MIN_RANDOMIZE_FACTOR, const float upperBoundRandom = MAX_RANDOMIZE_FACTOR);
 
-	bool targetInRadius(CircleDecorator* target);
+	bool targetInRadius(Life* target);
 
 	/*
 		Standard size = 1.0
@@ -36,6 +36,16 @@ public:
 	 */
 	virtual const std::string type() const { return "LIFE"; };
 
+	int getNutritionalValue() const { return (int)(this->_circle.getRadius() * this->_nutritionalValueMultiplier); }
+
+	void addFollower(Life *newFollower);
+	void removeFollower(Life *oldFollower);
+	void addFollowing(Life *followTarget);
+	void setTarget(Life *toFollow);
+	Life *getTarget() const;
+	bool isFollowingSomething() const;
+	bool hasFollowers() const;
+
 protected:
 
 	unsigned int _lastUpdate = SDL_GetTicks();
@@ -43,10 +53,18 @@ protected:
 	static const float MIN_RANDOMIZE_FACTOR;
 	static const float MAX_RANDOMIZE_FACTOR;
 
+	std::vector<Life *> _followers;
+	std::vector<Life *> _following;
+	Life *_target = nullptr;
+
+	float _nutritionalValueMultiplier = 1.0f;
+
 	bool _eatsFood = false;
 
 	int _nourishment = 1000;
 	int _nourishmentLossPerSecond = 15;
+
+	float _size = 1.0;
 	
 };
 

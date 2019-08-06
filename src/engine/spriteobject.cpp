@@ -33,6 +33,12 @@ SpriteObject::SpriteObject(Graphics &graphics, const std::string assetName, floa
 	this->_assetName = assetName;
 }
 
+void SpriteObject::updateSprite(Graphics& graphics, const std::string assetName)
+{
+	setSprite(graphics, assetName, this->_width, this->_height);
+	this->_assetName = assetName;
+}
+
 void SpriteObject::updateSprite(Graphics &graphics)
 {
 	setSprite(graphics, this->_assetName, this->_width, this->_height);

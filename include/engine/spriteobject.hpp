@@ -16,12 +16,13 @@ public:
 
 	SpriteObject(Graphics &graphics, const std::string assetName, float width, float height);
 
-	void updateSprite(Graphics &graphics);
-
 	void draw(Graphics &graphics, Point shift = Point(0, 0));
 	void update();
 	void move(Util::Direction direction);
 	virtual const GameObjectTypes type() const { return SPRITEOBJECT; };
+
+	void updateSprite(Graphics &graphics, const std::string assetName);
+	void updateSprite(Graphics &graphics);
 
 	Point getFixedShift() const;
 

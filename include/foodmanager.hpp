@@ -18,7 +18,7 @@ public:
 
   void update();
 
-	CircleDecorator* newEntityInstance(Rectangle<int> areaToAdd);
+	Life* newEntityInstance(Rectangle<int> areaToAdd);
 
 private:
 

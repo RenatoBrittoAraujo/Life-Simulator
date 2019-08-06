@@ -27,7 +27,7 @@ Segment::Segment(Point first, Point second)
 
 void Segment::draw(Graphics &graphics, Point currentShift)
 {
-	Color oldColor = graphics.getStandardColor();
+	Color oldColor = graphics.getRenderColor();
 	graphics.setRenderColor(getColor());
 	SDL_RenderDrawLine(graphics.getRenderer(),
 		_first.getX() - currentShift.getX(),

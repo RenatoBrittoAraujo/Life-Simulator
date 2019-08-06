@@ -52,9 +52,10 @@ public:
 
 	SDL_Renderer *getRenderer() const;
 	void setRenderColor(Color color);
+	Color getRenderColor() const;
 
-	void setStandardColor(const Color color) { this->_standardColor = color; }
-	Color getStandardColor() const { return this->_standardColor; }
+	void setRenderColorShift(Color shift);
+	void resetRenderColorShift();
 
 	SDL_Texture *getTextureFromImage(const char* path);
 
@@ -68,7 +69,10 @@ private:
 	static std::map<std::string, SDL_Surface *> _spriteSheets;
 	static std::map<std::string, SDL_Texture *> _textureSheets;
 
-	Color _standardColor = Color(255,255,255,255);
+	static const Color _standardColorShift;
+
+	Color _renderColor = Color(0, 0, 0, 0);
+	Color _renderColorShift = Color(255, 255, 255, 0);
 };
 
 #endif

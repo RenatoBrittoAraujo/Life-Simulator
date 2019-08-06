@@ -6,6 +6,7 @@
 Graphics* Graphics::_instance = nullptr;
 std::map<std::string, SDL_Surface *> Graphics::_spriteSheets = std::map<std::string, SDL_Surface *>();
 std::map<std::string, SDL_Texture *> Graphics::_textureSheets = std::map<std::string, SDL_Texture *>();
+const Color Graphics::_standardColorShift = Color(255, 255, 255, 0);
 
 Graphics::Graphics()
 {}
@@ -64,12 +65,18 @@ SDL_Renderer *Graphics::getRenderer() const
 
 void Graphics::setRenderColor(Color color)
 {
+	this->_renderColor = color;
 	SDL_SetRenderDrawColor(
 			_renderer,
 			color.getRed(),
 			color.getGreen(),
 			color.getBlue(),
 			color.getAlpha());
+}
+
+Color Graphics::getRenderColor() const
+{
+	return this->_renderColor;
 }
 
 SDL_Surface *Graphics::loadImage(const std::string &path)
@@ -88,4 +95,14 @@ SDL_Texture* Graphics::getTextureFromImage(const char *path)
 		_textureSheets[(std::string)path] = SDL_CreateTextureFromSurface(this->getRenderer(), this->loadImage(path));
 	}
 	return _textureSheets[(std::string)path];
+}
+
+void Graphics::setRenderColorShift(const Color shift)
+{
+	SDL_SetRenderDrawColor(this->_renderer, shift.getRed(), shift.getGreen(), shift.getBlue(), 0);
+}
+
+void Graphics::resetRenderColorShift()
+{
+	SDL_SetRenderDrawColor(this->_renderer, 255, 255, 255, 0);
 }

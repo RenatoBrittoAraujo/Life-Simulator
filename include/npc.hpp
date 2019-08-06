@@ -22,7 +22,7 @@ public:
 
 	virtual const std::string type() { return "NPC"; }
 
-	void findTarget(const std::vector<CircleDecorator*> &targets);
+	void findTarget(const std::vector<Life*> &targets);
 
 private:
 

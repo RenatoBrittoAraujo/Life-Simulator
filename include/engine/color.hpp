@@ -7,7 +7,7 @@ class Color
 {
 public:
 
-	Color(int red, int green, int blue, int alpha) : 
+	Color(int red, int green, int blue, int alpha = 0) : 
 	_red(red),
 	_green(green),
 	_blue(blue),

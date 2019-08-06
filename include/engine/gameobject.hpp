@@ -55,7 +55,7 @@ public:
 		Handles collisions with other GameObjects
 		Returns number of collisions
 	 */
-	int collide(std::vector<GameObject*> objects);
+	int collide(std::vector<GameObject*> &objects);
 
 	/*
 	 Basic getters and setters

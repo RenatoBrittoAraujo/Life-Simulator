@@ -14,10 +14,10 @@ public:
 
 	void update();
 
-	CircleDecorator *newEntityInstance(Rectangle<int> areaToAdd);
+	Life *newEntityInstance(Rectangle<int> areaToAdd);
 
-	void findFood(std::vector<CircleDecorator *> _foods);
-	void findFood(CircleDecorator* food);
+	void findFood(std::vector<Life *> _foods);
+	void findFood(Life* food);
 
 private:
 

@@ -21,7 +21,7 @@ void PredatorManager::update()
 	// }
 }
 
-void PredatorManager::findFood(std::vector<CircleDecorator *> foods)
+void PredatorManager::findFood(std::vector<Life *> foods)
 {
 	for (auto &predator : this->_entities)
 	{
@@ -29,9 +29,9 @@ void PredatorManager::findFood(std::vector<CircleDecorator *> foods)
 	}
 }
 
-void PredatorManager::findFood(CircleDecorator* food)
+void PredatorManager::findFood(Life* food)
 {
-	std::vector<CircleDecorator*> vec = { food };
+	std::vector<Life*> vec = { food };
 	for (auto &predator : this->_entities)
 	{
 		((Predator *)predator)->findTarget(vec);
@@ -47,7 +47,7 @@ PredatorManager &PredatorManager::getInstance()
 	return *PredatorManager::instance;
 }
 
-CircleDecorator *PredatorManager::newEntityInstance(Rectangle<int> areaToAdd)
+Life *PredatorManager::newEntityInstance(Rectangle<int> areaToAdd)
 {
-	return new Predator("assets/predatorCircle.png", 30.0f);
+	return new Predator("assets/predatorCircle.png", 40.0f);
 }

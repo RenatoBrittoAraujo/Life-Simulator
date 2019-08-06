@@ -93,14 +93,14 @@ void NPC::setRandomMovement(Util::Direction direction)
 	}
 }
 
-void NPC::findTarget(const std::vector<CircleDecorator*> &targets)
+void NPC::findTarget(const std::vector<Life*> &targets)
 {
 	bool scanningPhase = Time::timeSince(this->_targetCycleTime) < this->_targetScanTime;
 	if (isFollowingSomething() and !scanningPhase)
 	{
 		return;
 	}
-	CircleDecorator *validTarget = nullptr;
+	Life *validTarget = nullptr;
 	for (auto &target : targets)
 	{
 		float distance = target->getPosition().euclidianDistance(this->getPosition());

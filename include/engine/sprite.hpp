@@ -24,6 +24,8 @@ public:
 	 */
 	void draw(Graphics &graphics, int x, int y);
 
+	void setRenderShift(const Color shift);
+
 protected:
 
 	SDL_Rect _sourceRect;

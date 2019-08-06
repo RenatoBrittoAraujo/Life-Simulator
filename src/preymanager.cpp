@@ -23,7 +23,7 @@ void PreyManager::update()
 	}
 }
 
-void PreyManager::findFood(std::vector<CircleDecorator*> foods)
+void PreyManager::findFood(std::vector<Life*> foods)
 {
 	for (auto &prey : this->_entities)
 	{
@@ -40,7 +40,7 @@ PreyManager &PreyManager::getInstance()
 	return *PreyManager::instance;
 }
 
-CircleDecorator *PreyManager::newEntityInstance(Rectangle<int> areaToAdd)
+Life *PreyManager::newEntityInstance(Rectangle<int> areaToAdd)
 {
 	return new Prey("assets/preyCircle.png", 20.0f);
 }

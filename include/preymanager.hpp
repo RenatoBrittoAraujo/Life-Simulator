@@ -13,9 +13,9 @@ public:
 
 	void update();
 
-	CircleDecorator *newEntityInstance(Rectangle<int> areaToAdd);
+	Life *newEntityInstance(Rectangle<int> areaToAdd);
 
-	void findFood(std::vector<CircleDecorator*> _foods);
+	void findFood(std::vector<Life*> _foods);
 
 private:
 	static PreyManager *instance;
