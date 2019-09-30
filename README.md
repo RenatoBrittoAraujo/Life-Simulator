@@ -1,5 +1,7 @@
 # Life Simulator
 
+![](https://i.imgur.com/YmNHqR5.gif)
+
 A simple SDL2 game about simulating a environment of natural selection where you are just one of the many organisms fighting for survival.
 
 Running normally:
